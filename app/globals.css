@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Marquee ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.333%); }
+}
+
+/* ── Recommended Trips slide animations ── */
+@keyframes slideFromRight {
+  from { transform: translateX(48px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideFromLeft {
+  from { transform: translateX(-48px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+.slide-from-right { animation: slideFromRight 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+.slide-from-left  { animation: slideFromLeft  0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+
+:root {
+  --primary:    #5bc1d5;
+  --secondary:  #1f77a3;
+  --accent:     #fde047;
+  --foreground: #1a1a1a;
+  --background: #ffffff;
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #374151;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  button:focus-visible, a:focus-visible {
+    outline: 2px solid #5bc1d5;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#5bc1d5] text-white px-6 py-3 rounded-full font-semibold
+           hover:bg-[#4ab0c4] active:scale-95 transition-all duration-200
+           inline-flex items-center gap-2 shadow-sm;
+  }
+  .btn-outline {
+    @apply border-2 border-[#5bc1d5] text-[#5bc1d5] px-6 py-3 rounded-full font-semibold
+           hover:bg-[#5bc1d5] hover:text-white active:scale-95 transition-all duration-200
+           inline-flex items-center gap-2;
+  }
+  .btn-white {
+    @apply border-2 border-white text-white px-6 py-3 rounded-full font-semibold
+           hover:bg-white hover:text-[#1a1a1a] active:scale-95 transition-all duration-200
+           inline-flex items-center gap-2;
+  }
+
+  .section-padding { @apply py-20 md:py-24; }
+  .container-max   { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-sm hover:shadow-xl
+           transition-all duration-300 hover:-translate-y-1.5
+           border border-gray-100;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* Blog prose */
+.prose {
+  line-height: 1.85;
+  color: #4B5563;
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+}
+.prose h1, .prose h2, .prose h3 {
+  font-family: 'DM Sans', sans-serif;
+  color: #1a1a1a;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.prose h2 { font-size: 1.5rem; font-weight: 700; }
+.prose h3 { font-size: 1.2rem; font-weight: 600; }
+.prose p  { margin-bottom: 1.25rem; }
+.prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.prose li { margin-bottom: 0.4rem; }
+.prose strong { color: #1a1a1a; font-weight: 600; }
+.prose em { font-style: italic; }
+.prose a { color: #5bc1d5; text-decoration: underline; }
+.prose blockquote {
+  border-left: 3px solid #5bc1d5;
+  padding-left: 1rem;
+  color: #6B7280;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
