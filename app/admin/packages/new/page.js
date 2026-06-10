@@ -16,7 +16,7 @@ const SUBTYPES = {
   CORPORATE: ['Team Outing', 'Corporate Retreat', 'MICE'],
 };
 
-const VIBES = ['Adventure', 'Moody', 'Cultural', 'Spiritual', 'Romantic', 'Family', 'Wildlife', 'Beach', 'Mountain', 'Budget', 'Luxury', 'Offbeat'];
+const VIBES = ['Adventure', 'Moody', 'Cultural', 'Spiritual', 'Romantic', 'Honeymoon', 'Family', 'Wildlife', 'Beach', 'Mountain', 'Treks', 'Budget', 'Luxury', 'Offbeat'];
 
 const INPUT = 'w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] focus:border-transparent';
 const LABEL = 'block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide';
