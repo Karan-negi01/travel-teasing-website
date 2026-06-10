@@ -186,6 +186,7 @@ export default function NewPackagePage() {
       duration_nights: form.duration_nights,
       vibe: form.vibes.join(', '),
       price_per_person: parseInt(form.price_per_person) || 0,
+      total_price: parseInt(form.price_per_person) || 0,
       group_size_min: form.group_size_min,
       group_size_max: form.group_size_max,
       cover_image: form.images.find(Boolean) || '',
