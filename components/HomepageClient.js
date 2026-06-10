@@ -94,6 +94,22 @@ const vibeVideos = [
   'https://assets.mixkit.co/videos/1170/1170-720.mp4',
 ];
 
+const CATEGORY_STYLE = {
+  'destination-guide': { bg: 'bg-teal-50',   text: 'text-teal-700',   label: 'Destination Guide' },
+  'trek-report':       { bg: 'bg-orange-50',  text: 'text-orange-700', label: 'Trek Report' },
+  'travel-tips':       { bg: 'bg-violet-50',  text: 'text-violet-700', label: 'Travel Tips' },
+  'food-culture':      { bg: 'bg-rose-50',    text: 'text-rose-700',   label: 'Food & Culture' },
+};
+
+const staticBlogs = [
+  { id: 'sb1', slug: 'best-time-to-visit-spiti-valley',    title: 'Best Time to Visit Spiti Valley: A Month-by-Month Guide',      category: 'destination-guide', cover_image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80', excerpt: 'Spiti Valley rewards different travelers in different seasons — frozen rivers, green meadows, or golden autumn. Here\'s how to pick yours.', read_time: '6 min' },
+  { id: 'sb2', slug: 'solo-travel-in-ladakh',             title: 'Solo Travel in Ladakh: Everything You Need to Know',           category: 'trek-report',       cover_image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80', excerpt: 'From altitude sickness hacks to the best hidden campsites — the real insider guide to going alone in the mountains.',                       read_time: '8 min' },
+  { id: 'sb3', slug: 'kashmir-great-lakes-trek-diary',    title: 'Kashmir Great Lakes Trek: A First-Timer\'s Diary',             category: 'trek-report',       cover_image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80', excerpt: 'Seven pristine alpine lakes, endless meadows, and one sunrise that genuinely changed the way I think about travel.',                       read_time: '10 min' },
+  { id: 'sb4', slug: 'bali-budget-travel-guide',          title: 'Bali on ₹60K: A Complete 10-Day Budget Itinerary',             category: 'travel-tips',       cover_image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80', excerpt: 'Yes, Bali is genuinely affordable — if you know where to look. Here\'s our tried-and-tested plan used by 200+ travelers.',                read_time: '7 min' },
+  { id: 'sb5', slug: 'meghalaya-hidden-waterfalls',       title: 'Meghalaya\'s Hidden Waterfalls: Off the Beaten Track',          category: 'destination-guide', cover_image: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80', excerpt: 'Beyond Cherrapunji lie waterfalls so remote that most travelers never find them. We did. Here\'s the route.',                              read_time: '5 min' },
+  { id: 'sb6', slug: 'women-solo-travel-india-tips',      title: 'Women Traveling Solo in India: Tips from Our Community',        category: 'travel-tips',       cover_image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80', excerpt: 'Safety, confidence, and freedom — 50+ women in our community share what actually helped them travel alone.',                              read_time: '9 min' },
+];
+
 const faqItems = [
   { q: 'What makes your trips different from regular group tours?', a: 'We curate experiences with verified local partners, transparent pricing, and 24×7 support. Every itinerary is crafted by people who have actually traveled there — not just planned on paper.' },
   { q: 'Can I join solo and still feel included?', a: 'Absolutely! Most of our travelers join solo. The group trip format makes it easy to connect, and many solo travelers leave with lifelong friends.' },
@@ -252,7 +268,12 @@ export default function HomepageClient() {
     fetch('/api/packages?featured=true').then(r => r.json()).then(d => setPackages(d.packages || []));
     fetch('/api/packages?category=group').then(r => r.json()).then(d => setGroupPackages((d.packages || []).slice(0, 8)));
     fetch('/api/testimonials').then(r => r.json()).then(d => setTestimonials(d.testimonials || []));
-    fetch('/api/blogs').then(r => r.json()).then(d => setBlogs((d.blogs || []).slice(0, 3)));
+    fetch('/api/blogs').then(r => r.json()).then(d => {
+      const api = (d.blogs || []).slice(0, 6);
+      const apiSlugs = new Set(api.map(b => b.slug));
+      const filled = [...api, ...staticBlogs.filter(b => !apiSlugs.has(b.slug))].slice(0, 6);
+      setBlogs(filled);
+    });
   }, []);
 
   const scroll = (ref, dir) => ref.current?.scrollBy({ left: dir * 200, behavior: 'smooth' });
@@ -657,40 +678,103 @@ export default function HomepageClient() {
       </section>
 
       {/* ── TRAVEL GUIDES ────────────────────────────────────────── */}
-      {blogs.length > 0 && (
-        <section className="py-10 px-8 bg-white">
-          <div className="max-w-[1600px] mx-auto">
-            <SectionHeader title="Travel Guides & Stories"
-              subtitle="Inspiration, trek reports and tips from our team"
-              action={
-                <Link href="/blog" className="text-xs text-[#5bc1d5] font-semibold hover:underline whitespace-nowrap ml-4 mb-1">
-                  View All →
-                </Link>
-              }
-            />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {blogs.map(blog => (
-                <Link key={blog.id} href={`/blog/${blog.slug}`}
-                  className="group relative block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-                  <div className="relative h-52 overflow-hidden">
-                    <Image src={blog.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'}
-                      alt={blog.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      {blog.category && (
-                        <span className="text-[11px] font-bold text-[#5bc1d5] uppercase tracking-wide">
-                          {blog.category.replace('-', ' ')}
-                        </span>
-                      )}
-                      <h3 className="text-white font-semibold text-[15px] leading-snug mt-1 line-clamp-2">{blog.title}</h3>
+      <section className="py-12 px-8 bg-[#fafafa]">
+        <div className="max-w-[1600px] mx-auto">
+          <SectionHeader title="Travel Guides & Stories"
+            subtitle="Inspiration, trek reports and tips from our team"
+            action={
+              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/30 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
+                View All <ArrowRight size={11} />
+              </Link>
+            }
+          />
+
+          {/* Featured card + side card */}
+          <div className="grid lg:grid-cols-5 gap-5 mb-5">
+            {/* Featured — spans 3 cols */}
+            {blogs[0] && (() => {
+              const b = blogs[0];
+              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
+              return (
+                <Link href={`/blog/${b.slug}`}
+                  className="lg:col-span-3 group relative flex flex-col rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 bg-white border border-gray-100 hover:-translate-y-1">
+                  <div className="relative h-72 overflow-hidden">
+                    <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'} alt={b.title}
+                      fill className="object-cover transition-transform duration-600 group-hover:scale-105" sizes="700px" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className={`text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full ${cat.bg} ${cat.text}`}>
+                        {cat.label}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6 flex flex-col gap-3">
+                    <h3 className="font-bold text-xl text-gray-900 leading-snug group-hover:text-[#5bc1d5] transition-colors line-clamp-2">{b.title}</h3>
+                    {b.excerpt && <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">{b.excerpt}</p>}
+                    <div className="flex items-center gap-3 pt-2 border-t border-gray-100 mt-auto">
+                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                      <span className="text-gray-200">·</span>
+                      <span className="text-[11px] text-[#5bc1d5] font-semibold group-hover:underline">Read article →</span>
                     </div>
                   </div>
                 </Link>
-              ))}
+              );
+            })()}
+
+            {/* Two stacked side cards — spans 2 cols */}
+            <div className="lg:col-span-2 flex flex-col gap-5">
+              {blogs.slice(1, 3).map(b => {
+                const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
+                return (
+                  <Link key={b.id} href={`/blog/${b.slug}`}
+                    className="group flex gap-4 bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                    <div className="relative w-32 shrink-0 overflow-hidden">
+                      <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'} alt={b.title}
+                        fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="128px" />
+                    </div>
+                    <div className="flex flex-col justify-center py-4 pr-4 gap-2">
+                      <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-full w-fit ${cat.bg} ${cat.text}`}>
+                        {cat.label}
+                      </span>
+                      <h3 className="font-semibold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">{b.title}</h3>
+                      <span className="text-[11px] text-gray-400">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
-        </section>
-      )}
+
+          {/* Bottom row — 3 cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {blogs.slice(3, 6).map(b => {
+              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
+              return (
+                <Link key={b.id} href={`/blog/${b.slug}`}
+                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                  <div className="relative h-44 overflow-hidden">
+                    <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'} alt={b.title}
+                      fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
+                    <div className="absolute top-3 left-3">
+                      <span className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
+                        {cat.label}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-4 flex flex-col gap-2 flex-1">
+                    <h3 className="font-bold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">{b.title}</h3>
+                    {b.excerpt && <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2">{b.excerpt}</p>}
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                      <span className="text-[11px] text-gray-400">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                      <span className="text-[11px] text-[#5bc1d5] font-semibold">Read →</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
       <section id="faq" className="py-12 px-8 bg-[#fafafa]">
