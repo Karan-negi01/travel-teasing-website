@@ -678,95 +678,50 @@ export default function HomepageClient() {
       </section>
 
       {/* ── TRAVEL GUIDES ────────────────────────────────────────── */}
-      <section className="py-12 px-8 bg-[#fafafa]">
+      <section className="py-12 px-8 bg-white">
         <div className="max-w-[1600px] mx-auto">
           <SectionHeader title="Travel Guides & Stories"
             subtitle="Inspiration, trek reports and tips from our team"
             action={
-              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/30 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
+              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/40 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
                 View All <ArrowRight size={11} />
               </Link>
             }
           />
-
-          {/* Featured card + side card */}
-          <div className="grid lg:grid-cols-5 gap-5 mb-5">
-            {/* Featured — spans 3 cols */}
-            {blogs[0] && (() => {
-              const b = blogs[0];
-              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
-              return (
-                <Link href={`/blog/${b.slug}`}
-                  className="lg:col-span-3 group relative flex flex-col rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 bg-white border border-gray-100 hover:-translate-y-1">
-                  <div className="relative h-72 overflow-hidden">
-                    <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'} alt={b.title}
-                      fill className="object-cover transition-transform duration-600 group-hover:scale-105" sizes="700px" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                    <div className="absolute top-4 left-4">
-                      <span className={`text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full ${cat.bg} ${cat.text}`}>
-                        {cat.label}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6 flex flex-col gap-3">
-                    <h3 className="font-bold text-xl text-gray-900 leading-snug group-hover:text-[#5bc1d5] transition-colors line-clamp-2">{b.title}</h3>
-                    {b.excerpt && <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">{b.excerpt}</p>}
-                    <div className="flex items-center gap-3 pt-2 border-t border-gray-100 mt-auto">
-                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                      <span className="text-gray-200">·</span>
-                      <span className="text-[11px] text-[#5bc1d5] font-semibold group-hover:underline">Read article →</span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })()}
-
-            {/* Two stacked side cards — spans 2 cols */}
-            <div className="lg:col-span-2 flex flex-col gap-5">
-              {blogs.slice(1, 3).map(b => {
-                const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
-                return (
-                  <Link key={b.id} href={`/blog/${b.slug}`}
-                    className="group flex gap-4 bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-                    <div className="relative w-32 shrink-0 overflow-hidden">
-                      <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'} alt={b.title}
-                        fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="128px" />
-                    </div>
-                    <div className="flex flex-col justify-center py-4 pr-4 gap-2">
-                      <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-1 rounded-full w-fit ${cat.bg} ${cat.text}`}>
-                        {cat.label}
-                      </span>
-                      <h3 className="font-semibold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">{b.title}</h3>
-                      <span className="text-[11px] text-gray-400">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Bottom row — 3 cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {blogs.slice(3, 6).map(b => {
-              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: b.category };
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((b, i) => {
+              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: (b.category || 'guide').replace(/-/g, ' ') };
               return (
                 <Link key={b.id} href={`/blog/${b.slug}`}
-                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                  <div className="relative h-44 overflow-hidden">
-                    <Image src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'} alt={b.title}
-                      fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
-                    <div className="absolute top-3 left-3">
-                      <span className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
-                        {cat.label}
-                      </span>
-                    </div>
+                  className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+
+                  {/* Image */}
+                  <div className="relative overflow-hidden" style={{ height: i === 0 ? '260px' : '200px' }}>
+                    <Image
+                      src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'}
+                      alt={b.title} fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    {/* Warm gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    {/* Category pill */}
+                    <span className={`absolute top-3 left-3 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
+                      {cat.label}
+                    </span>
                   </div>
-                  <div className="p-4 flex flex-col gap-2 flex-1">
-                    <h3 className="font-bold text-[14px] text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">{b.title}</h3>
-                    {b.excerpt && <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2">{b.excerpt}</p>}
+
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 px-5 py-4 gap-2.5">
+                    <h3 className={`font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors ${i === 0 ? 'text-[17px]' : 'text-[14px]'}`}>
+                      {b.title}
+                    </h3>
+                    {b.excerpt && (
+                      <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2">{b.excerpt}</p>
+                    )}
                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
-                      <span className="text-[11px] text-gray-400">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                      <span className="text-[11px] text-[#5bc1d5] font-semibold">Read →</span>
+                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                      <span className="text-[11px] font-semibold text-[#5bc1d5] opacity-0 group-hover:opacity-100 transition-opacity">Read →</span>
                     </div>
                   </div>
                 </Link>
