@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight, Star, ChevronDown, ChevronLeft, ChevronRight,
-  MessageCircle, Play, MapPin, Search
+  MessageCircle, Play, MapPin, Search, Volume2, VolumeX
 } from 'lucide-react';
 import PackageCard from './PackageCard';
 import EnquiryModal from './EnquiryModal';
@@ -85,6 +85,15 @@ const domesticDests = [
   { name: 'Munnar',       image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80' },
 ];
 
+const vibeVideos = [
+  'https://assets.mixkit.co/videos/51500/51500-720.mp4',
+  'https://assets.mixkit.co/videos/1214/1214-720.mp4',
+  'https://assets.mixkit.co/videos/1197/1197-720.mp4',
+  'https://assets.mixkit.co/videos/51501/51501-720.mp4',
+  'https://assets.mixkit.co/videos/1191/1191-720.mp4',
+  'https://assets.mixkit.co/videos/1170/1170-720.mp4',
+];
+
 const faqItems = [
   { q: 'What makes your trips different from regular group tours?', a: 'We curate experiences with verified local partners, transparent pricing, and 24×7 support. Every itinerary is crafted by people who have actually traveled there — not just planned on paper.' },
   { q: 'Can I join solo and still feel included?', a: 'Absolutely! Most of our travelers join solo. The group trip format makes it easy to connect, and many solo travelers leave with lifelong friends.' },
@@ -100,6 +109,40 @@ const footerLinks = {
   Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/916396464369'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
 };
+
+/* ─── Vibe Video Card ──────────────────────────────────────────── */
+function VibeVideoCard({ src }) {
+  const [muted, setMuted] = useState(true);
+  const videoRef = useRef(null);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !muted;
+      setMuted(!muted);
+    }
+  };
+
+  return (
+    <div className="flex-shrink-0 relative rounded-2xl overflow-hidden shadow-lg bg-black"
+      style={{ width: '270px', height: '480px' }}>
+      <video
+        ref={videoRef}
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <button
+        onClick={toggleMute}
+        className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white z-10 hover:bg-black/70 transition-colors"
+      >
+        {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+      </button>
+    </div>
+  );
+}
 
 /* ─── Section Header — Playfair italic + regular, same as Recommended Trips ── */
 function SectionHeader({ title, subtitle, action }) {
@@ -467,36 +510,38 @@ export default function HomepageClient() {
                       style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.5s ease' }} sizes="420px" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-                    {/* Vertical name — shown when collapsed */}
-                    <div className="absolute inset-0 flex items-center justify-center"
-                      style={{ opacity: isActive ? 0 : 1, transition: 'opacity 0.25s ease' }}>
-                      <p style={{
-                        writingMode: 'vertical-rl',
-                        transform: 'rotate(180deg)',
-                        color: 'white',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                        textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+                    {/* Single element — rotates from vertical to horizontal */}
+                    <div className="absolute inset-0">
+                      <div style={{
+                        position: 'absolute',
+                        bottom: isActive ? '44px' : '50%',
+                        left: isActive ? '20px' : '50%',
+                        transform: isActive
+                          ? 'translate(0, 0) rotate(0deg)'
+                          : 'translate(-50%, 50%) rotate(-90deg)',
+                        transition: 'all 0.55s cubic-bezier(0.4,0,0.2,1)',
+                        transformOrigin: 'center center',
                         whiteSpace: 'nowrap',
-                      }}>{d.name}</p>
-                    </div>
-
-                    {/* Horizontal name + Explore — shown when expanded */}
-                    <div className="absolute bottom-5 left-5"
-                      style={{ opacity: isActive ? 1 : 0, transition: 'opacity 0.3s ease 0.25s' }}>
-                      <p style={{
-                        color: 'white',
-                        fontWeight: 700,
-                        fontSize: '20px',
-                        whiteSpace: 'nowrap',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                        textShadow: '0 2px 12px rgba(0,0,0,0.5)',
-                        marginBottom: '4px',
-                      }}>{d.name}</p>
-                      <p style={{ color: '#5bc1d5', fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>Explore →</p>
+                      }}>
+                        <p style={{
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          textShadow: '0 2px 10px rgba(0,0,0,0.85)',
+                        }}>{d.name}</p>
+                      </div>
+                      {/* Explore → fades in after rotation completes */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '20px',
+                        opacity: isActive ? 1 : 0,
+                        transition: 'opacity 0.2s ease 0.4s',
+                      }}>
+                        <p style={{ color: '#5bc1d5', fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>Explore →</p>
+                      </div>
                     </div>
                   </Link>
                 );
@@ -516,48 +561,50 @@ export default function HomepageClient() {
               </div>
               <CarouselNav onLeft={() => scroll(domesticRef, -1)} onRight={() => scroll(domesticRef, 1)} />
             </div>
-            <div className="flex gap-2 h-[300px] overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
               {domesticDests.map((d, i) => {
                 const isActive = activeDomestic === i;
                 return (
                   <Link key={d.name} href={`/packages?search=${d.name}`}
                     onMouseEnter={() => setActiveDomestic(i)}
-                    style={{ width: isActive ? '380px' : '78px', flexShrink: 0, transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)' }}
+                    style={{ width: isActive ? '420px' : '88px', flexShrink: 0, transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)' }}
                     className="relative h-full rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl">
                     <Image src={d.image} alt={d.name} fill className="object-cover transition-transform duration-500" sizes="380px"
                       style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)' }} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-                    {/* Vertical name — shown when collapsed */}
-                    <div className="absolute inset-0 flex items-center justify-center"
-                      style={{ opacity: isActive ? 0 : 1, transition: 'opacity 0.25s ease' }}>
-                      <p style={{
-                        writingMode: 'vertical-rl',
-                        transform: 'rotate(180deg)',
-                        color: 'white',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                        textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+                    {/* Single element — rotates from vertical to horizontal */}
+                    <div className="absolute inset-0">
+                      <div style={{
+                        position: 'absolute',
+                        bottom: isActive ? '44px' : '50%',
+                        left: isActive ? '20px' : '50%',
+                        transform: isActive
+                          ? 'translate(0, 0) rotate(0deg)'
+                          : 'translate(-50%, 50%) rotate(-90deg)',
+                        transition: 'all 0.55s cubic-bezier(0.4,0,0.2,1)',
+                        transformOrigin: 'center center',
                         whiteSpace: 'nowrap',
-                      }}>{d.name}</p>
-                    </div>
-
-                    {/* Horizontal name + Explore — shown when expanded */}
-                    <div className="absolute bottom-5 left-5"
-                      style={{ opacity: isActive ? 1 : 0, transition: 'opacity 0.3s ease 0.25s' }}>
-                      <p style={{
-                        color: 'white',
-                        fontWeight: 700,
-                        fontSize: '20px',
-                        whiteSpace: 'nowrap',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                        textShadow: '0 2px 12px rgba(0,0,0,0.5)',
-                        marginBottom: '4px',
-                      }}>{d.name}</p>
-                      <p style={{ color: '#5bc1d5', fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>Explore →</p>
+                      }}>
+                        <p style={{
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          textShadow: '0 2px 10px rgba(0,0,0,0.85)',
+                        }}>{d.name}</p>
+                      </div>
+                      {/* Explore → fades in after rotation completes */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '20px',
+                        opacity: isActive ? 1 : 0,
+                        transition: 'opacity 0.2s ease 0.4s',
+                      }}>
+                        <p style={{ color: '#5bc1d5', fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>Explore →</p>
+                      </div>
                     </div>
                   </Link>
                 );
@@ -702,6 +749,18 @@ export default function HomepageClient() {
           </div>
         </section>
       )}
+
+      {/* ── VIBE WITH US ─────────────────────────────────────────── */}
+      <section className="py-12 bg-[#fffdf7]">
+        <div className="max-w-[1600px] mx-auto px-6">
+          <SectionHeader title="Vibe with Us" subtitle="Real moments. Real vibes. From the road." />
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
+            {vibeVideos.map((src, i) => (
+              <VibeVideoCard key={i} src={src} />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── FOOTER CTA ───────────────────────────────────────────── */}
       <section className="bg-[#1a1a1a] px-8 pt-14 pb-10 mt-2">
