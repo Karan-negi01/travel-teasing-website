@@ -146,17 +146,15 @@ function VibeVideoCard({ src }) {
 
 /* ─── Section Header — Playfair italic + regular, same as Recommended Trips ── */
 function SectionHeader({ title, subtitle, action }) {
-  // Split last word as regular, rest as italic Playfair
+  // Only first word italic Playfair — keeps long headings consistent
   const words = title.trim().split(' ');
-  const lastWord = words.pop();
-  const firstPart = words.join(' ');
+  const firstWord = words.shift();
+  const rest = words.join(' ');
   return (
     <div className="relative flex flex-col items-center text-center mb-7">
       <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-        {firstPart && (
-          <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>{firstPart} </span>
-        )}
-        <span>{lastWord}</span>
+        <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>{firstWord}</span>
+        {rest && <span> {rest}</span>}
       </h2>
       {subtitle && <p className="text-gray-500 text-sm mt-2 max-w-lg leading-relaxed">{subtitle}</p>}
       {action && <div className="absolute right-0 top-0">{action}</div>}
