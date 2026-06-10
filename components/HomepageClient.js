@@ -678,8 +678,8 @@ export default function HomepageClient() {
       </section>
 
       {/* ── TRAVEL GUIDES ────────────────────────────────────────── */}
-      <section className="py-12 px-8 bg-white">
-        <div className="max-w-[1600px] mx-auto">
+      <section className="py-12 bg-white">
+        <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader title="Travel Guides & Stories"
             subtitle="Inspiration, trek reports and tips from our team"
             action={
@@ -688,40 +688,36 @@ export default function HomepageClient() {
               </Link>
             }
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((b, i) => {
+          <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
+            {blogs.map((b) => {
               const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: (b.category || 'guide').replace(/-/g, ' ') };
               return (
                 <Link key={b.id} href={`/blog/${b.slug}`}
-                  className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                  className="group flex-shrink-0 flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
+                  style={{ width: '320px' }}>
 
                   {/* Image */}
-                  <div className="relative overflow-hidden" style={{ height: i === 0 ? '260px' : '200px' }}>
-                    <Image
+                  <div className="relative overflow-hidden flex-shrink-0" style={{ height: '220px' }}>
+                    <img
                       src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'}
-                      alt={b.title} fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      alt={b.title}
+                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'; }}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    {/* Warm gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    {/* Category pill */}
-                    <span className={`absolute top-3 left-3 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
-                      {cat.label}
-                    </span>
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col flex-1 px-5 py-4 gap-2.5">
-                    <h3 className={`font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors ${i === 0 ? 'text-[17px]' : 'text-[14px]'}`}>
+                  <div className="flex flex-col flex-1 px-4 py-4 gap-2">
+                    <span className={`self-start text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
+                      {cat.label}
+                    </span>
+                    <h3 className="font-bold text-gray-900 text-[14px] leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">
                       {b.title}
                     </h3>
-                    {b.excerpt && (
-                      <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2">{b.excerpt}</p>
-                    )}
-                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                    <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2 flex-1">{b.excerpt || ''}</p>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
                       <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                      <span className="text-[11px] font-semibold text-[#5bc1d5] opacity-0 group-hover:opacity-100 transition-opacity">Read →</span>
+                      <span className="text-[11px] font-semibold text-[#5bc1d5]">Read story →</span>
                     </div>
                   </div>
                 </Link>
@@ -732,25 +728,46 @@ export default function HomepageClient() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
-      <section id="faq" className="py-12 px-8 bg-[#fafafa]">
-        <div className="max-w-2xl mx-auto">
+      <section id="faq" className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-6">
           <SectionHeader title="Frequently Asked Questions"
             subtitle="Everything you need to know before you go"
-            align="center"
           />
-          <div className="space-y-2 mt-2">
+          <div className="mt-4">
             {faqItems.map((item, i) => (
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-[#1a1a1a] hover:bg-gray-50 transition-colors">
-                  <span>{item.q}</span>
-                  <ChevronDown size={16} className={`flex-shrink-0 ml-4 text-gray-400 transition-transform duration-200 ${openFaq === i ? 'rotate-180' : ''}`} />
-                </button>
-                {openFaq === i && (
-                  <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-3">
-                    {item.a}
+              <div key={i}
+                className={`border-b border-gray-100 transition-all duration-200 ${
+                  openFaq === i ? 'border-l-4 border-l-[#5bc1d5] pl-4' : 'pl-0'
+                }`}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 py-5 text-left group">
+                  <div className="flex items-center gap-5">
+                    <span className={`text-[13px] font-bold tabular-nums transition-colors flex-shrink-0 ${openFaq === i ? 'text-[#5bc1d5]' : 'text-gray-300 group-hover:text-[#5bc1d5]'}`}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className={`text-[17px] font-semibold leading-snug transition-colors ${
+                      openFaq === i ? 'text-[#5bc1d5]' : 'text-[#1a1a1a] group-hover:text-[#5bc1d5]'
+                    }`}>
+                      {item.q}
+                    </span>
                   </div>
-                )}
+                  <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center border-2 transition-all duration-200 ${
+                    openFaq === i
+                      ? 'border-[#5bc1d5] bg-[#5bc1d5] text-white'
+                      : 'border-gray-200 text-gray-400 group-hover:border-[#5bc1d5] group-hover:text-[#5bc1d5]'
+                  }`}>
+                    {openFaq === i
+                      ? <span className="text-[20px] leading-none font-light mb-0.5">−</span>
+                      : <span className="text-[20px] leading-none font-light mb-0.5">+</span>
+                    }
+                  </div>
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 pb-6' : 'max-h-0'}`}>
+                  <p className="text-gray-500 text-[15px] leading-relaxed pl-11">
+                    {item.a}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
