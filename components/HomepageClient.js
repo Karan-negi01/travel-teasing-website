@@ -391,23 +391,23 @@ export default function HomepageClient() {
       <section className="py-12 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader title="Explore by Category" subtitle="Find the perfect trip for your travel style" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { label: 'Group Trips',    emoji: '🧭', color: 'from-blue-500 to-cyan-400',   href: '/group-trips',    img: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80' },
-              { label: 'Sacred Places', emoji: '🛕', color: 'from-amber-500 to-yellow-400', href: '/sacred-places',  img: 'https://images.unsplash.com/photo-1571536802807-30451e3955d8?w=400&q=80' },
-              { label: 'Honeymoon',     emoji: '💑', color: 'from-pink-500 to-rose-400',    href: '/packages?search=honeymoon', img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=80' },
-              { label: 'Adventure Treks', emoji: '⛰️', color: 'from-green-500 to-emerald-400', href: '/packages?search=trek', img: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80' },
-              { label: "Women's Only",  emoji: '👩‍🤝‍👩', color: 'from-purple-500 to-violet-400', href: '/packages?search=women', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80' },
-              { label: 'Corporate',     emoji: '💼', color: 'from-slate-500 to-gray-400',   href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&q=80' },
+              { label: 'Group Trips',   tag: 'Community',  href: '/group-trips',               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
+              { label: 'Sacred Places', tag: 'Spiritual',  href: '/sacred-places',             img: 'https://images.unsplash.com/photo-1609920658906-8223bd289001?w=600&q=80' },
+              { label: 'Honeymoon',     tag: 'Romantic',   href: '/packages?search=honeymoon', img: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80' },
+              { label: 'Treks',         tag: 'Adventure',  href: '/packages?search=trek',      img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
+              { label: "Women's Only",  tag: 'Exclusive',  href: '/packages?search=women',     img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
+              { label: 'Corporate',     tag: 'Offsite',    href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
             ].map(cat => (
               <Link key={cat.label} href={cat.href}
-                className="group relative rounded-2xl overflow-hidden aspect-[3/4] shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                className="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
                 <img src={cat.img} alt={cat.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} opacity-60 group-hover:opacity-70 transition-opacity`} />
-                <div className="absolute inset-0 flex flex-col items-center justify-end pb-5 px-3 text-center">
-                  <span className="text-2xl mb-1">{cat.emoji}</span>
-                  <span className="text-white font-bold text-sm leading-tight drop-shadow-sm">{cat.label}</span>
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <p className="text-[10px] font-semibold tracking-widest uppercase text-[#5bc1d5] mb-1">{cat.tag}</p>
+                  <p className="text-white font-bold text-[15px] leading-tight">{cat.label}</p>
                 </div>
               </Link>
             ))}
