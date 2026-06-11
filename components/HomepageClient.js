@@ -387,6 +387,34 @@ export default function HomepageClient() {
         </div>
       </div>
 
+      {/* ── TRIP CATEGORIES ── */}
+      <section className="py-12 bg-[#fafafa]">
+        <div className="max-w-[1600px] mx-auto px-6">
+          <SectionHeader title="Explore by Category" subtitle="Find the perfect trip for your travel style" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { label: 'Group Trips',    emoji: '🧭', color: 'from-blue-500 to-cyan-400',   href: '/group-trips',    img: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80' },
+              { label: 'Sacred Places', emoji: '🛕', color: 'from-amber-500 to-yellow-400', href: '/sacred-places',  img: 'https://images.unsplash.com/photo-1571536802807-30451e3955d8?w=400&q=80' },
+              { label: 'Honeymoon',     emoji: '💑', color: 'from-pink-500 to-rose-400',    href: '/packages?search=honeymoon', img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=80' },
+              { label: 'Adventure Treks', emoji: '⛰️', color: 'from-green-500 to-emerald-400', href: '/packages?search=trek', img: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80' },
+              { label: "Women's Only",  emoji: '👩‍🤝‍👩', color: 'from-purple-500 to-violet-400', href: '/packages?search=women', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80' },
+              { label: 'Corporate',     emoji: '💼', color: 'from-slate-500 to-gray-400',   href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&q=80' },
+            ].map(cat => (
+              <Link key={cat.label} href={cat.href}
+                className="group relative rounded-2xl overflow-hidden aspect-[3/4] shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <img src={cat.img} alt={cat.label}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} opacity-60 group-hover:opacity-70 transition-opacity`} />
+                <div className="absolute inset-0 flex flex-col items-center justify-end pb-5 px-3 text-center">
+                  <span className="text-2xl mb-1">{cat.emoji}</span>
+                  <span className="text-white font-bold text-sm leading-tight drop-shadow-sm">{cat.label}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── RECOMMENDED TRIPS ── */}
       <section className="relative bg-white py-12 md:py-16">
         <div className="mx-auto max-w-[1600px] px-4">
@@ -491,6 +519,31 @@ export default function HomepageClient() {
               className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
               View All Packages <ArrowRight size={14} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHY TRAVEL TEASING ── */}
+      <section className="py-14 bg-white">
+        <div className="max-w-[1600px] mx-auto px-6">
+          <SectionHeader title="Why Travel Teasing" subtitle="We're not just a travel company — we're your adventure partner" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: '🗺️', title: 'Curated Itineraries', desc: 'Every trip is handcrafted by people who have actually been there — not just planned on paper.' },
+              { icon: '🧑‍✈️', title: 'Expert Trip Captains', desc: 'Each group has a dedicated captain who keeps the journey safe, fun, and unforgettable.' },
+              { icon: '💰', title: 'Transparent Pricing', desc: 'No hidden charges. What you see is what you pay — always. Full breakdown before you book.' },
+              { icon: '📞', title: '24×7 Support', desc: 'We\'re always a call or WhatsApp away — before, during, and after your trip.' },
+              { icon: '👥', title: 'Small Group Sizes', desc: 'We keep groups small so every traveler gets personal attention and a real experience.' },
+              { icon: '✅', title: 'Verified Partners', desc: 'All hotels, guides, and transport are personally vetted by our team for quality and safety.' },
+              { icon: '🌍', title: '150+ Destinations', desc: 'From Spiti Valley to Bali — we cover the most epic destinations across India and the world.' },
+              { icon: '⭐', title: '4.9★ Rated', desc: 'Loved by 10,000+ travelers. Our reviews speak for themselves — real people, real experiences.' },
+            ].map((item, i) => (
+              <div key={i} className="group flex flex-col gap-3 p-6 rounded-2xl border border-gray-100 bg-white hover:border-[#5bc1d5] hover:shadow-lg transition-all duration-300">
+                <span className="text-3xl">{item.icon}</span>
+                <h3 className="font-bold text-[#1a1a1a] text-base">{item.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -803,6 +856,55 @@ export default function HomepageClient() {
           </div>
         </section>
       )}
+
+      {/* ── INSTAGRAM FEED ───────────────────────────────────────── */}
+      <section className="py-12 bg-white">
+        <div className="max-w-[1600px] mx-auto px-6">
+          <SectionHeader
+            title="Instagram Moments"
+            subtitle="Real trips. Real people. Real memories."
+            action={
+              <a href="https://instagram.com/travelteasing" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/40 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
+                Follow @travelteasing <ArrowRight size={11} />
+              </a>
+            }
+          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {[
+              { img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80', likes: '2.4K', location: 'Kashmir' },
+              { img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400&q=80', likes: '1.8K', location: 'Ladakh' },
+              { img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80', likes: '3.1K', location: 'Bali' },
+              { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', likes: '2.7K', location: 'Spiti' },
+              { img: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=400&q=80', likes: '1.5K', location: 'Meghalaya' },
+              { img: 'https://images.unsplash.com/photo-1571536802807-30451e3955d8?w=400&q=80', likes: '2.2K', location: 'Sikkim' },
+              { img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80', likes: '1.9K', location: 'Rajasthan' },
+              { img: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80', likes: '4.2K', location: 'Himachal' },
+              { img: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400&q=80', likes: '2.0K', location: 'Goa' },
+              { img: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80', likes: '1.6K', location: 'Kerala' },
+              { img: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&q=80', likes: '3.4K', location: 'Thailand' },
+              { img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=80', likes: '2.8K', location: 'Maldives' },
+            ].map((post, i) => (
+              <a key={i} href="https://instagram.com/travelteasing" target="_blank" rel="noopener noreferrer"
+                className="group relative aspect-square rounded-xl overflow-hidden">
+                <img src={post.img} alt={post.location}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col items-center justify-center gap-1">
+                  <span className="text-white font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">❤️ {post.likes}</span>
+                  <span className="text-white/80 text-xs opacity-0 group-hover:opacity-100 transition-opacity">{post.location}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="flex justify-center mt-8">
+            <a href="https://instagram.com/travelteasing" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc1888] text-white px-7 py-3 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg">
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Follow us on Instagram
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* ── VIBE WITH US ─────────────────────────────────────────── */}
       <section className="py-12 bg-[#fffdf7]">
