@@ -524,26 +524,84 @@ export default function HomepageClient() {
       </section>
 
       {/* ── WHY TRAVEL TEASING ── */}
-      <section className="py-14 bg-white">
-        <div className="max-w-[1600px] mx-auto px-6">
-          <SectionHeader title="Why Travel Teasing" subtitle="We're not just a travel company — we're your adventure partner" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: '🗺️', title: 'Curated Itineraries', desc: 'Every trip is handcrafted by people who have actually been there — not just planned on paper.' },
-              { icon: '🧑‍✈️', title: 'Expert Trip Captains', desc: 'Each group has a dedicated captain who keeps the journey safe, fun, and unforgettable.' },
-              { icon: '💰', title: 'Transparent Pricing', desc: 'No hidden charges. What you see is what you pay — always. Full breakdown before you book.' },
-              { icon: '📞', title: '24×7 Support', desc: 'We\'re always a call or WhatsApp away — before, during, and after your trip.' },
-              { icon: '👥', title: 'Small Group Sizes', desc: 'We keep groups small so every traveler gets personal attention and a real experience.' },
-              { icon: '✅', title: 'Verified Partners', desc: 'All hotels, guides, and transport are personally vetted by our team for quality and safety.' },
-              { icon: '🌍', title: '150+ Destinations', desc: 'From Spiti Valley to Bali — we cover the most epic destinations across India and the world.' },
-              { icon: '⭐', title: '4.9★ Rated', desc: 'Loved by 10,000+ travelers. Our reviews speak for themselves — real people, real experiences.' },
-            ].map((item, i) => (
-              <div key={i} className="group flex flex-col gap-3 p-6 rounded-2xl border border-gray-100 bg-white hover:border-[#5bc1d5] hover:shadow-lg transition-all duration-300">
-                <span className="text-3xl">{item.icon}</span>
-                <h3 className="font-bold text-[#1a1a1a] text-base">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+      <section className="bg-[#f9f8f5] overflow-hidden">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[680px]">
+
+            {/* Left — full bleed video, no padding */}
+            <div className="relative h-[420px] lg:h-auto">
+              <video autoPlay muted loop playsInline className="w-full h-full object-cover"
+                poster="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=90">
+                <source src="https://assets.mixkit.co/videos/4215/4215-720.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              {/* badge */}
+              <div className="absolute top-6 left-6 flex items-center gap-2 bg-white/20 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/30">
+                <span className="w-1.5 h-1.5 bg-[#5bc1d5] rounded-full animate-pulse" />
+                Live Trips
               </div>
-            ))}
+              {/* bottom quote */}
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="text-white/60 text-xs uppercase tracking-widest mb-2 font-semibold">Our travelers say —</p>
+                <p className="text-white text-xl font-bold leading-snug">"Strangers on day one.<br/>Best friends by the end."</p>
+                <p className="text-white/50 text-xs mt-2">— Priya, Spiti Valley 2024</p>
+              </div>
+            </div>
+
+            {/* Right — content with padding */}
+            <div className="flex flex-col justify-center px-8 py-14 lg:px-14 bg-[#f9f8f5]">
+
+              <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-5">Why Travel Teasing</p>
+
+              <h2 className="text-[32px] md:text-[44px] font-bold text-[#1a1a1a] leading-[1.15] mb-3">
+                We don't just<br />plan trips.
+              </h2>
+              <p className="text-[20px] md:text-[24px] mb-8" style={{fontFamily:"'Playfair Display',serif", fontStyle:'italic', color:'#5bc1d5'}}>
+                We create memories<br />that stay forever.
+              </p>
+
+              {/* stats row */}
+              <div className="flex gap-6 mb-10">
+                {[
+                  { val: '10K+', label: 'Happy travelers' },
+                  { val: '4.9★', label: 'Avg rating' },
+                  { val: '150+', label: 'Destinations' },
+                ].map(s => (
+                  <div key={s.label}>
+                    <p className="text-2xl font-bold text-[#1a1a1a]">{s.val}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* reasons — teal left border style */}
+              <div className="space-y-5 mb-10">
+                {[
+                  { title: 'Handcrafted Itineraries', desc: 'Every route tested by people who have actually been there — not planned on paper.' },
+                  { title: 'Dedicated Trip Captains', desc: 'Your own captain on ground. You just show up — they handle everything.' },
+                  { title: 'No Hidden Costs. Ever.', desc: 'Full breakdown before you book. What you see is exactly what you pay.' },
+                  { title: 'Small Groups, Real Bonds', desc: 'Intimate groups mean real connections — not just strangers on a bus.' },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4 items-start">
+                    <div className="w-0.5 h-full self-stretch bg-[#5bc1d5] rounded-full shrink-0 mt-1" style={{minHeight:'40px'}} />
+                    <div>
+                      <p className="font-bold text-[#1a1a1a] text-[14px] mb-0.5">{item.title}</p>
+                      <p className="text-gray-400 text-[13px] leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link href="/packages" className="inline-flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#333] text-white font-semibold px-7 py-3.5 rounded-full text-sm transition-colors">
+                  Browse Packages <ArrowRight size={15} />
+                </Link>
+                <Link href="/group-trips" className="text-sm font-semibold text-[#5bc1d5] hover:underline underline-offset-2">
+                  View Group Trips →
+                </Link>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
