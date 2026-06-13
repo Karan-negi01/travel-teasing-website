@@ -43,13 +43,13 @@ export default function AboutPage() {
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-[#E8651A]">
+      <section className="py-16 bg-[#1a1a1a]">
         <div className="container-max">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map(s => (
               <div key={s.label}>
-                <p className="text-4xl font-bold text-white mb-1">{s.value}</p>
-                <p className="text-orange-100 text-sm">{s.label}</p>
+                <p className="text-4xl font-bold text-[#5bc1d5] mb-1">{s.value}</p>
+                <p className="text-white/60 text-sm">{s.label}</p>
               </div>
             ))}
           </div>

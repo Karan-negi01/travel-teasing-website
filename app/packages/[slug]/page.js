@@ -61,7 +61,7 @@ export default function PackageDetailPage({ params }) {
   const allImages = [pkg.cover_image, ...(pkg.gallery_images || [])].filter(Boolean);
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 pb-24 lg:pb-0">
       {/* Breadcrumb */}
       <div className="bg-gray-50 border-b">
         <div className="container-max py-3 text-sm text-gray-500 flex gap-2">
@@ -227,6 +227,23 @@ export default function PackageDetailPage({ params }) {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Mobile sticky bottom CTA */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-3 shadow-xl">
+        <div className="flex-1">
+          <p className="text-[11px] text-gray-400 leading-none">Price per person</p>
+          <p className="text-xl font-bold text-[#1a1a1a]">₹{pkg.price_per_person?.toLocaleString('en-IN')}</p>
+        </div>
+        <a href={`https://wa.me/916396464369?text=Hi! I'm interested in the ${encodeURIComponent(pkg.title)} package.`}
+          target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2.5 rounded-full text-sm font-semibold">
+          <MessageCircle size={16} /> WhatsApp
+        </a>
+        <button onClick={() => setEnquiryOpen(true)}
+          className="flex items-center gap-2 bg-[#1a1a1a] text-white px-4 py-2.5 rounded-full text-sm font-semibold">
+          Enquire
+        </button>
       </div>
 
       {/* Enquiry Modal */}

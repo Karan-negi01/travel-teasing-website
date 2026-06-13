@@ -160,20 +160,20 @@ function VibeVideoCard({ src }) {
   );
 }
 
-/* ─── Section Header — Playfair italic + regular, same as Recommended Trips ── */
+/* ─── Section Header — responsive: action below on mobile, absolute on sm+ ── */
 function SectionHeader({ title, subtitle, action }) {
-  // Only first word italic Playfair — keeps long headings consistent
   const words = title.trim().split(' ');
   const firstWord = words.shift();
   const rest = words.join(' ');
   return (
-    <div className="relative flex flex-col items-center text-center mb-7">
-      <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+    <div className="relative mb-7 text-center">
+      {action && <div className="absolute right-0 top-0 hidden sm:block">{action}</div>}
+      <h2 className="text-3xl font-semibold text-gray-800 sm:text-4xl md:text-5xl">
         <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>{firstWord}</span>
         {rest && <span> {rest}</span>}
       </h2>
-      {subtitle && <p className="text-gray-500 text-sm mt-2 max-w-lg leading-relaxed">{subtitle}</p>}
-      {action && <div className="absolute right-0 top-0">{action}</div>}
+      {subtitle && <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto leading-relaxed">{subtitle}</p>}
+      {action && <div className="mt-3 flex justify-center sm:hidden">{action}</div>}
     </div>
   );
 }
@@ -210,7 +210,7 @@ function CarouselNav({ onLeft, onRight }) {
 function PromoBanner({ b }) {
   const isRight = b.align === 'right';
   return (
-    <div className="px-8 py-3 max-w-[1600px] mx-auto w-full">
+    <div className="px-4 sm:px-8 py-3 max-w-[1600px] mx-auto w-full">
       <Link href={b.href}
         className="group block relative w-full overflow-hidden rounded-2xl aspect-[2/1] sm:aspect-[3/1] lg:aspect-[4.5/1] shadow-md hover:shadow-xl transition-shadow duration-300">
         <Image src={b.image} alt={b.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="100vw" />
@@ -395,7 +395,7 @@ export default function HomepageClient() {
             {[
               { label: 'Group Trips',   tag: 'Community',  href: '/group-trips',               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
               { label: 'FIT Packages', tag: 'Personalised', href: '/packages?search=fit',     img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
-              { label: 'Family',        tag: 'Together',   href: '/packages?search=family',    img: 'https://images.unsplash.com/photo-1511895426328-dc8714191011?w=600&q=80' },
+              { label: 'Family',        tag: 'Together',   href: '/packages?search=family',    img: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=600&q=80' },
               { label: 'Treks',         tag: 'Adventure',  href: '/packages?search=trek',      img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
               { label: "Women's Only",  tag: 'Exclusive',  href: '/packages?search=women',     img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
               { label: 'Corporate',     tag: 'Offsite',    href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
@@ -450,14 +450,14 @@ export default function HomepageClient() {
                 <button
                   onClick={() => goToPage(Math.max(0, safePage - 1))}
                   disabled={safePage === 0}
-                  className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                  <ChevronLeft size={15} /> Previous
+                  className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                  <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
                 </button>
                 <button
                   onClick={() => goToPage(Math.min(totalPages - 1, safePage + 1))}
                   disabled={safePage === totalPages - 1}
-                  className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                  Next <ChevronRight size={15} />
+                  className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                  <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
                 </button>
               </div>
             )}
@@ -538,14 +538,14 @@ export default function HomepageClient() {
             <div className="flex items-center justify-between mb-5">
               <div>
                 <p className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#5bc1d5] mb-1">Fly Away</p>
-                <h3 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+                <h3 className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-3xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>International </span>
                   <span>Gateways</span>
                 </h3>
               </div>
               <CarouselNav onLeft={() => scroll(worldRef, -1)} onRight={() => scroll(worldRef, 1)} />
             </div>
-            <div ref={worldRef} className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
+            <div ref={worldRef} className="flex gap-2 h-[240px] sm:h-[340px] overflow-x-auto scrollbar-hide">
               {worldDests.map((d, i) => {
                 const isActive = activeWorld === i;
                 return (
@@ -601,14 +601,14 @@ export default function HomepageClient() {
             <div className="flex items-center justify-between mb-5">
               <div>
                 <p className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#5bc1d5] mb-1">Incredible India</p>
-                <h3 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+                <h3 className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-3xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Domestic </span>
                   <span>Getaways</span>
                 </h3>
               </div>
               <CarouselNav onLeft={() => scroll(domesticRef, -1)} onRight={() => scroll(domesticRef, 1)} />
             </div>
-            <div ref={domesticRef} className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
+            <div ref={domesticRef} className="flex gap-2 h-[240px] sm:h-[340px] overflow-x-auto scrollbar-hide">
               {domesticDests.map((d, i) => {
                 const isActive = activeDomestic === i;
                 return (
@@ -707,7 +707,7 @@ export default function HomepageClient() {
       <PromoBanner b={banners[1]} />
 
       {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
-      <section className="py-10 px-8 bg-[#fafafa]">
+      <section className="py-10 px-4 sm:px-8 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto">
           <SectionHeader title="Upcoming Community Trips"
             subtitle="Fixed departures with confirmed dates — join now"
@@ -806,7 +806,7 @@ export default function HomepageClient() {
 
       {/* ── WHAT OUR TRAVEL TEASERS SAY ──────────────────────────── */}
       {testimonials.length > 0 && (
-        <section className="py-10 px-8 bg-[#fafafa]">
+        <section className="py-10 px-4 sm:px-8 bg-[#fafafa]">
           <div className="max-w-[1600px] mx-auto">
             <SectionHeader title="What our Travel Teasers say" subtitle="Real trips. Real stories." align="center" />
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -889,7 +889,7 @@ export default function HomepageClient() {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
 
             {/* Left: Colorful illustration + heading */}
-            <div className="rounded-3xl bg-gradient-to-br from-[#e6f9fc] via-[#f0fbff] to-[#eef7f0] p-10 flex flex-col justify-between min-h-[500px] relative overflow-hidden">
+            <div className="rounded-3xl bg-gradient-to-br from-[#e6f9fc] via-[#f0fbff] to-[#eef7f0] p-8 sm:p-10 flex flex-col justify-between min-h-[300px] sm:min-h-[500px] relative overflow-hidden">
               <div>
                 <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-5">Have Questions?</p>
                 <h2 className="text-5xl sm:text-6xl font-black leading-[1.05] text-[#1a1a1a]">
@@ -956,7 +956,7 @@ export default function HomepageClient() {
       </section>
 
       {/* ── FOOTER CTA ───────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] px-8 pt-14 pb-10 mt-2">
+      <section className="bg-[#1a1a1a] px-4 sm:px-8 pt-14 pb-10 mt-2">
         <div className="max-w-[1600px] mx-auto">
 
           {/* CTA headline + buttons */}

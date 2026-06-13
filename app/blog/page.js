@@ -38,7 +38,7 @@ export default function BlogPage() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {categories.map(cat => (
             <button key={cat.id} onClick={() => setCategory(cat.id)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all ${category === cat.id ? 'bg-[#E8651A] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all ${category === cat.id ? 'bg-[#5bc1d5] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
               {cat.label}
             </button>
           ))}
@@ -55,7 +55,7 @@ export default function BlogPage() {
                 <div className="relative aspect-video overflow-hidden">
                   <Image src={blog.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'} alt={blog.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
                   {blog.category && (
-                    <span className="absolute top-3 left-3 bg-[#E8651A] text-white text-xs px-2 py-1 rounded-full capitalize">
+                    <span className="absolute top-3 left-3 bg-[#5bc1d5] text-white text-xs px-2 py-1 rounded-full capitalize">
                       {blog.category.replace('-', ' ')}
                     </span>
                   )}
@@ -64,7 +64,7 @@ export default function BlogPage() {
                   <p className="text-gray-400 text-xs mb-2">{blog.published_at ? new Date(blog.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</p>
                   <h3 className="font-bold text-[#1a1a2e] mb-2 leading-snug">{blog.title}</h3>
                   {blog.excerpt && <p className="text-gray-500 text-sm line-clamp-2">{blog.excerpt}</p>}
-                  <span className="text-[#E8651A] text-sm font-semibold mt-3 inline-block">Read More →</span>
+                  <span className="text-[#5bc1d5] text-sm font-semibold mt-3 inline-block">Read More →</span>
                 </div>
               </Link>
             ))}

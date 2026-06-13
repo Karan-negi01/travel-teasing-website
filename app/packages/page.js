@@ -64,7 +64,7 @@ function PackagesContent() {
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <form onSubmit={handleSearch} className="flex flex-1 shadow-sm rounded-full overflow-hidden border border-gray-200">
             <input value={searchInput} onChange={e => setSearchInput(e.target.value)} placeholder="Search destinations..." className="flex-1 px-5 py-3 text-sm outline-none" />
-            <button type="submit" className="bg-[#E8651A] text-white px-5 py-3 hover:bg-orange-600 transition-colors">
+            <button type="submit" className="bg-[#5bc1d5] text-white px-5 py-3 hover:bg-[#4ab0c4] transition-colors">
               <Search size={18} />
             </button>
           </form>
@@ -80,7 +80,7 @@ function PackagesContent() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {categories.map(cat => (
             <button key={cat.id} onClick={() => setCategory(cat.id)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all ${category === cat.id ? 'bg-[#E8651A] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all ${category === cat.id ? 'bg-[#5bc1d5] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
               {cat.label}
             </button>
           ))}
