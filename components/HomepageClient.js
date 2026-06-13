@@ -27,15 +27,15 @@ const banners = [
     tagColor: 'text-[#5bc1d5]',
   },
   {
-    image: 'https://images.unsplash.com/photo-1571536802807-30451e3955d8?w=1600&q=80',
-    tag: 'Sacred Journeys',
-    title: 'Find Peace.\nFind Yourself.',
-    cta: 'Explore Sacred Places',
-    href: '/sacred-places',
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80',
+    tag: 'Weekend Escapes',
+    title: 'Two Days.\nInfinite Memories.',
+    cta: 'View Weekend Trips',
+    href: '/packages',
     gradient: 'from-black/70 via-black/30 to-transparent',
     align: 'left',
-    ctaColor: 'bg-white text-[#1a1a1a] hover:bg-[#fde047] hover:text-[#1a1a1a]',
-    tagColor: 'text-[#fde047]',
+    ctaColor: 'bg-white text-[#1a1a1a] hover:bg-[#5bc1d5] hover:text-white',
+    tagColor: 'text-[#5bc1d5]',
   },
   {
     image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1600&q=80',
@@ -394,8 +394,8 @@ export default function HomepageClient() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
               { label: 'Group Trips',   tag: 'Community',  href: '/group-trips',               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
-              { label: 'Sacred Places', tag: 'Spiritual',  href: '/sacred-places',             img: 'https://images.unsplash.com/photo-1609920658906-8223bd289001?w=600&q=80' },
-              { label: 'Honeymoon',     tag: 'Romantic',   href: '/packages?search=honeymoon', img: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80' },
+              { label: 'FIT Packages', tag: 'Personalised', href: '/packages?search=fit',     img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
+              { label: 'Family',        tag: 'Together',   href: '/packages?search=family',    img: 'https://images.unsplash.com/photo-1511895426328-dc8714191011?w=600&q=80' },
               { label: 'Treks',         tag: 'Adventure',  href: '/packages?search=trek',      img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
               { label: "Women's Only",  tag: 'Exclusive',  href: '/packages?search=women',     img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
               { label: 'Corporate',     tag: 'Offsite',    href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
@@ -430,8 +430,8 @@ export default function HomepageClient() {
             </p>
           </div>
 
-          {/* Filter tabs */}
-          <div className="mt-4 flex flex-col gap-2">
+          {/* Filter tabs + Prev/Next on same row */}
+          <div className="mt-4 flex items-center justify-between gap-4">
             <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
               {priceFilters.map(f => (
                 <button key={f.id} onClick={() => changeFilter(f.id)}
@@ -445,6 +445,22 @@ export default function HomepageClient() {
                 </button>
               ))}
             </div>
+            {packages.length > 0 && (
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <button
+                  onClick={() => goToPage(Math.max(0, safePage - 1))}
+                  disabled={safePage === 0}
+                  className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                  <ChevronLeft size={15} /> Previous
+                </button>
+                <button
+                  onClick={() => goToPage(Math.min(totalPages - 1, safePage + 1))}
+                  disabled={safePage === totalPages - 1}
+                  className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                  Next <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* ── CAROUSEL — exact DeshVidesh: overflow-x-hidden viewport + flex track that slides ── */}
@@ -485,31 +501,15 @@ export default function HomepageClient() {
             )}
           </div>
 
-          {/* Pagination — dots + Previous / Next */}
+          {/* Pagination dots */}
           {packages.length > 0 && (
-            <div className="flex items-center justify-between mt-8">
-              <div className="flex items-center gap-2">
-                {Array.from({ length: totalPages }).map((_, i) => (
-                  <button key={i} onClick={() => goToPage(i)}
-                    className={`rounded-full transition-all duration-300 ${
-                      i === safePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'
-                    }`} />
-                ))}
-              </div>
-              <div className="flex items-center gap-2 rounded-full px-4 py-2">
-                <button
-                  onClick={() => goToPage(Math.max(0, safePage - 1))}
-                  disabled={safePage === 0}
-                  className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                  <ChevronLeft size={16} /> Previous
-                </button>
-                <button
-                  onClick={() => goToPage(Math.min(totalPages - 1, safePage + 1))}
-                  disabled={safePage === totalPages - 1}
-                  className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                  Next <ChevronRight size={16} />
-                </button>
-              </div>
+            <div className="flex items-center gap-2 mt-8">
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button key={i} onClick={() => goToPage(i)}
+                  className={`rounded-full transition-all duration-300 ${
+                    i === safePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'
+                  }`} />
+              ))}
             </div>
           )}
 
@@ -519,89 +519,6 @@ export default function HomepageClient() {
               className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
               View All Packages <ArrowRight size={14} />
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHY TRAVEL TEASING ── */}
-      <section className="bg-[#f9f8f5] overflow-hidden">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[680px]">
-
-            {/* Left — full bleed video, no padding */}
-            <div className="relative h-[420px] lg:h-auto">
-              <video autoPlay muted loop playsInline className="w-full h-full object-cover"
-                poster="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=90">
-                <source src="https://assets.mixkit.co/videos/4215/4215-720.mp4" type="video/mp4" />
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              {/* badge */}
-              <div className="absolute top-6 left-6 flex items-center gap-2 bg-white/20 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/30">
-                <span className="w-1.5 h-1.5 bg-[#5bc1d5] rounded-full animate-pulse" />
-                Live Trips
-              </div>
-              {/* bottom quote */}
-              <div className="absolute bottom-8 left-8 right-8">
-                <p className="text-white/60 text-xs uppercase tracking-widest mb-2 font-semibold">Our travelers say —</p>
-                <p className="text-white text-xl font-bold leading-snug">"Strangers on day one.<br/>Best friends by the end."</p>
-                <p className="text-white/50 text-xs mt-2">— Priya, Spiti Valley 2024</p>
-              </div>
-            </div>
-
-            {/* Right — content with padding */}
-            <div className="flex flex-col justify-center px-8 py-14 lg:px-14 bg-[#f9f8f5]">
-
-              <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-5">Why Travel Teasing</p>
-
-              <h2 className="text-[32px] md:text-[44px] font-bold text-[#1a1a1a] leading-[1.15] mb-3">
-                We don't just<br />plan trips.
-              </h2>
-              <p className="text-[20px] md:text-[24px] mb-8" style={{fontFamily:"'Playfair Display',serif", fontStyle:'italic', color:'#5bc1d5'}}>
-                We create memories<br />that stay forever.
-              </p>
-
-              {/* stats row */}
-              <div className="flex gap-6 mb-10">
-                {[
-                  { val: '10K+', label: 'Happy travelers' },
-                  { val: '4.9★', label: 'Avg rating' },
-                  { val: '150+', label: 'Destinations' },
-                ].map(s => (
-                  <div key={s.label}>
-                    <p className="text-2xl font-bold text-[#1a1a1a]">{s.val}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* reasons — teal left border style */}
-              <div className="space-y-5 mb-10">
-                {[
-                  { title: 'Handcrafted Itineraries', desc: 'Every route tested by people who have actually been there — not planned on paper.' },
-                  { title: 'Dedicated Trip Captains', desc: 'Your own captain on ground. You just show up — they handle everything.' },
-                  { title: 'No Hidden Costs. Ever.', desc: 'Full breakdown before you book. What you see is exactly what you pay.' },
-                  { title: 'Small Groups, Real Bonds', desc: 'Intimate groups mean real connections — not just strangers on a bus.' },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4 items-start">
-                    <div className="w-0.5 h-full self-stretch bg-[#5bc1d5] rounded-full shrink-0 mt-1" style={{minHeight:'40px'}} />
-                    <div>
-                      <p className="font-bold text-[#1a1a1a] text-[14px] mb-0.5">{item.title}</p>
-                      <p className="text-gray-400 text-[13px] leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4">
-                <Link href="/packages" className="inline-flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#333] text-white font-semibold px-7 py-3.5 rounded-full text-sm transition-colors">
-                  Browse Packages <ArrowRight size={15} />
-                </Link>
-                <Link href="/group-trips" className="text-sm font-semibold text-[#5bc1d5] hover:underline underline-offset-2">
-                  View Group Trips →
-                </Link>
-              </div>
-
-            </div>
           </div>
         </div>
       </section>
@@ -628,7 +545,7 @@ export default function HomepageClient() {
               </div>
               <CarouselNav onLeft={() => scroll(worldRef, -1)} onRight={() => scroll(worldRef, 1)} />
             </div>
-            <div className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
+            <div ref={worldRef} className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
               {worldDests.map((d, i) => {
                 const isActive = activeWorld === i;
                 return (
@@ -691,7 +608,7 @@ export default function HomepageClient() {
               </div>
               <CarouselNav onLeft={() => scroll(domesticRef, -1)} onRight={() => scroll(domesticRef, 1)} />
             </div>
-            <div className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
+            <div ref={domesticRef} className="flex gap-2 h-[340px] overflow-x-auto scrollbar-hide">
               {domesticDests.map((d, i) => {
                 const isActive = activeDomestic === i;
                 return (
@@ -745,11 +662,49 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── BANNER 2 ─────────────────────────────────────────────── */}
-      <PromoBanner b={banners[1]} />
+      {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
+      <section className="relative bg-white py-12 md:py-16">
+        <div className="mx-auto max-w-[1600px] px-4">
+          <div className="mb-8 text-center">
+            <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+              <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Weekend </span>
+              <span>Escapes</span>
+            </h2>
+            <p className="mt-4 text-base text-gray-600 md:text-lg">
+              Short on time? These quick getaways pack in all the fun
+            </p>
+          </div>
+          {packages.length === 0 ? (
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              {[1,2,3,4].map(i => (
+                <div key={i}>
+                  <div className="h-[220px] md:h-80 bg-gray-100 rounded-2xl animate-pulse" />
+                  <div className="py-2 space-y-3 mt-2">
+                    <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
+                    <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
+                    <div className="h-5 bg-gray-100 rounded animate-pulse w-2/5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              {packages.slice(0, 8).map(pkg => (
+                <PackageCard key={pkg.id} pkg={pkg} />
+              ))}
+            </div>
+          )}
+          <div className="mt-8 flex justify-center">
+            <Link href="/packages"
+              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+              View All Weekend Trips <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      {/* ── BANNER 3 ─────────────────────────────────────────────── */}
-      <PromoBanner b={banners[2]} />
+      {/* ── BANNER 2 — Weekend Escapes ── */}
+      <PromoBanner b={banners[1]} />
 
       {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
       <section className="py-10 px-8 bg-[#fafafa]">
@@ -788,134 +743,19 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── TRAVEL GUIDES ────────────────────────────────────────── */}
-      <section className="py-12 bg-white">
+      {/* ── VIBE WITH TRAVEL TEASING ─────────────────────────────── */}
+      <section className="py-12 bg-[#fffdf7]">
         <div className="max-w-[1600px] mx-auto px-6">
-          <SectionHeader title="Travel Guides & Stories"
-            subtitle="Inspiration, trek reports and tips from our team"
-            action={
-              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/40 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
-                View All <ArrowRight size={11} />
-              </Link>
-            }
-          />
-          <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
-            {blogs.map((b) => {
-              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: (b.category || 'guide').replace(/-/g, ' ') };
-              return (
-                <Link key={b.id} href={`/blog/${b.slug}`}
-                  className="group flex-shrink-0 flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
-                  style={{ width: '320px' }}>
-
-                  {/* Image */}
-                  <div className="relative overflow-hidden flex-shrink-0" style={{ height: '220px' }}>
-                    <img
-                      src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'}
-                      alt={b.title}
-                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'; }}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex flex-col flex-1 px-4 py-4 gap-2">
-                    <span className={`self-start text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
-                      {cat.label}
-                    </span>
-                    <h3 className="font-bold text-gray-900 text-[14px] leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">
-                      {b.title}
-                    </h3>
-                    <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2 flex-1">{b.excerpt || ''}</p>
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
-                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                      <span className="text-[11px] font-semibold text-[#5bc1d5]">Read story →</span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ──────────────────────────────────────────────────── */}
-      <section id="faq" className="py-16 bg-white">
-        <div className="max-w-3xl mx-auto px-6">
-          <SectionHeader title="Frequently Asked Questions"
-            subtitle="Everything you need to know before you go"
-          />
-          <div className="mt-4">
-            {faqItems.map((item, i) => (
-              <div key={i}
-                className={`border-b border-gray-100 transition-all duration-200 ${
-                  openFaq === i ? 'border-l-4 border-l-[#5bc1d5] pl-4' : 'pl-0'
-                }`}>
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 py-5 text-left group">
-                  <div className="flex items-center gap-5">
-                    <span className={`text-[13px] font-bold tabular-nums transition-colors flex-shrink-0 ${openFaq === i ? 'text-[#5bc1d5]' : 'text-gray-300 group-hover:text-[#5bc1d5]'}`}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className={`text-[17px] font-semibold leading-snug transition-colors ${
-                      openFaq === i ? 'text-[#5bc1d5]' : 'text-[#1a1a1a] group-hover:text-[#5bc1d5]'
-                    }`}>
-                      {item.q}
-                    </span>
-                  </div>
-                  <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center border-2 transition-all duration-200 ${
-                    openFaq === i
-                      ? 'border-[#5bc1d5] bg-[#5bc1d5] text-white'
-                      : 'border-gray-200 text-gray-400 group-hover:border-[#5bc1d5] group-hover:text-[#5bc1d5]'
-                  }`}>
-                    {openFaq === i
-                      ? <span className="text-[20px] leading-none font-light mb-0.5">−</span>
-                      : <span className="text-[20px] leading-none font-light mb-0.5">+</span>
-                    }
-                  </div>
-                </button>
-                <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 pb-6' : 'max-h-0'}`}>
-                  <p className="text-gray-500 text-[15px] leading-relaxed pl-11">
-                    {item.a}
-                  </p>
-                </div>
-              </div>
+          <SectionHeader title="Vibe with Travel Teasing" subtitle="Real moments. Real vibes. From the road." />
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
+            {vibeVideos.map((src, i) => (
+              <VibeVideoCard key={i} src={src} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ─────────────────────────────────────────── */}
-      {testimonials.length > 0 && (
-        <section className="py-10 px-8 bg-white">
-          <div className="max-w-[1600px] mx-auto">
-            <SectionHeader title="What Travelers Say" subtitle="Real trips. Real stories." align="center" />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {testimonials.slice(0, 3).map(t => (
-                <div key={t.id} className="bg-[#fafafa] border border-gray-100 rounded-2xl p-5 flex flex-col gap-3">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.rating || 5 }).map((_, i) => (
-                      <Star key={i} size={13} className="text-yellow-400 fill-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 text-sm leading-relaxed line-clamp-4 flex-1">"{t.review_text}"</p>
-                  <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                    <div className="w-8 h-8 rounded-full bg-[#5bc1d5]/15 flex items-center justify-center text-[#5bc1d5] font-bold text-sm flex-shrink-0">
-                      {(t.name || 'T').charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-[#1a1a1a] font-semibold text-sm">{t.name}</p>
-                      <p className="text-gray-400 text-xs">{t.trip_destination} · {t.traveler_city}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── INSTAGRAM FEED ───────────────────────────────────────── */}
+      {/* ── INSTAGRAM MOMENTS ────────────────────────────────────── */}
       <section className="py-12 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader
@@ -964,14 +804,153 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── VIBE WITH US ─────────────────────────────────────────── */}
-      <section className="py-12 bg-[#fffdf7]">
+      {/* ── WHAT OUR TRAVEL TEASERS SAY ──────────────────────────── */}
+      {testimonials.length > 0 && (
+        <section className="py-10 px-8 bg-[#fafafa]">
+          <div className="max-w-[1600px] mx-auto">
+            <SectionHeader title="What our Travel Teasers say" subtitle="Real trips. Real stories." align="center" />
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {testimonials.slice(0, 3).map(t => (
+                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-col gap-3">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                      <Star key={i} size={13} className="text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 text-sm leading-relaxed line-clamp-4 flex-1">"{t.review_text}"</p>
+                  <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                    <div className="w-8 h-8 rounded-full bg-[#5bc1d5]/15 flex items-center justify-center text-[#5bc1d5] font-bold text-sm flex-shrink-0">
+                      {(t.name || 'T').charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-[#1a1a1a] font-semibold text-sm">{t.name}</p>
+                      <p className="text-gray-400 text-xs">{t.trip_destination} · {t.traveler_city}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── TRAVEL GUIDES & STORIES ───────────────────────────────── */}
+      <section className="py-12 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
-          <SectionHeader title="Vibe with Us" subtitle="Real moments. Real vibes. From the road." />
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
-            {vibeVideos.map((src, i) => (
-              <VibeVideoCard key={i} src={src} />
-            ))}
+          <SectionHeader title="Travel Guides & Stories"
+            subtitle="Inspiration, trek reports and tips from our team"
+            action={
+              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/40 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
+                View All <ArrowRight size={11} />
+              </Link>
+            }
+          />
+          <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
+            {blogs.map((b) => {
+              const cat = CATEGORY_STYLE[b.category] || { bg: 'bg-gray-100', text: 'text-gray-600', label: (b.category || 'guide').replace(/-/g, ' ') };
+              return (
+                <Link key={b.id} href={`/blog/${b.slug}`}
+                  className="group flex-shrink-0 flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
+                  style={{ width: '320px' }}>
+                  <div className="relative overflow-hidden flex-shrink-0" style={{ height: '220px' }}>
+                    <img
+                      src={b.cover_image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'}
+                      alt={b.title}
+                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'; }}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="flex flex-col flex-1 px-4 py-4 gap-2">
+                    <span className={`self-start text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
+                      {cat.label}
+                    </span>
+                    <h3 className="font-bold text-gray-900 text-[14px] leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">
+                      {b.title}
+                    </h3>
+                    <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2 flex-1">{b.excerpt || ''}</p>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
+                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                      <span className="text-[11px] font-semibold text-[#5bc1d5]">Read story →</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BANNER 3 — Leh Ladakh ── */}
+      <PromoBanner b={banners[2]} />
+
+      {/* ── FAQ ──────────────────────────────────────────────────── */}
+      <section id="faq" className="py-16 bg-[#fafafa]">
+        <div className="max-w-[1600px] mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+            {/* Left: Colorful illustration + heading */}
+            <div className="rounded-3xl bg-gradient-to-br from-[#e6f9fc] via-[#f0fbff] to-[#eef7f0] p-10 flex flex-col justify-between min-h-[500px] relative overflow-hidden">
+              <div>
+                <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-5">Have Questions?</p>
+                <h2 className="text-5xl sm:text-6xl font-black leading-[1.05] text-[#1a1a1a]">
+                  Frequently<br />
+                  Asked<br />
+                  <span className="text-[#5bc1d5] underline decoration-[#5bc1d5]/40 underline-offset-4">Questions</span>
+                </h2>
+                <p className="text-gray-500 text-sm mt-6 leading-relaxed max-w-[260px]">
+                  your questions matter — and together, we're solving them.
+                </p>
+              </div>
+              {/* Decorative travel icons */}
+              <div className="absolute bottom-0 right-0 pointer-events-none">
+                <svg viewBox="0 0 240 240" className="w-56 h-56 opacity-75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="70" y="105" width="100" height="80" rx="10" fill="#5bc1d5" opacity="0.25"/>
+                  <rect x="87" y="93" width="66" height="16" rx="6" fill="#5bc1d5" opacity="0.35"/>
+                  <line x1="120" y1="105" x2="120" y2="185" stroke="#5bc1d5" strokeWidth="2.5" opacity="0.5"/>
+                  <line x1="70" y1="145" x2="170" y2="145" stroke="#5bc1d5" strokeWidth="2.5" opacity="0.5"/>
+                  <rect x="108" y="175" width="24" height="12" rx="4" fill="#5bc1d5" opacity="0.4"/>
+                  <rect x="18" y="42" width="60" height="46" rx="8" fill="#f97316" opacity="0.3"/>
+                  <circle cx="48" cy="65" r="13" fill="#f97316" opacity="0.5"/>
+                  <circle cx="48" cy="65" r="7" fill="#f97316" opacity="0.7"/>
+                  <rect x="45" y="30" width="20" height="14" rx="4" fill="#f97316" opacity="0.35"/>
+                  <circle cx="68" cy="52" r="4" fill="#f97316" opacity="0.6"/>
+                  <path d="M155 18 L210 58 L188 65 L175 95 L162 85 L176 60 L138 68 Z" fill="#a78bfa" opacity="0.4"/>
+                  <circle cx="28" cy="165" r="18" fill="#fbbf24" opacity="0.2"/>
+                  <path d="M28 142 L32 158 L48 158 L35 168 L40 184 L28 174 L16 184 L21 168 L8 158 L24 158 Z" fill="#fbbf24" opacity="0.45"/>
+                  <ellipse cx="205" cy="158" rx="11" ry="42" fill="#34d399" opacity="0.35" transform="rotate(-15 205 158)"/>
+                  <ellipse cx="205" cy="158" rx="5" ry="18" fill="#34d399" opacity="0.2" transform="rotate(-15 205 158)"/>
+                  <circle cx="145" cy="25" r="4" fill="#5bc1d5" opacity="0.4"/>
+                  <circle cx="160" cy="35" r="2.5" fill="#5bc1d5" opacity="0.3"/>
+                  <circle cx="55" cy="105" r="3" fill="#f97316" opacity="0.35"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Right: Clean accordion */}
+            <div className="py-2">
+              {faqItems.map((item, i) => (
+                <div key={i} className={`border-b border-gray-100 transition-all duration-200 ${openFaq === i ? 'bg-white rounded-xl px-4 mb-1 shadow-sm border-b-0' : ''}`}>
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 py-5 text-left group">
+                    <span className={`text-[15px] font-semibold leading-snug transition-colors ${
+                      openFaq === i ? 'text-[#1a1a1a]' : 'text-[#1a1a1a] group-hover:text-[#5bc1d5]'
+                    }`}>
+                      {item.q}
+                    </span>
+                    <ChevronDown size={18} className={`flex-shrink-0 transition-transform duration-200 ${
+                      openFaq === i ? 'rotate-180 text-[#5bc1d5]' : 'text-gray-400 group-hover:text-[#5bc1d5]'
+                    }`} />
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 pb-5' : 'max-h-0'}`}>
+                    <p className="text-gray-500 text-[14px] leading-relaxed">
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       </section>

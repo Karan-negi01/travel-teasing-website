@@ -6,12 +6,12 @@ import { Menu, X, Mountain, Home, Layers, Users, BookOpen, Info, MapPin } from '
 import { supabase } from '@/lib/supabase';
 
 const navLinks = [
-  { href: '/packages',      label: 'Explore' },
-  { href: '/packages',      label: 'Best Sellers' },
-  { href: '/packages?category=group', label: 'Group Trips' },
-  { href: '/sacred-places', label: 'Sacred Places' },
-  { href: '/about',         label: 'Who Travels With Us' },
-  { href: '/blog',          label: 'Blog' },
+  { href: '/packages',               label: 'Explore' },
+  { href: '/packages?sort=popular',  label: 'Best Sellers' },
+  { href: '/packages?type=domestic', label: 'Domestic' },
+  { href: '/packages?type=international', label: 'International' },
+  { href: '/about',                  label: 'About Us' },
+  { href: '/blog',                   label: 'Blog' },
 ];
 
 const mobileLinks = [
