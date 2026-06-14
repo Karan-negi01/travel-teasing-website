@@ -6,7 +6,7 @@ import FloatingWhatsApp from './FloatingWhatsApp';
 import AnnouncementBar from './AnnouncementBar';
 
 // Pages where hero fills full viewport — navbar floats over them transparently
-const HERO_PAGES = ['/', '/packages', '/group-trips', '/sacred-places', '/about'];
+const HERO_PAGES = ['/', '/packages', '/group-trips', '/about'];
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();

@@ -119,8 +119,17 @@ const faqItems = [
   { q: 'How do you ensure comfort for women travelers?', a: 'We have female captains on select trips, strict vetting of accommodations, and 24×7 emergency support. A large part of our community is women who travel solo with us.' },
 ];
 
+const staticTestimonials = [
+  { id: 'st1', name: 'Priya Sharma',    rating: 5, review_text: 'Honestly the best trip I\'ve ever taken. The Kashmir Great Lakes trek was breathtaking and the Travel Teasing team made sure everything was sorted — from permits to food. Zero stress, all memories.',                   trip_destination: 'Kashmir Great Lakes', traveler_city: 'Delhi' },
+  { id: 'st2', name: 'Rohan Mehta',     rating: 5, review_text: 'Did the Spiti Valley group trip and met some amazing people. The captain knew every hidden spot and the itinerary was perfectly balanced between adventure and rest. Already booked the next one!',           trip_destination: 'Spiti Valley',        traveler_city: 'Mumbai' },
+  { id: 'st3', name: 'Ananya Reddy',    rating: 5, review_text: 'As a solo female traveler I was nervous at first, but the group vibe was incredible. Super safe, well-organized, and the sunsets in Ladakh made me cry happy tears. 10/10 would recommend.',              trip_destination: 'Ladakh',              traveler_city: 'Bangalore' },
+  { id: 'st4', name: 'Karan Joshi',     rating: 5, review_text: 'The Bali trip with Travel Teasing was insane value. Got to see places I\'d never have found on my own, ate at local spots, surfed for the first time, and the whole thing was seamless from Day 1.',          trip_destination: 'Bali',                traveler_city: 'Pune' },
+  { id: 'st5', name: 'Neha Kapoor',     rating: 5, review_text: 'Did the Meghalaya trip and wow — living root bridges, double-decker bridges, and waterfalls that looked unreal. The team handled everything and the group became like a little family.',                      trip_destination: 'Meghalaya',           traveler_city: 'Chennai' },
+  { id: 'st6', name: 'Arjun Singh',     rating: 5, review_text: 'Went on the Rajasthan heritage tour with my partner and it exceeded all expectations. Palaces, forts, camel rides, the works. Felt premium without being overpriced. Will definitely travel with them again.', trip_destination: 'Rajasthan',           traveler_city: 'Hyderabad' },
+];
+
 const footerLinks = {
-  Explore:        [['All Packages', '/packages'], ['Group Trips', '/group-trips'], ['Sacred Places', '/sacred-places'], ['Blog', '/blog'], ['Upcoming Trips', '/group-trips']],
+  Explore:        [['All Packages', '/packages'], ['Group Trips', '/group-trips'], ['Blog', '/blog'], ['Upcoming Trips', '/group-trips']],
   'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
   Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/916396464369'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
@@ -376,10 +385,10 @@ export default function HomepageClient() {
           <div className="flex items-center gap-6 text-[12px]">
             {[['10K+', 'Travelers'], ['4.9★', 'Rated'], ['150+', 'Destinations']].map(([val, label], i) => (
               <div key={label} className="flex items-center gap-4">
-                {i > 0 && <span className="text-white/15 text-xs">|</span>}
+                {i > 0 && <span className="text-white/15 text-sm">|</span>}
                 <div className="flex flex-col items-center gap-0">
-                  <span className="text-white font-bold text-[15px]">{val}</span>
-                  <span className="text-white/35 text-[10px] tracking-wider uppercase">{label}</span>
+                  <span className="text-white font-bold text-[22px]">{val}</span>
+                  <span className="text-white/35 text-[12px] tracking-wider uppercase">{label}</span>
                 </div>
               </div>
             ))}
@@ -388,7 +397,7 @@ export default function HomepageClient() {
       </div>
 
       {/* ── TRIP CATEGORIES ── */}
-      <section className="py-12 bg-[#fafafa]">
+      <section className="py-20 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader title="Explore by Category" subtitle="Find the perfect trip for your travel style" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -416,7 +425,7 @@ export default function HomepageClient() {
       </section>
 
       {/* ── RECOMMENDED TRIPS ── */}
-      <section className="relative bg-white py-12 md:py-16">
+      <section className="relative bg-white py-16 md:py-24">
         <div className="mx-auto max-w-[1600px] px-4">
 
           {/* Heading — mb-8 text-center (exact DV) */}
@@ -527,7 +536,7 @@ export default function HomepageClient() {
       <PromoBanner b={banners[0]} />
 
       {/* ── EXPLORE DESTINATIONS (World + Domestic combined) ──────── */}
-      <section className="py-12 bg-[#fafafa]">
+      <section className="py-20 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto px-6">
 
           {/* Main section heading — Playfair style */}
@@ -663,7 +672,7 @@ export default function HomepageClient() {
       </section>
 
       {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
-      <section className="relative bg-white py-12 md:py-16">
+      <section className="relative bg-white py-16 md:py-24">
         <div className="mx-auto max-w-[1600px] px-4">
           <div className="mb-8 text-center">
             <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
@@ -707,7 +716,7 @@ export default function HomepageClient() {
       <PromoBanner b={banners[1]} />
 
       {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
-      <section className="py-10 px-4 sm:px-8 bg-[#fafafa]">
+      <section className="py-20 px-4 sm:px-8 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto">
           <SectionHeader title="Upcoming Community Trips"
             subtitle="Fixed departures with confirmed dates — join now"
@@ -744,7 +753,7 @@ export default function HomepageClient() {
       </section>
 
       {/* ── VIBE WITH TRAVEL TEASING ─────────────────────────────── */}
-      <section className="py-12 bg-[#fffdf7]">
+      <section className="py-20 bg-[#fffdf7]">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader title="Vibe with Travel Teasing" subtitle="Real moments. Real vibes. From the road." />
           <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
@@ -755,8 +764,65 @@ export default function HomepageClient() {
         </div>
       </section>
 
+      {/* ── PERSONALISED TOUR PACKAGES (FIT) ────────────────────── */}
+      {(() => {
+        const fitPackages = [
+          {
+            id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir',
+            category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6,
+            slug: 'packages?search=kashmir', cover_image: null,
+          },
+          {
+            id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia',
+            category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7,
+            slug: 'packages?search=bali', cover_image: null,
+          },
+          {
+            id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh',
+            category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8,
+            slug: 'packages?search=ladakh', cover_image: null,
+          },
+          {
+            id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand',
+            category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6,
+            slug: 'packages?search=thailand', cover_image: null,
+          },
+          {
+            id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan',
+            category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7,
+            slug: 'packages?search=rajasthan', cover_image: null,
+          },
+          {
+            id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives',
+            category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5,
+            slug: 'packages?search=maldives', cover_image: null,
+          },
+        ];
+        return (
+          <section className="py-20 bg-[#fafafa]">
+            <div className="max-w-[1600px] mx-auto px-6">
+              <SectionHeader
+                title="Personalised Tour Packages"
+                subtitle="Handcrafted FIT packages built around your schedule, budget & travel style"
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 mt-2">
+                {fitPackages.map(pkg => (
+                  <PackageCard key={pkg.id} pkg={pkg} />
+                ))}
+              </div>
+              <div className="flex justify-center mt-10">
+                <Link href="/packages?search=fit"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+                  View All FIT Packages <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* ── INSTAGRAM MOMENTS ────────────────────────────────────── */}
-      <section className="py-12 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader
             title="Instagram Moments"
@@ -797,7 +863,7 @@ export default function HomepageClient() {
           <div className="flex justify-center mt-8">
             <a href="https://instagram.com/travelteasing" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc1888] text-white px-7 py-3 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              <InstagramIcon size={16} />
               Follow us on Instagram
             </a>
           </div>
@@ -805,45 +871,51 @@ export default function HomepageClient() {
       </section>
 
       {/* ── WHAT OUR TRAVEL TEASERS SAY ──────────────────────────── */}
-      {testimonials.length > 0 && (
-        <section className="py-10 px-4 sm:px-8 bg-[#fafafa]">
-          <div className="max-w-[1600px] mx-auto">
-            <SectionHeader title="What our Travel Teasers say" subtitle="Real trips. Real stories." align="center" />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {testimonials.slice(0, 3).map(t => (
-                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-col gap-3">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.rating || 5 }).map((_, i) => (
-                      <Star key={i} size={13} className="text-yellow-400 fill-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 text-sm leading-relaxed line-clamp-4 flex-1">"{t.review_text}"</p>
-                  <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                    <div className="w-8 h-8 rounded-full bg-[#5bc1d5]/15 flex items-center justify-center text-[#5bc1d5] font-bold text-sm flex-shrink-0">
-                      {(t.name || 'T').charAt(0)}
+      {(() => {
+        const apiIds = new Set(testimonials.map(t => t.id));
+        const merged = [...testimonials, ...staticTestimonials.filter(t => !apiIds.has(t.id))].slice(0, 6);
+        return (
+          <section className="py-20 px-4 sm:px-8 bg-[#fafafa]">
+            <div className="max-w-[1600px] mx-auto">
+              <div className="relative mb-7 text-center">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-4xl md:text-5xl">
+                  What our{' '}
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Travel Teasers</span>
+                  {' '}say
+                </h2>
+                <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto leading-relaxed">Real trips. Real stories from real people.</p>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {merged.map(t => (
+                  <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-col gap-3">
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                        <Star key={i} size={13} className="text-yellow-400 fill-yellow-400" />
+                      ))}
                     </div>
-                    <div>
-                      <p className="text-[#1a1a1a] font-semibold text-sm">{t.name}</p>
-                      <p className="text-gray-400 text-xs">{t.trip_destination} · {t.traveler_city}</p>
+                    <p className="text-gray-700 text-sm leading-relaxed line-clamp-4 flex-1">"{t.review_text}"</p>
+                    <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                      <div className="w-8 h-8 rounded-full bg-[#5bc1d5]/15 flex items-center justify-center text-[#5bc1d5] font-bold text-sm flex-shrink-0">
+                        {(t.name || 'T').charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-[#1a1a1a] font-semibold text-sm">{t.name}</p>
+                        <p className="text-gray-400 text-xs">{t.trip_destination} · {t.traveler_city}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        );
+      })()}
 
       {/* ── TRAVEL GUIDES & STORIES ───────────────────────────────── */}
-      <section className="py-12 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
           <SectionHeader title="Travel Guides & Stories"
             subtitle="Inspiration, trek reports and tips from our team"
-            action={
-              <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5bc1d5] border border-[#5bc1d5]/40 px-4 py-1.5 rounded-full hover:bg-[#5bc1d5] hover:text-white transition-all">
-                View All <ArrowRight size={11} />
-              </Link>
-            }
           />
           <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2">
             {blogs.map((b) => {
@@ -861,21 +933,26 @@ export default function HomepageClient() {
                     />
                   </div>
                   <div className="flex flex-col flex-1 px-4 py-4 gap-2">
-                    <span className={`self-start text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
+                    <span className={`self-start text-[11px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full ${cat.bg} ${cat.text}`}>
                       {cat.label}
                     </span>
-                    <h3 className="font-bold text-gray-900 text-[14px] leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">
+                    <h3 className="font-bold text-gray-900 text-[16px] leading-snug line-clamp-2 group-hover:text-[#5bc1d5] transition-colors">
                       {b.title}
                     </h3>
-                    <p className="text-gray-400 text-[12px] leading-relaxed line-clamp-2 flex-1">{b.excerpt || ''}</p>
+                    <p className="text-gray-400 text-[14px] leading-relaxed line-clamp-2 flex-1">{b.excerpt || ''}</p>
                     <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
-                      <span className="text-[11px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
-                      <span className="text-[11px] font-semibold text-[#5bc1d5]">Read story →</span>
+                      <span className="text-[13px] text-gray-400 font-medium">{b.read_time ? `${b.read_time} read` : '5 min read'}</span>
+                      <span className="text-[13px] font-semibold text-[#5bc1d5]">Read story →</span>
                     </div>
                   </div>
                 </Link>
               );
             })}
+          </div>
+          <div className="flex justify-center mt-8">
+            <Link href="/blog" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+              View All <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
@@ -884,7 +961,7 @@ export default function HomepageClient() {
       <PromoBanner b={banners[2]} />
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
-      <section id="faq" className="py-16 bg-[#fafafa]">
+      <section id="faq" className="py-24 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
 
@@ -933,7 +1010,7 @@ export default function HomepageClient() {
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between gap-4 py-5 text-left group">
-                    <span className={`text-[15px] font-semibold leading-snug transition-colors ${
+                    <span className={`text-[17px] font-semibold leading-snug transition-colors ${
                       openFaq === i ? 'text-[#1a1a1a]' : 'text-[#1a1a1a] group-hover:text-[#5bc1d5]'
                     }`}>
                       {item.q}
@@ -943,7 +1020,7 @@ export default function HomepageClient() {
                     }`} />
                   </button>
                   <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 pb-5' : 'max-h-0'}`}>
-                    <p className="text-gray-500 text-[14px] leading-relaxed">
+                    <p className="text-gray-500 text-[16px] leading-relaxed">
                       {item.a}
                     </p>
                   </div>
@@ -985,7 +1062,7 @@ export default function HomepageClient() {
             {/* Brand col */}
             <div className="col-span-2 md:col-span-1">
               <p className="text-white font-bold text-base mb-3">Travel Teasing</p>
-              <p className="text-[#f2f2f2]/50 text-xs leading-relaxed mb-4">India's trusted travel partner for group trips, sacred journeys & adventure treks.</p>
+              <p className="text-[#f2f2f2]/50 text-xs leading-relaxed mb-4">India's trusted travel partner for group trips, weekend escapes & adventure treks.</p>
               <div className="flex gap-3">
                 <a href="https://youtube.com/@travelteasing" target="_blank" rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">

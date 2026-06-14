@@ -10,7 +10,6 @@ const categories = [
   { id: '', label: 'All' },
   { id: 'group', label: 'Group Trips' },
   { id: 'family', label: 'Family' },
-  { id: 'sacred', label: 'Sacred Places' },
   { id: 'adventure', label: 'Adventure' },
   { id: 'corporate', label: 'Corporate' },
 ];

@@ -3,11 +3,11 @@ import ConditionalLayout from '@/components/ConditionalLayout';
 
 export const metadata = {
   title: { default: "Travel Teasing — India's Trusted Travel Partner", template: '%s | Travel Teasing' },
-  description: 'Explore curated group trips, family packages, sacred journeys, and adventure treks across India. 500+ happy travelers. 50+ destinations. 4.9★ rated.',
-  keywords: 'travel india, group trips, himachal pradesh, ladakh, char dham yatra, family packages, adventure treks',
+  description: 'Explore curated group trips, family packages, weekend escapes, and adventure treks across India. 500+ happy travelers. 50+ destinations. 4.9★ rated.',
+  keywords: 'travel india, group trips, himachal pradesh, ladakh, weekend escapes, family packages, adventure treks',
   openGraph: {
     title: "Travel Teasing — India's Trusted Travel Partner",
-    description: 'Curated group trips, family packages, and sacred journeys across India.',
+    description: 'Curated group trips, family packages, and adventure treks across India.',
     type: 'website',
   },
 };

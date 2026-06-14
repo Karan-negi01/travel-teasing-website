@@ -27,7 +27,6 @@ export default function Footer() {
               {[
                 ['All Packages', '/packages'],
                 ['Group Trips', '/group-trips'],
-                ['Sacred Places', '/sacred-places'],
                 ['Blog', '/blog'],
                 ['About Us', '/about'],
                 ['Contact', '/contact'],
@@ -48,7 +47,6 @@ export default function Footer() {
               {[
                 ['Group Trips', '/packages?category=group'],
                 ['Family Packages', '/packages?category=family'],
-                ['Sacred Journeys', '/packages?category=sacred'],
                 ['Adventure & Treks', '/packages?category=adventure'],
                 ['Corporate Trips', '/packages?category=corporate'],
               ].map(([label, href]) => (
