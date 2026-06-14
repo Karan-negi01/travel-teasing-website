@@ -120,6 +120,7 @@ export default function NewPackagePage() {
     date_type: 'coming_soon',
     start_date: '',
     end_date: '',
+    multi_dates: [{ start_date: '', end_date: '' }],
     about_trip: '',
     inclusions: [''],
     exclusions: [''],
@@ -194,6 +195,7 @@ export default function NewPackagePage() {
       date_type: type === 'FIT' ? null : form.date_type,
       start_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.start_date : null,
       end_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.end_date : null,
+      multi_dates: form.date_type === 'multi_dates' ? form.multi_dates.filter(d => d.start_date && d.end_date) : null,
       description: form.about_trip,
       highlights: form.highlights.filter(Boolean),
       inclusions: form.inclusions.filter(Boolean),
@@ -412,6 +414,7 @@ export default function NewPackagePage() {
               {[
                 { id: 'select_dates', label: 'Select Dates' },
                 { id: 'coming_soon', label: 'Coming Soon' },
+                ...(type === 'GROUPS' ? [{ id: 'multi_dates', label: 'Multiple Dates' }] : []),
               ].map(opt => (
                 <label key={opt.id}
                   className={`flex-1 flex items-center gap-3 border-2 rounded-xl px-4 py-3 cursor-pointer transition-all ${
@@ -425,6 +428,7 @@ export default function NewPackagePage() {
                 </label>
               ))}
             </div>
+
             {form.date_type === 'select_dates' && (
               <div className="grid grid-cols-2 gap-4 mt-3">
                 <div>
@@ -437,6 +441,42 @@ export default function NewPackagePage() {
                   <input type="date" value={form.end_date} onChange={e => setField('end_date', e.target.value)}
                     className={INPUT} />
                 </div>
+              </div>
+            )}
+
+            {form.date_type === 'multi_dates' && (
+              <div className="mt-3 space-y-3">
+                {form.multi_dates.map((d, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-[#E8651A] text-xs font-bold flex items-center justify-center">{i + 1}</div>
+                    <div className="grid grid-cols-2 gap-3 flex-1">
+                      <div>
+                        {i === 0 && <label className={LABEL}>Start Date</label>}
+                        <input type="date" value={d.start_date}
+                          onChange={e => setField('multi_dates', form.multi_dates.map((x, idx) => idx === i ? { ...x, start_date: e.target.value } : x))}
+                          className={INPUT} />
+                      </div>
+                      <div>
+                        {i === 0 && <label className={LABEL}>End Date</label>}
+                        <input type="date" value={d.end_date}
+                          onChange={e => setField('multi_dates', form.multi_dates.map((x, idx) => idx === i ? { ...x, end_date: e.target.value } : x))}
+                          className={INPUT} />
+                      </div>
+                    </div>
+                    {form.multi_dates.length > 1 && (
+                      <button type="button"
+                        onClick={() => setField('multi_dates', form.multi_dates.filter((_, idx) => idx !== i))}
+                        className="flex-shrink-0 p-1.5 text-red-400 hover:bg-red-50 rounded-lg transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button type="button"
+                  onClick={() => setField('multi_dates', [...form.multi_dates, { start_date: '', end_date: '' }])}
+                  className="text-[#E8651A] text-xs font-semibold flex items-center gap-1 hover:underline mt-1">
+                  <Plus size={13} /> Add Another Date
+                </button>
               </div>
             )}
           </div>
