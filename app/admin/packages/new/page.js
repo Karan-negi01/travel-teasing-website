@@ -191,9 +191,9 @@ export default function NewPackagePage() {
       group_size_max: form.group_size_max,
       cover_image: form.images.find(Boolean) || '',
       images: form.images.filter(Boolean),
-      date_type: form.date_type,
-      start_date: form.date_type === 'select_dates' ? form.start_date : null,
-      end_date: form.date_type === 'select_dates' ? form.end_date : null,
+      date_type: type === 'FIT' ? null : form.date_type,
+      start_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.start_date : null,
+      end_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.end_date : null,
       description: form.about_trip,
       highlights: form.highlights.filter(Boolean),
       inclusions: form.inclusions.filter(Boolean),
@@ -404,41 +404,43 @@ export default function NewPackagePage() {
           </div>
         </div>
 
-        {/* ── Dates ── */}
-        <div className={SECTION}>
-          <div className={SECTION_TITLE}>Trip Dates</div>
-          <div className="flex gap-4">
-            {[
-              { id: 'select_dates', label: 'Select Dates' },
-              { id: 'coming_soon', label: 'Coming Soon' },
-            ].map(opt => (
-              <label key={opt.id}
-                className={`flex-1 flex items-center gap-3 border-2 rounded-xl px-4 py-3 cursor-pointer transition-all ${
-                  form.date_type === opt.id ? 'border-[#E8651A] bg-orange-50' : 'border-gray-200 hover:border-gray-300'
-                }`}>
-                <input type="radio" name="date_type" value={opt.id} checked={form.date_type === opt.id}
-                  onChange={() => setField('date_type', opt.id)} className="accent-[#E8651A]" />
-                <span className={`text-sm font-semibold ${form.date_type === opt.id ? 'text-[#E8651A]' : 'text-gray-600'}`}>
-                  {opt.label}
-                </span>
-              </label>
-            ))}
-          </div>
-          {form.date_type === 'select_dates' && (
-            <div className="grid grid-cols-2 gap-4 mt-3">
-              <div>
-                <label className={LABEL}>Start Date</label>
-                <input type="date" value={form.start_date} onChange={e => setField('start_date', e.target.value)}
-                  className={INPUT} />
-              </div>
-              <div>
-                <label className={LABEL}>End Date</label>
-                <input type="date" value={form.end_date} onChange={e => setField('end_date', e.target.value)}
-                  className={INPUT} />
-              </div>
+        {/* ── Dates (hidden for FIT packages) ── */}
+        {type !== 'FIT' && (
+          <div className={SECTION}>
+            <div className={SECTION_TITLE}>Trip Dates</div>
+            <div className="flex gap-4">
+              {[
+                { id: 'select_dates', label: 'Select Dates' },
+                { id: 'coming_soon', label: 'Coming Soon' },
+              ].map(opt => (
+                <label key={opt.id}
+                  className={`flex-1 flex items-center gap-3 border-2 rounded-xl px-4 py-3 cursor-pointer transition-all ${
+                    form.date_type === opt.id ? 'border-[#E8651A] bg-orange-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                  <input type="radio" name="date_type" value={opt.id} checked={form.date_type === opt.id}
+                    onChange={() => setField('date_type', opt.id)} className="accent-[#E8651A]" />
+                  <span className={`text-sm font-semibold ${form.date_type === opt.id ? 'text-[#E8651A]' : 'text-gray-600'}`}>
+                    {opt.label}
+                  </span>
+                </label>
+              ))}
             </div>
-          )}
-        </div>
+            {form.date_type === 'select_dates' && (
+              <div className="grid grid-cols-2 gap-4 mt-3">
+                <div>
+                  <label className={LABEL}>Start Date</label>
+                  <input type="date" value={form.start_date} onChange={e => setField('start_date', e.target.value)}
+                    className={INPUT} />
+                </div>
+                <div>
+                  <label className={LABEL}>End Date</label>
+                  <input type="date" value={form.end_date} onChange={e => setField('end_date', e.target.value)}
+                    className={INPUT} />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ── Itinerary ── */}
         <div className={SECTION}>
