@@ -22,12 +22,16 @@ function PackagesContent() {
   const [category, setCategory] = useState(searchParams.get('category') || '');
   const [sort, setSort] = useState('featured');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const subtype = searchParams.get('subtype') || '';
+  const vibe = searchParams.get('vibe') || '';
 
   useEffect(() => {
     setLoading(true);
     const params = new URLSearchParams();
     if (category) params.set('category', category);
     if (search) params.set('search', search);
+    if (subtype) params.set('subtype', subtype);
+    if (vibe) params.set('vibe', vibe);
     fetch(`/api/packages?${params}`)
       .then(r => r.json())
       .then(d => {

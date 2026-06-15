@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Trash2 } from 'lucide-react';
 
+const INPUT = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] focus:border-transparent';
+
 export default function EditPackagePage({ params }) {
   const router = useRouter();
   const [pkg, setPkg] = useState(null);
@@ -18,6 +20,7 @@ export default function EditPackagePage({ params }) {
         p.inclusions = p.inclusions?.length ? p.inclusions : [''];
         p.exclusions = p.exclusions?.length ? p.exclusions : [''];
         p.things_to_carry = p.things_to_carry?.length ? p.things_to_carry : [''];
+        p.tour_options = p.tour_options?.length ? p.tour_options : [];
         setPkg(p);
       }
       setLoading(false);
@@ -32,7 +35,11 @@ export default function EditPackagePage({ params }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true); setError('');
-    const res = await fetch(`/api/admin/packages/${params.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pkg) });
+    const payload = {
+      ...pkg,
+      tour_options: (pkg.tour_options || []).filter(o => o.label && o.price),
+    };
+    const res = await fetch(`/api/admin/packages/${params.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const data = await res.json();
     if (data.success) router.push('/admin/packages');
     else { setError(data.error); setSaving(false); }
@@ -58,6 +65,38 @@ export default function EditPackagePage({ params }) {
             <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={pkg.is_featured || false} onChange={e => setField('is_featured', e.target.checked)} className="accent-[#E8651A]" /><span className="text-sm">Featured</span></label>
             <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={pkg.is_active !== false} onChange={e => setField('is_active', e.target.checked)} className="accent-[#E8651A]" /><span className="text-sm">Active</span></label>
           </div>
+        </div>
+
+        {/* Tour Options */}
+        <div className="bg-white rounded-xl p-6 shadow-sm space-y-3">
+          <h2 className="font-bold text-[#1a1a2e] border-b pb-2">Tour Options <span className="text-gray-400 font-normal text-sm">(multiple pricing — e.g. bike solo, bike pillion, traveler)</span></h2>
+          {(pkg.tour_options || []).map((opt, i) => (
+            <div key={i} className="flex gap-2">
+              <input
+                value={opt.label || ''}
+                onChange={e => setField('tour_options', pkg.tour_options.map((o, idx) => idx === i ? { ...o, label: e.target.value } : o))}
+                placeholder="Option name — e.g. RE Himalayan 411 Solo"
+                className={`${INPUT} flex-[2]`}
+              />
+              <input
+                type="number" min="0"
+                value={opt.price || ''}
+                onChange={e => setField('tour_options', pkg.tour_options.map((o, idx) => idx === i ? { ...o, price: e.target.value } : o))}
+                placeholder="Price ₹"
+                className={`${INPUT} flex-1`}
+              />
+              <button type="button"
+                onClick={() => setField('tour_options', pkg.tour_options.filter((_, idx) => idx !== i))}
+                className="p-2 text-red-400 hover:bg-red-50 rounded-lg">
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))}
+          <button type="button"
+            onClick={() => setField('tour_options', [...(pkg.tour_options || []), { label: '', price: '' }])}
+            className="text-[#E8651A] text-sm flex items-center gap-1 font-semibold hover:underline">
+            <Plus size={14} /> Add Option
+          </button>
         </div>
 
         {['highlights', 'inclusions', 'exclusions', 'things_to_carry'].map(key => (

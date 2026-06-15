@@ -17,6 +17,7 @@ create table if not exists packages (
   inclusions text[],
   exclusions text[],
   things_to_carry text[],
+  tour_options jsonb,
   itinerary jsonb,
   cover_image text,
   gallery_images text[],

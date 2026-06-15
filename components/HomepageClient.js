@@ -402,12 +402,12 @@ export default function HomepageClient() {
           <SectionHeader title="Explore by Category" subtitle="Find the perfect trip for your travel style" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { label: 'Group Trips',   tag: 'Community',  href: '/group-trips',               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
-              { label: 'FIT Packages', tag: 'Personalised', href: '/packages?search=fit',     img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
-              { label: 'Weekend Escapes', tag: 'Quick Trips', href: '/packages?search=weekend',  img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80' },
-              { label: 'Treks',         tag: 'Adventure',  href: '/packages?search=trek',      img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
-              { label: "Women's Only",  tag: 'Exclusive',  href: '/packages?search=women',     img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
-              { label: 'Corporate',     tag: 'Offsite',    href: '/packages?search=corporate', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
+              { label: 'Group Trips',     tag: 'Community',    href: '/group-trips',                                                           img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
+              { label: 'FIT Packages',   tag: 'Personalised', href: '/packages?category=fit',                                                  img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
+              { label: 'Weekend Escapes', tag: 'Quick Trips',  href: '/packages?search=weekend',                                               img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80' },
+              { label: 'Adventure Treks', tag: 'Adventure',    href: '/packages?category=group&vibe=Treks',                                    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
+              { label: "Women's Only",    tag: 'Exclusive',    href: "/packages?category=group&subtype=Women's+Only+Group",                    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
+              { label: 'Corporate',       tag: 'Offsite',      href: '/packages?category=corporate',                                           img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
             ].map(cat => (
               <Link key={cat.label} href={cat.href}
                 className="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">

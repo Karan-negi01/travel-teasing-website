@@ -15,45 +15,23 @@ export default function PackageDetailPage({ params }) {
   const [activeImage, setActiveImage] = useState(0);
   const [openDay, setOpenDay] = useState(0);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const [groupModalOpen, setGroupModalOpen] = useState(false);
   const [similarPkgs, setSimilarPkgs] = useState([]);
-  const [openGroupTrips, setOpenGroupTrips] = useState([]);
-  const [groupForm, setGroupForm] = useState({ creator_name: '', creator_phone: '', creator_email: '', departure_city: '', trip_dates_from: '', trip_dates_to: '', total_spots: 10, vibe_tags: [] });
-  const [groupSuccess, setGroupSuccess] = useState(false);
-  const [groupLoading, setGroupLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [showAllOptions, setShowAllOptions] = useState(false);
   const stickyRef = useRef(null);
 
   useEffect(() => {
     fetch(`/api/packages/${slug}`).then(r => r.json()).then(d => {
       setPkg(d.package);
+      if (d.package?.tour_options?.length > 0) setSelectedOption(d.package.tour_options[0]);
       setLoading(false);
       if (d.package) {
         fetch(`/api/packages?category=${d.package.category}`).then(r => r.json()).then(sd => {
           setSimilarPkgs((sd.packages || []).filter(p => p.slug !== slug).slice(0, 3));
         });
-        if (d.package.category === 'group') {
-          fetch(`/api/group-trips?package_slug=${slug}`).then(r => r.json()).then(gd => setOpenGroupTrips(gd.trips || []));
-        }
       }
     }).catch(() => setLoading(false));
   }, [slug]);
-
-  function toggleVibe(tag) {
-    setGroupForm(f => ({ ...f, vibe_tags: f.vibe_tags.includes(tag) ? f.vibe_tags.filter(v => v !== tag) : [...f.vibe_tags, tag] }));
-  }
-
-  async function submitGroupTrip(e) {
-    e.preventDefault();
-    setGroupLoading(true);
-    const res = await fetch('/api/group-trips', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ package_id: pkg.id, package_title: pkg.title, package_slug: pkg.slug, price_per_person: pkg.price_per_person, total_price: pkg.total_price, ...groupForm }),
-    });
-    const data = await res.json();
-    if (data.success) setGroupSuccess(true);
-    setGroupLoading(false);
-  }
 
   if (loading) return <div className="h-screen flex items-center justify-center"><div className="animate-spin w-10 h-10 border-4 border-[#E8651A] border-t-transparent rounded-full" /></div>;
   if (!pkg) return <div className="h-screen flex items-center justify-center text-gray-500">Package not found.</div>;
@@ -184,36 +162,77 @@ export default function PackageDetailPage({ params }) {
             <div ref={stickyRef} className="lg:sticky lg:top-24 space-y-4">
               {/* Price card */}
               <div className="card p-6">
-                <p className="text-[#E8651A] text-3xl font-bold mb-1">₹{pkg.price_per_person?.toLocaleString('en-IN')}<span className="text-base text-gray-500 font-normal">/person</span></p>
-                {pkg.total_price && pkg.group_size_max && (
-                  <p className="text-gray-400 text-sm mb-5">Total ₹{pkg.total_price?.toLocaleString('en-IN')} for {pkg.group_size_max} people</p>
+                <p className="text-sm text-gray-500 font-medium mb-1">Book This Tour</p>
+                {pkg.tour_options?.length > 0 ? (
+                  <>
+                    <p className="text-[#E8651A] text-3xl font-bold mb-1">
+                      ₹{parseInt(selectedOption?.price || pkg.price_per_person).toLocaleString('en-IN')}
+                      <span className="text-base text-gray-500 font-normal">/person</span>
+                    </p>
+                    <p className="text-gray-400 text-xs mb-4">+ tax as applicable</p>
+
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tour Option</p>
+                    <div className="space-y-2 mb-3">
+                      {(showAllOptions ? pkg.tour_options : pkg.tour_options.slice(0, 2)).map((opt, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setSelectedOption(opt)}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all ${
+                            selectedOption?.label === opt.label
+                              ? 'border-[#E8651A] bg-orange-50 text-[#E8651A]'
+                              : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          <span>₹{parseInt(opt.price).toLocaleString('en-IN')}</span>
+                        </button>
+                      ))}
+                    </div>
+                    {pkg.tour_options.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllOptions(v => !v)}
+                        className="w-full flex items-center justify-center gap-1 border-2 border-[#E8651A] text-[#E8651A] rounded-xl py-2.5 text-sm font-semibold hover:bg-orange-50 transition-colors mb-3"
+                      >
+                        {showAllOptions ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                        {showAllOptions ? 'Show Less Options' : `Show ${pkg.tour_options.length - 2} More Options`}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[#E8651A] text-3xl font-bold mb-1">₹{pkg.price_per_person?.toLocaleString('en-IN')}<span className="text-base text-gray-500 font-normal">/person</span></p>
+                    {pkg.total_price && pkg.group_size_max && (
+                      <p className="text-gray-400 text-sm mb-4">Total ₹{pkg.total_price?.toLocaleString('en-IN')} for {pkg.group_size_max} people</p>
+                    )}
+                  </>
                 )}
                 <div className="space-y-3">
-                  <button onClick={() => setEnquiryOpen(true)} className="w-full btn-primary justify-center">Enquire Now</button>
-                  <a
-                    href={`https://wa.me/916396464369?text=Hi! I'm interested in the ${encodeURIComponent(pkg.title)} package.`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 rounded-full font-semibold hover:bg-green-500 transition-colors"
+                  <button
+                    onClick={() => setEnquiryOpen(true)}
+                    className="w-full btn-primary justify-center"
                   >
-                    <MessageCircle size={18} /> WhatsApp Us
-                  </a>
+                    Book Now
+                  </button>
+                  <div className="flex gap-2">
+                    <a
+                      href={`https://wa.me/916396464369?text=Hi! I'm interested in the ${encodeURIComponent(pkg.title)} package${selectedOption ? ` (${selectedOption.label})` : ''}.`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-[#25D366] text-white rounded-full hover:bg-green-500 transition-colors"
+                    >
+                      <MessageCircle size={20} />
+                    </a>
+                    <a
+                      href={pkg.itinerary_pdf || '#'}
+                      className={`flex-1 flex items-center justify-center gap-2 border-2 border-gray-200 text-gray-700 py-3 rounded-full text-sm font-semibold hover:border-gray-300 transition-colors ${!pkg.itinerary_pdf ? 'opacity-50 pointer-events-none' : ''}`}
+                    >
+                      Download Itinerary
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              {/* Group trip card */}
-              {pkg.category === 'group' && (
-                <div className="card p-6">
-                  <h4 className="font-bold text-[#1a1a2e] mb-2">Don't have a group yet?</h4>
-                  <p className="text-gray-500 text-sm mb-4">Create a group trip listing. We'll help you connect with other solo travelers going to the same place.</p>
-                  {openGroupTrips.length > 0 && (
-                    <p className="text-[#E8651A] text-sm font-medium mb-3">✨ {openGroupTrips.length} group trip{openGroupTrips.length > 1 ? 's' : ''} already open for this package</p>
-                  )}
-                  <button onClick={() => setGroupModalOpen(true)} className="w-full btn-primary justify-center text-sm mb-2">Create Group Trip</button>
-                  {openGroupTrips.length > 0 && (
-                    <Link href={`/group-trips?package_slug=${slug}`} className="block text-center text-[#E8651A] text-sm font-medium hover:underline">View Existing Trips →</Link>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -232,10 +251,10 @@ export default function PackageDetailPage({ params }) {
       {/* Mobile sticky bottom CTA */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-3 shadow-xl">
         <div className="flex-1">
-          <p className="text-[11px] text-gray-400 leading-none">Price per person</p>
-          <p className="text-xl font-bold text-[#1a1a1a]">₹{pkg.price_per_person?.toLocaleString('en-IN')}</p>
+          <p className="text-[11px] text-gray-400 leading-none">{selectedOption ? selectedOption.label : 'Price per person'}</p>
+          <p className="text-xl font-bold text-[#1a1a1a]">₹{(selectedOption ? parseInt(selectedOption.price) : pkg.price_per_person)?.toLocaleString('en-IN')}</p>
         </div>
-        <a href={`https://wa.me/916396464369?text=Hi! I'm interested in the ${encodeURIComponent(pkg.title)} package.`}
+        <a href={`https://wa.me/916396464369?text=Hi! I'm interested in the ${encodeURIComponent(pkg.title)} package${selectedOption ? ` (${selectedOption.label})` : ''}.`}
           target="_blank" rel="noopener noreferrer"
           className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2.5 rounded-full text-sm font-semibold">
           <MessageCircle size={16} /> WhatsApp
@@ -249,75 +268,6 @@ export default function PackageDetailPage({ params }) {
       {/* Enquiry Modal */}
       <EnquiryModal open={enquiryOpen} onClose={() => setEnquiryOpen(false)} packageId={pkg.id} packageTitle={pkg.title} enquiryType="package" />
 
-      {/* Group Trip Modal */}
-      {groupModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={(e) => e.target === e.currentTarget && setGroupModalOpen(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between px-6 py-4 border-b">
-              <h3 className="font-bold text-[#1a1a2e] text-lg">Create Group Trip for {pkg.title}</h3>
-              <button onClick={() => setGroupModalOpen(false)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
-            </div>
-            {groupSuccess ? (
-              <div className="p-8 text-center">
-                <div className="text-5xl mb-4">🎉</div>
-                <h4 className="text-xl font-bold text-[#1a1a2e] mb-2">Trip Listed!</h4>
-                <p className="text-gray-500 mb-4">Your group trip has been listed! Others can now find and join your trip.</p>
-                <Link href="/group-trips" className="btn-primary">View Group Trips</Link>
-              </div>
-            ) : (
-              <form onSubmit={submitGroupTrip} className="px-6 py-5 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
-                    <input required value={groupForm.creator_name} onChange={e => setGroupForm(f => ({...f, creator_name: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                    <input required value={groupForm.creator_phone} onChange={e => setGroupForm(f => ({...f, creator_phone: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" value={groupForm.creator_email} onChange={e => setGroupForm(f => ({...f, creator_email: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Departure City *</label>
-                  <input required value={groupForm.departure_city} onChange={e => setGroupForm(f => ({...f, departure_city: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" placeholder="e.g. Delhi" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">From Date *</label>
-                    <input required type="date" value={groupForm.trip_dates_from} onChange={e => setGroupForm(f => ({...f, trip_dates_from: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">To Date *</label>
-                    <input required type="date" value={groupForm.trip_dates_to} onChange={e => setGroupForm(f => ({...f, trip_dates_to: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Total Spots *</label>
-                  <input required type="number" min="2" max="20" value={groupForm.total_spots} onChange={e => setGroupForm(f => ({...f, total_spots: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Trip Vibe</label>
-                  <div className="flex flex-wrap gap-2">
-                    {['Chill', 'Adventure', 'Cultural', 'Spiritual'].map(tag => (
-                      <button key={tag} type="button" onClick={() => toggleVibe(tag)}
-                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${groupForm.vibe_tags.includes(tag) ? 'bg-[#E8651A] text-white border-[#E8651A]' : 'border-gray-300 text-gray-600 hover:border-[#E8651A]'}`}>
-                        {tag}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <button type="button" onClick={() => setGroupModalOpen(false)} className="flex-1 border border-gray-300 text-gray-600 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50">Cancel</button>
-                  <button type="submit" disabled={groupLoading} className="flex-1 btn-primary justify-center text-sm py-2.5">{groupLoading ? 'Creating...' : 'Create Trip'}</button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

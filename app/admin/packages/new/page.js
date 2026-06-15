@@ -6,7 +6,7 @@ import { Plus, Trash2, Upload, X, ChevronRight, Check, ImageIcon } from 'lucide-
 /* ── Config ──────────────────────────────────────────────── */
 const TYPES = [
   { id: 'FIT',       label: 'FIT',       desc: 'Fixed Individual Tours — solo & couple travelers' },
-  { id: 'GROUPS',    label: 'Groups',    desc: 'Community group trips with fixed departures' },
+  { id: 'GROUPS',    label: 'Fixed Departures',    desc: 'Community group trips with fixed departures' },
   { id: 'CORPORATE', label: 'Corporate', desc: 'Corporate offsite & team outing packages' },
 ];
 
@@ -115,6 +115,7 @@ export default function NewPackagePage() {
     duration_nights: 1,
     vibes: [],
     price_per_person: '',
+    tour_options: [],
     group_size_min: 8,
     group_size_max: 15,
     date_type: 'coming_soon',
@@ -188,6 +189,7 @@ export default function NewPackagePage() {
       vibe: form.vibes.join(', '),
       price_per_person: parseInt(form.price_per_person) || 0,
       total_price: parseInt(form.price_per_person) || 0,
+      tour_options: form.tour_options.filter(o => o.label && o.price),
       group_size_min: form.group_size_min,
       group_size_max: form.group_size_max,
       cover_image: form.images.find(Boolean) || '',
@@ -338,6 +340,40 @@ export default function NewPackagePage() {
               onChange={e => setField('price_per_person', e.target.value)}
               placeholder="e.g. 18500"
               className={INPUT} />
+          </div>
+
+          {/* Tour Options */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className={LABEL}>Tour Options <span className="text-gray-400 font-normal normal-case tracking-normal">(optional — for multiple pricing like bike solo, bike pillion, traveler)</span></label>
+            </div>
+            {form.tour_options.map((opt, i) => (
+              <div key={i} className="flex gap-2 mb-2">
+                <input
+                  value={opt.label}
+                  onChange={e => setField('tour_options', form.tour_options.map((o, idx) => idx === i ? { ...o, label: e.target.value } : o))}
+                  placeholder={`Option name — e.g. RE Himalayan 411 Solo`}
+                  className={`${INPUT} flex-[2]`}
+                />
+                <input
+                  type="number" min="0"
+                  value={opt.price}
+                  onChange={e => setField('tour_options', form.tour_options.map((o, idx) => idx === i ? { ...o, price: e.target.value } : o))}
+                  placeholder="Price ₹"
+                  className={`${INPUT} flex-1`}
+                />
+                <button type="button"
+                  onClick={() => setField('tour_options', form.tour_options.filter((_, idx) => idx !== i))}
+                  className="p-2 text-red-400 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+            <button type="button"
+              onClick={() => setField('tour_options', [...form.tour_options, { label: '', price: '' }])}
+              className="text-[#E8651A] text-xs font-semibold flex items-center gap-1 hover:underline">
+              <Plus size={13} /> Add Tour Option
+            </button>
           </div>
 
           {type === 'GROUPS' && (
