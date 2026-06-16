@@ -249,15 +249,19 @@ export default function HomepageClient() {
   const [openFaq, setOpenFaq]           = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [carouselPage, setCarouselPage] = useState(0);
+  const [weekendPage, setWeekendPage]   = useState(0);
+  const [communityPage, setCommunityPage] = useState(0);
   const [heroSearch, setHeroSearch]     = useState('');
 
   const worldRef      = useRef(null);
   const domesticRef   = useRef(null);
-  const upcomingRef   = useRef(null);
-  const trackRef      = useRef(null);   // the flex track that slides
-  const viewportRef   = useRef(null);   // overflow-x-hidden viewport
+  const trackRef      = useRef(null);
+  const viewportRef   = useRef(null);
+  const weekendTrackRef    = useRef(null);
+  const weekendViewportRef = useRef(null);
+  const communityTrackRef    = useRef(null);
+  const communityViewportRef = useRef(null);
 
-  // Slide track using transform — exact DeshVidesh behaviour
   const goToPage = (newPage) => {
     setCarouselPage(newPage);
     if (trackRef.current && viewportRef.current) {
@@ -266,7 +270,22 @@ export default function HomepageClient() {
     }
   };
 
-  // Reset track on filter change
+  const goToWeekendPage = (newPage) => {
+    setWeekendPage(newPage);
+    if (weekendTrackRef.current && weekendViewportRef.current) {
+      const vw = weekendViewportRef.current.clientWidth;
+      weekendTrackRef.current.style.transform = `translateX(-${newPage * vw}px)`;
+    }
+  };
+
+  const goToCommunityPage = (newPage) => {
+    setCommunityPage(newPage);
+    if (communityTrackRef.current && communityViewportRef.current) {
+      const vw = communityViewportRef.current.clientWidth;
+      communityTrackRef.current.style.transform = `translateX(-${newPage * vw}px)`;
+    }
+  };
+
   const changeFilter = (filterId) => {
     setActiveFilter(filterId);
     setCarouselPage(0);
@@ -285,7 +304,7 @@ export default function HomepageClient() {
     });
   }, []);
 
-  const scroll = (ref, dir) => ref.current?.scrollBy({ left: dir * 200, behavior: 'smooth' });
+  const scroll = (ref, dir) => ref.current?.scrollBy({ left: dir * 200, behavior: 'smooth' }); // used by destination carousels
 
   const priceFilters = [
     { id: 'all',    label: 'All Destinations' },
@@ -672,85 +691,174 @@ export default function HomepageClient() {
       </section>
 
       {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
-      <section className="relative bg-white py-16 md:py-24">
-        <div className="mx-auto max-w-[1600px] px-4">
-          <div className="mb-8 text-center">
-            <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-              <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Weekend </span>
-              <span>Escapes</span>
-            </h2>
-            <p className="mt-4 text-base text-gray-600 md:text-lg">
-              Short on time? These quick getaways pack in all the fun
-            </p>
-          </div>
-          {packages.length === 0 ? (
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-              {[1,2,3,4].map(i => (
-                <div key={i}>
-                  <div className="h-[220px] md:h-80 bg-gray-100 rounded-2xl animate-pulse" />
-                  <div className="py-2 space-y-3 mt-2">
-                    <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
-                    <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
-                    <div className="h-5 bg-gray-100 rounded animate-pulse w-2/5" />
+      {(() => {
+        const weekendPkgs = packages.slice(0, 8);
+        const wTotalPages = Math.max(1, Math.ceil(weekendPkgs.length / CARDS_PER_PAGE));
+        const wSafePage = Math.min(weekendPage, wTotalPages - 1);
+        return (
+          <section className="relative bg-white py-16 md:py-24">
+            <div className="mx-auto max-w-[1600px] px-4">
+              <div className="mb-8 text-center">
+                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Weekend </span>
+                  <span>Escapes</span>
+                </h2>
+                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                  Short on time? These quick getaways pack in all the fun
+                </p>
+              </div>
+
+              {/* Prev/Next */}
+              {weekendPkgs.length > 0 && (
+                <div className="flex justify-end mb-4">
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => goToWeekendPage(Math.max(0, wSafePage - 1))} disabled={wSafePage === 0}
+                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                      <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
+                    </button>
+                    <button onClick={() => goToWeekendPage(Math.min(wTotalPages - 1, wSafePage + 1))} disabled={wSafePage === wTotalPages - 1}
+                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                      <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
+                    </button>
                   </div>
                 </div>
-              ))}
+              )}
+
+              <div className="mt-2">
+                {weekendPkgs.length === 0 ? (
+                  <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+                    {[1,2,3,4].map(i => (
+                      <div key={i}>
+                        <div className="h-[220px] md:h-80 bg-gray-100 rounded-2xl animate-pulse" />
+                        <div className="py-2 space-y-3 mt-2">
+                          <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
+                          <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
+                          <div className="h-5 bg-gray-100 rounded animate-pulse w-2/5" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div ref={weekendViewportRef} className="overflow-x-hidden p-1">
+                    <div ref={weekendTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
+                      style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+                      {weekendPkgs.map(pkg => (
+                        <div key={pkg.id}
+                          className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
+                          <PackageCard pkg={pkg} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Dots */}
+              {weekendPkgs.length > 0 && (
+                <div className="flex items-center gap-2 mt-8">
+                  {Array.from({ length: wTotalPages }).map((_, i) => (
+                    <button key={i} onClick={() => goToWeekendPage(i)}
+                      className={`rounded-full transition-all duration-300 ${i === wSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-8 flex justify-center">
+                <Link href="/packages"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+                  View All Weekend Trips <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-              {packages.slice(0, 8).map(pkg => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </div>
-          )}
-          <div className="mt-8 flex justify-center">
-            <Link href="/packages"
-              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
-              View All Weekend Trips <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* ── BANNER 2 — Weekend Escapes ── */}
       <PromoBanner b={banners[1]} />
 
       {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-8 bg-[#fafafa]">
-        <div className="max-w-[1600px] mx-auto">
-          <SectionHeader title="Upcoming Community Trips"
-            subtitle="Fixed departures with confirmed dates — join now"
-            action={<CarouselNav onLeft={() => scroll(upcomingRef, -1)} onRight={() => scroll(upcomingRef, 1)} />}
-          />
-          {groupPackages.length === 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[1,2,3].map(i => (
-                <div key={i} className="rounded-2xl overflow-hidden border border-gray-100 bg-white">
-                  <div className="h-48 bg-gray-100 animate-pulse" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
-                    <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
+      {(() => {
+        const cTotalPages = Math.max(1, Math.ceil(groupPackages.length / CARDS_PER_PAGE));
+        const cSafePage = Math.min(communityPage, cTotalPages - 1);
+        return (
+          <section className="relative py-16 md:py-24 px-4 bg-[#fafafa]">
+            <div className="max-w-[1600px] mx-auto">
+              <div className="mb-8 text-center">
+                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Upcoming </span>
+                  <span>Community Trips</span>
+                </h2>
+                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                  Fixed departures with confirmed dates — join now
+                </p>
+              </div>
+
+              {/* Prev/Next */}
+              {groupPackages.length > 0 && (
+                <div className="flex justify-end mb-4">
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => goToCommunityPage(Math.max(0, cSafePage - 1))} disabled={cSafePage === 0}
+                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                      <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
+                    </button>
+                    <button onClick={() => goToCommunityPage(Math.min(cTotalPages - 1, cSafePage + 1))} disabled={cSafePage === cTotalPages - 1}
+                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                      <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div ref={upcomingRef} className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x">
-              {groupPackages.map(pkg => (
-                <div key={pkg.id} className="flex-shrink-0 snap-start w-[85vw] sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]">
-                  <PackageCard pkg={pkg} />
+              )}
+
+              <div className="mt-2">
+                {groupPackages.length === 0 ? (
+                  <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+                    {[1,2,3,4].map(i => (
+                      <div key={i}>
+                        <div className="h-[220px] md:h-80 bg-gray-100 rounded-2xl animate-pulse" />
+                        <div className="py-2 space-y-3 mt-2">
+                          <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
+                          <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
+                          <div className="h-5 bg-gray-100 rounded animate-pulse w-2/5" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div ref={communityViewportRef} className="overflow-x-hidden p-1">
+                    <div ref={communityTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
+                      style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+                      {groupPackages.map(pkg => (
+                        <div key={pkg.id}
+                          className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
+                          <PackageCard pkg={pkg} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Dots */}
+              {groupPackages.length > 0 && (
+                <div className="flex items-center gap-2 mt-8">
+                  {Array.from({ length: cTotalPages }).map((_, i) => (
+                    <button key={i} onClick={() => goToCommunityPage(i)}
+                      className={`rounded-full transition-all duration-300 ${i === cSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
+                  ))}
                 </div>
-              ))}
+              )}
+
+              <div className="mt-8 flex justify-center">
+                <Link href="/group-trips"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+                  View All Upcoming Trips <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
-          )}
-          <div className="text-center mt-8">
-            <Link href="/group-trips"
-              className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white px-7 py-3 rounded-full text-sm font-semibold hover:bg-[#333] transition-all">
-              View All Upcoming Trips <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* ── VIBE WITH TRAVEL TEASING ─────────────────────────────── */}
       <section className="py-20 bg-[#fffdf7]">
