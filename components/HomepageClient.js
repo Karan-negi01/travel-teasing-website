@@ -251,6 +251,7 @@ export default function HomepageClient() {
   const [carouselPage, setCarouselPage] = useState(0);
   const [weekendPage, setWeekendPage]   = useState(0);
   const [communityPage, setCommunityPage] = useState(0);
+  const [fitPage, setFitPage]           = useState(0);
   const [heroSearch, setHeroSearch]     = useState('');
 
   const worldRef      = useRef(null);
@@ -261,6 +262,8 @@ export default function HomepageClient() {
   const weekendViewportRef = useRef(null);
   const communityTrackRef    = useRef(null);
   const communityViewportRef = useRef(null);
+  const fitTrackRef          = useRef(null);
+  const fitViewportRef       = useRef(null);
 
   const goToPage = (newPage) => {
     setCarouselPage(newPage);
@@ -275,6 +278,14 @@ export default function HomepageClient() {
     if (weekendTrackRef.current && weekendViewportRef.current) {
       const vw = weekendViewportRef.current.clientWidth;
       weekendTrackRef.current.style.transform = `translateX(-${newPage * vw}px)`;
+    }
+  };
+
+  const goToFitPage = (newPage) => {
+    setFitPage(newPage);
+    if (fitTrackRef.current && fitViewportRef.current) {
+      const vw = fitViewportRef.current.clientWidth;
+      fitTrackRef.current.style.transform = `translateX(-${newPage * vw}px)`;
     }
   };
 
@@ -875,50 +886,63 @@ export default function HomepageClient() {
       {/* ── PERSONALISED TOUR PACKAGES (FIT) ────────────────────── */}
       {(() => {
         const fitPackages = [
-          {
-            id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir',
-            category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6,
-            slug: 'packages?search=kashmir', cover_image: null,
-          },
-          {
-            id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia',
-            category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7,
-            slug: 'packages?search=bali', cover_image: null,
-          },
-          {
-            id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh',
-            category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8,
-            slug: 'packages?search=ladakh', cover_image: null,
-          },
-          {
-            id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand',
-            category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6,
-            slug: 'packages?search=thailand', cover_image: null,
-          },
-          {
-            id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan',
-            category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7,
-            slug: 'packages?search=rajasthan', cover_image: null,
-          },
-          {
-            id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives',
-            category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5,
-            slug: 'packages?search=maldives', cover_image: null,
-          },
+          { id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir', category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6, slug: 'packages?search=kashmir', cover_image: null },
+          { id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia', category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7, slug: 'packages?search=bali', cover_image: null },
+          { id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh', category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8, slug: 'packages?search=ladakh', cover_image: null },
+          { id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand', category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6, slug: 'packages?search=thailand', cover_image: null },
+          { id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan', category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7, slug: 'packages?search=rajasthan', cover_image: null },
+          { id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives', category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5, slug: 'packages?search=maldives', cover_image: null },
         ];
+        const fTotalPages = Math.max(1, Math.ceil(fitPackages.length / CARDS_PER_PAGE));
+        const fSafePage = Math.min(fitPage, fTotalPages - 1);
         return (
-          <section className="py-20 bg-[#fafafa]">
-            <div className="max-w-[1600px] mx-auto px-6">
-              <SectionHeader
-                title="Personalised Tour Packages"
-                subtitle="Handcrafted FIT packages built around your schedule, budget & travel style"
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 mt-2">
-                {fitPackages.map(pkg => (
-                  <PackageCard key={pkg.id} pkg={pkg} />
+          <section className="relative py-16 md:py-24 bg-[#fafafa]">
+            <div className="max-w-[1600px] mx-auto px-4">
+              <div className="mb-8 text-center">
+                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Personalised </span>
+                  <span>Tour Packages</span>
+                </h2>
+                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                  Handcrafted FIT packages built around your schedule, budget & travel style
+                </p>
+              </div>
+
+              {/* Prev/Next */}
+              <div className="flex justify-end mb-4">
+                <div className="flex items-center gap-1">
+                  <button onClick={() => goToFitPage(Math.max(0, fSafePage - 1))} disabled={fSafePage === 0}
+                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                    <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
+                  </button>
+                  <button onClick={() => goToFitPage(Math.min(fTotalPages - 1, fSafePage + 1))} disabled={fSafePage === fTotalPages - 1}
+                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                    <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
+                  </button>
+                </div>
+              </div>
+
+              <div ref={fitViewportRef} className="overflow-x-hidden p-1">
+                <div ref={fitTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
+                  style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+                  {fitPackages.map(pkg => (
+                    <div key={pkg.id}
+                      className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
+                      <PackageCard pkg={pkg} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dots */}
+              <div className="flex items-center gap-2 mt-8">
+                {Array.from({ length: fTotalPages }).map((_, i) => (
+                  <button key={i} onClick={() => goToFitPage(i)}
+                    className={`rounded-full transition-all duration-300 ${i === fSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
                 ))}
               </div>
-              <div className="flex justify-center mt-10">
+
+              <div className="mt-8 flex justify-center">
                 <Link href="/packages?search=fit"
                   className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
                   View All FIT Packages <ArrowRight size={14} />
