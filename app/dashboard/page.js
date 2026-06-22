@@ -113,7 +113,6 @@ export default function DashboardPage() {
             <div className="flex flex-wrap gap-3">
               <button onClick={() => setAddTripOpen(true)} className="btn-primary text-sm"><Plus size={16} /> Add a Trip</button>
               <Link href="/packages" className="btn-outline text-sm">Browse Packages</Link>
-              <Link href="/group-trips" className="btn-outline text-sm">Browse Group Trips</Link>
             </div>
             {trips.length > 0 && (
               <div>

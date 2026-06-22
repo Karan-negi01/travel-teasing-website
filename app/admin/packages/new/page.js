@@ -5,14 +5,16 @@ import { Plus, Trash2, Upload, X, ChevronRight, Check, ImageIcon } from 'lucide-
 
 /* ── Config ──────────────────────────────────────────────── */
 const TYPES = [
-  { id: 'FIT',       label: 'FIT',       desc: 'Fixed Individual Tours — solo & couple travelers' },
-  { id: 'GROUPS',    label: 'Fixed Departures',    desc: 'Community group trips with fixed departures' },
-  { id: 'CORPORATE', label: 'Corporate', desc: 'Corporate offsite & team outing packages' },
+  { id: 'FIT',       label: 'FIT',              desc: 'Fixed Individual Tours — solo & couple travelers' },
+  { id: 'GROUPS',    label: 'Fixed Departures', desc: 'Community group trips with fixed departures' },
+  { id: 'WEEKEND',   label: 'Weekend Escapes',  desc: 'Short 2–4 day getaways — FIT or Fixed Departure' },
+  { id: 'CORPORATE', label: 'Corporate',        desc: 'Corporate offsite & team outing packages' },
 ];
 
 const SUBTYPES = {
   FIT:       ['Normal FIT', 'Exclusive FIT'],
   GROUPS:    ["Women's Only Group", 'Travel with Pets Group', 'Normal Group', 'Sacred Places Group', 'Exclusive Trips'],
+  WEEKEND:   ['FIT', 'Fixed Departure'],
   CORPORATE: ['Team Outing', 'Corporate Retreat', 'MICE'],
 };
 
@@ -172,7 +174,7 @@ export default function NewPackagePage() {
     setSaving(true); setError('');
     const slug = form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     const duration = `${form.duration_nights}N/${form.duration_days}D`;
-    const category = type === 'GROUPS' ? 'group' : type === 'FIT' ? 'fit' : 'corporate';
+    const category = type === 'GROUPS' ? 'group' : type === 'FIT' ? 'fit' : type === 'WEEKEND' ? 'weekend' : 'corporate';
 
     const payload = {
       slug,
@@ -194,9 +196,9 @@ export default function NewPackagePage() {
       group_size_max: form.group_size_max,
       cover_image: form.images.find(Boolean) || '',
       images: form.images.filter(Boolean),
-      date_type: type === 'FIT' ? null : form.date_type,
-      start_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.start_date : null,
-      end_date: type !== 'FIT' && form.date_type === 'select_dates' ? form.end_date : null,
+      date_type: fitLike ? null : form.date_type,
+      start_date: !fitLike && form.date_type === 'select_dates' ? form.start_date : null,
+      end_date: !fitLike && form.date_type === 'select_dates' ? form.end_date : null,
       multi_dates: form.date_type === 'multi_dates' ? form.multi_dates.filter(d => d.start_date && d.end_date) : null,
       description: form.about_trip,
       highlights: form.highlights.filter(Boolean),
@@ -247,14 +249,21 @@ export default function NewPackagePage() {
   if (step === 2) return (
     <div className="max-w-2xl">
       <button onClick={() => setStep(1)} className="text-sm text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1">← Back</button>
-      <h1 className="text-2xl font-bold text-[#1a1a2e] mb-2">New {type} Package</h1>
+      <h1 className="text-2xl font-bold text-[#1a1a2e] mb-2">New {TYPES.find(t => t.id === type)?.label} Package</h1>
       <p className="text-gray-400 text-sm mb-8">Step 2 of 3 — Choose subtype</p>
       <div className="grid gap-3">
         {SUBTYPES[type].map(st => (
           <button key={st} type="button"
             onClick={() => { setSubtype(st); setStep(3); }}
             className="flex items-center justify-between px-5 py-4 bg-white border-2 border-gray-100 rounded-xl hover:border-[#E8651A] hover:shadow-md transition-all text-left group">
-            <span className="font-semibold text-[#1a1a2e]">{st}</span>
+            <div>
+              <span className="font-semibold text-[#1a1a2e]">{st}</span>
+              {type === 'WEEKEND' && (
+                <p className="text-gray-400 text-xs mt-0.5">
+                  {st === 'FIT' ? 'No fixed dates — traveler books anytime' : 'Fixed group dates with confirmed batches'}
+                </p>
+              )}
+            </div>
             <ChevronRight size={18} className="text-gray-300 group-hover:text-[#E8651A] transition-colors" />
           </button>
         ))}
@@ -264,6 +273,14 @@ export default function NewPackagePage() {
 
   /* ── STEP 3: Full Form ── */
   const duration = `${form.duration_nights}N/${form.duration_days}D`;
+
+  // Weekend subtype helpers
+  const isWeekendFIT = type === 'WEEKEND' && subtype === 'FIT';
+  const isWeekendFD  = type === 'WEEKEND' && subtype === 'Fixed Departure';
+  // Treat like FIT (no dates, no group size) if FIT or Weekend-FIT
+  const fitLike      = type === 'FIT' || isWeekendFIT;
+  // Treat like GROUPS (dates + group size + multi_dates) if GROUPS or Weekend-FD
+  const groupsLike   = type === 'GROUPS' || isWeekendFD;
 
   return (
     <div className="max-w-3xl pb-16">
@@ -376,7 +393,7 @@ export default function NewPackagePage() {
             </button>
           </div>
 
-          {type === 'GROUPS' && (
+          {groupsLike && (
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={LABEL}>Min Group Size</label>
@@ -442,15 +459,15 @@ export default function NewPackagePage() {
           </div>
         </div>
 
-        {/* ── Dates (hidden for FIT packages) ── */}
-        {type !== 'FIT' && (
+        {/* ── Dates (hidden for FIT-like packages) ── */}
+        {!fitLike && (
           <div className={SECTION}>
             <div className={SECTION_TITLE}>Trip Dates</div>
             <div className="flex gap-4">
               {[
                 { id: 'select_dates', label: 'Select Dates' },
                 { id: 'coming_soon', label: 'Coming Soon' },
-                ...(type === 'GROUPS' ? [{ id: 'multi_dates', label: 'Multiple Dates' }] : []),
+                ...(groupsLike ? [{ id: 'multi_dates', label: 'Multiple Dates' }] : []),
               ].map(opt => (
                 <label key={opt.id}
                   className={`flex-1 flex items-center gap-3 border-2 rounded-xl px-4 py-3 cursor-pointer transition-all ${

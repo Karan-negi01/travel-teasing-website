@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ packages: 0, enquiries: 0, groupTrips: 0, users: 0 });
+  const [stats, setStats] = useState({ packages: 0, enquiries: 0, users: 0 });
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,9 +11,8 @@ export default function AdminDashboard() {
     Promise.all([
       fetch('/api/packages').then(r => r.json()),
       fetch('/api/enquiries').then(r => r.json()),
-      fetch('/api/group-trips').then(r => r.json()),
-    ]).then(([pkgs, enq, grp]) => {
-      setStats({ packages: pkgs.packages?.length || 0, enquiries: (enq.enquiries || []).filter(e => e.status === 'new').length, groupTrips: grp.trips?.length || 0, users: 0 });
+    ]).then(([pkgs, enq]) => {
+      setStats({ packages: pkgs.packages?.length || 0, enquiries: (enq.enquiries || []).filter(e => e.status === 'new').length, users: 0 });
       setEnquiries((enq.enquiries || []).slice(0, 5));
       setLoading(false);
     });
@@ -24,11 +23,10 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1a1a2e] mb-6">Admin Dashboard</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         {[
           { label: 'Total Packages', value: stats.packages, href: '/admin/packages', color: 'bg-blue-500' },
           { label: 'New Enquiries', value: stats.enquiries, href: '/admin/enquiries', color: 'bg-orange-500' },
-          { label: 'Open Group Trips', value: stats.groupTrips, href: '/admin/group-trips', color: 'bg-green-500' },
           { label: 'Total Users', value: stats.users, href: '/admin/users', color: 'bg-purple-500' },
         ].map(s => (
           <Link key={s.label} href={s.href} className="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all">

@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { Mountain, LayoutDashboard, Package, MessageSquare, Users, Star, BookOpen, Image, MapPin } from 'lucide-react';
+import { Mountain, LayoutDashboard, Package, MessageSquare, Users, Star, BookOpen, Image, CreditCard } from 'lucide-react';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/packages', label: 'Packages', icon: Package },
   { href: '/admin/enquiries', label: 'Enquiries', icon: MessageSquare },
-  { href: '/admin/group-trips', label: 'Group Trips', icon: MapPin },
+  { href: '/admin/transactions', label: 'Transactions', icon: CreditCard },
   { href: '/admin/users', label: 'Users', icon: Users },
   { href: '/admin/testimonials', label: 'Testimonials', icon: Star },
   { href: '/admin/blogs', label: 'Blogs', icon: BookOpen },

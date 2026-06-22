@@ -1,13 +1,16 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, Calendar, MapPin, Phone } from 'lucide-react';
-import { useState } from 'react';
-import EnquiryModal from './EnquiryModal';
+import { Calendar, MapPin, Phone } from 'lucide-react';
 
 const catLabels = {
-  group: 'Group', family: 'Family', sacred: 'Sacred',
-  adventure: 'Adventure', corporate: 'Corporate',
+  group:     'Group',
+  family:    'FIT',
+  sacred:    'FIT',
+  adventure: 'Group',
+  corporate: 'Corporate',
+  weekend:   'FIT',
+  fit:       'FIT',
 };
 
 const destImages = [
@@ -48,7 +51,6 @@ function getDestImage(pkg) {
 }
 
 export default function PackageCard({ pkg }) {
-  const [enquiryOpen, setEnquiryOpen] = useState(false);
   const label = catLabels[pkg.category] || 'Group';
 
   const savings = pkg.original_price && pkg.price_per_person && pkg.original_price > pkg.price_per_person
@@ -85,53 +87,34 @@ export default function PackageCard({ pkg }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
 
-          {/* Save badge — exact DV: orange pill top-left */}
-          {savings && (
-            <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1
-                            bg-[#ff6b35] text-white text-[11px] font-semibold
-                            px-2.5 py-1 rounded-full shadow-md">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
-              </svg>
-              Save ₹{savings.toLocaleString('en-IN')}
-            </div>
-          )}
+
         </div>
 
         {/* ── TEXT PANEL ── */}
-        <div className="flex flex-col justify-between gap-1.5 py-1 md:gap-2 md:py-2">
+        <div className="flex flex-col justify-between gap-3 py-2 md:gap-3 md:py-3">
 
           {/* Title — 16px / 500 */}
-          <h2 className="line-clamp-2 text-base font-semibold leading-snug text-gray-900">
+          <h2 className="line-clamp-2 text-base font-medium leading-6 text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>
             {pkg.title}
           </h2>
 
-          {/* Meta row — cool colored pill for category + styled rating */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            {/* Category pill — colored by type */}
-            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-              pkg.category === 'sacred'    ? 'bg-orange-100 text-orange-700' :
-              pkg.category === 'adventure' ? 'bg-green-100 text-green-700'  :
-              pkg.category === 'family'    ? 'bg-purple-100 text-purple-700':
-              pkg.category === 'corporate' ? 'bg-gray-100 text-gray-700'    :
-              'bg-blue-100 text-blue-700'
-            }`}>
-              <MapPin size={10} />
+          {/* Meta row */}
+          <div className="flex items-center justify-between -ml-0.5" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            <span className="inline-flex items-center gap-1 text-[15px] font-normal text-gray-600">
+              <MapPin size={14} className="text-[#1a1a1a]" />
               {label}
             </span>
-            {/* Rating pill */}
-            <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-0.5 text-[11px] font-semibold text-yellow-700">
-              <Star size={10} className="fill-yellow-400 text-yellow-400" />
-              4.9
-              <span className="font-normal text-gray-400">(100)</span>
-            </span>
-            {/* Date chip */}
-            {dateStr && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600">
-                <Calendar size={10} />
+            {label === 'FIT' ? (
+              <span className="inline-flex items-center gap-1 text-[13px] font-medium text-[#1a1a1a]">
+                <Calendar size={14} className="text-[#1a1a1a]" />
+                Request
+              </span>
+            ) : dateStr ? (
+              <span className="inline-flex items-center gap-1 text-[13px] font-normal text-gray-500">
+                <Calendar size={14} className="text-[#1a1a1a]" />
                 {dateStr}
               </span>
-            )}
+            ) : null}
           </div>
 
           {/* Price row */}
@@ -141,7 +124,7 @@ export default function PackageCard({ pkg }) {
             <div>
               <div className="flex items-baseline gap-1.5">
                 {/* Price — 20px / 700 bold */}
-                <span className="text-xl font-bold text-[#1a1a1a]">
+                <span className="text-xl font-bold text-[#1a1a1a]" style={{ fontFamily: "'Poppins', sans-serif" }}>
                   ₹{pkg.price_per_person?.toLocaleString('en-IN')}
                 </span>
                 {savings && (
@@ -151,7 +134,7 @@ export default function PackageCard({ pkg }) {
                 )}
               </div>
               {pkg.duration_days && (
-                <p className="hidden text-[11px] font-medium text-gray-500 md:block">
+                <p className="hidden text-[12px] font-normal text-gray-400 md:block" style={{ fontFamily: "'Poppins', sans-serif" }}>
                   {pkg.duration_days}-day package
                 </p>
               )}
@@ -159,35 +142,32 @@ export default function PackageCard({ pkg }) {
 
             {/* Right: phone + Details — bigger buttons (p-2.5, icon 15px) */}
             <div className="flex flex-row items-center gap-1.5">
-              <button
-                onClick={() => setEnquiryOpen(true)}
-                className="cursor-pointer rounded-full border-2 border-gray-200 bg-white p-2.5
-                           transition-all duration-300 hover:border-[#5bc1d5] hover:shadow-sm"
-                aria-label="Enquire">
-                <Phone size={15} className="text-[#1a1a1a]" />
-              </button>
+              <a
+                href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + pkg.title + '. Please share more details.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer rounded-full border-[2px] border-gray-300 p-2 flex items-center justify-center transition-all duration-500 hover:border-gray-500"
+                aria-label="WhatsApp">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a1a1a">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.553 4.112 1.523 5.84L.057 23.143a.75.75 0 0 0 .921.919l5.376-1.457A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.718 9.718 0 0 1-4.964-1.36l-.355-.212-3.686.999 1.016-3.586-.232-.369A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+                </svg>
+              </a>
               <Link
                 href={`/packages/${pkg.slug}`}
-                className="flex flex-row items-center gap-1.5 rounded-full border-2 border-[#1a1a1a]
-                           bg-[#1a1a1a] px-3 py-2.5 text-white transition-all duration-300 hover:bg-[#333]">
+                className="flex flex-row items-center gap-1 rounded-full border-2 border-[#1a1a1a]
+                           bg-[#1a1a1a] p-2 text-white transition-all duration-500 hover:bg-[#333]">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 17L17 7M17 7H7M17 7v10"/>
                 </svg>
-                <span className="text-xs font-semibold">Details</span>
+                <span className="text-[14px] font-normal" style={{ fontFamily: "'Poppins', sans-serif" }}>Details</span>
               </Link>
             </div>
           </div>
         </div>
       </div>
 
-      <EnquiryModal
-        open={enquiryOpen}
-        onClose={() => setEnquiryOpen(false)}
-        packageId={pkg.id}
-        packageTitle={pkg.title}
-        enquiryType="package"
-      />
     </>
   );
 }

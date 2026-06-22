@@ -2,32 +2,17 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Calendar, Users, CheckCircle } from 'lucide-react';
+import { MapPin, Calendar, Users, MessageCircle } from 'lucide-react';
 
 const vibeBg = { Chill: 'bg-blue-100 text-blue-700', Adventure: 'bg-orange-100 text-orange-700', Cultural: 'bg-purple-100 text-purple-700', Spiritual: 'bg-yellow-100 text-yellow-700' };
 
 export default function GroupTripDetailPage({ params }) {
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     fetch(`/api/group-trips/${params.id}`).then(r => r.json()).then(d => { setTrip(d.trip); setLoading(false); }).catch(() => setLoading(false));
   }, [params.id]);
-
-  async function handleJoin(e) {
-    e.preventDefault();
-    if (!form.name || !form.phone) { setError('Name and phone are required.'); return; }
-    setSubmitting(true); setError('');
-    const res = await fetch(`/api/group-trips/${params.id}/join`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
-    const data = await res.json();
-    if (data.success) setSuccess(true);
-    else setError(data.error || 'Something went wrong.');
-    setSubmitting(false);
-  }
 
   if (loading) return <div className="h-screen flex items-center justify-center pt-20"><div className="animate-spin w-10 h-10 border-4 border-[#E8651A] border-t-transparent rounded-full" /></div>;
   if (!trip) return <div className="h-screen flex items-center justify-center pt-20 text-gray-500">Group trip not found.</div>;
@@ -36,6 +21,8 @@ export default function GroupTripDetailPage({ params }) {
   const total = trip.total_spots;
   const pct = Math.round((filled / total) * 100);
   const pkg = trip.packages;
+
+  const waMessage = encodeURIComponent(`Hi! I'm interested in the trip: ${trip.package_title}. Please share more details.`);
 
   return (
     <div className="pt-20">
@@ -75,13 +62,6 @@ export default function GroupTripDetailPage({ params }) {
               </div>
             </div>
 
-            <div className="bg-orange-50 border border-orange-100 rounded-xl p-5 mb-6">
-              <p className="text-gray-600 text-sm">
-                <span className="font-semibold text-[#E8651A]">{trip.creator_name?.split(' ')[0]}</span> is organizing this trip.
-                Join now to secure your spot!
-              </p>
-            </div>
-
             {pkg && (
               <Link href={`/packages/${pkg.slug || trip.package_slug}`} className="text-[#E8651A] text-sm font-semibold hover:underline">
                 View full package details →
@@ -89,41 +69,22 @@ export default function GroupTripDetailPage({ params }) {
             )}
           </div>
 
-          {/* Join form */}
+          {/* Book via WhatsApp */}
           <div>
             <div className="card p-6 lg:sticky lg:top-24">
               <p className="text-[#E8651A] text-3xl font-bold mb-1">₹{trip.price_per_person?.toLocaleString('en-IN')}<span className="text-base text-gray-500 font-normal">/person</span></p>
-              <p className="text-gray-400 text-sm mb-5">Total trip cost: ₹{trip.total_price?.toLocaleString('en-IN')}</p>
+              <p className="text-gray-400 text-sm mb-6">Total trip cost: ₹{trip.total_price?.toLocaleString('en-IN')}</p>
 
-              {success ? (
-                <div className="text-center py-6">
-                  <CheckCircle size={48} className="text-green-500 mx-auto mb-3" />
-                  <h4 className="font-bold text-[#1a1a2e] mb-2">Request Sent!</h4>
-                  <p className="text-gray-500 text-sm">We'll connect you with the group organizer shortly via WhatsApp.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleJoin} className="space-y-4">
-                  <h3 className="font-bold text-[#1a1a2e]">Join This Trip</h3>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-                    <input required value={form.name} onChange={e => setForm(f => ({...f, name: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                    <input required value={form.phone} onChange={e => setForm(f => ({...f, phone: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" value={form.email} onChange={e => setForm(f => ({...f, email: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                    <textarea rows={3} value={form.message} onChange={e => setForm(f => ({...f, message: e.target.value}))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] resize-none" placeholder="Tell the organizer about yourself..." />
-                  </div>
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
-                  <button type="submit" disabled={submitting} className="w-full btn-primary justify-center">{submitting ? 'Sending...' : 'Request to Join'}</button>
-                </form>
-              )}
+              <a
+                href={`https://wa.me/916396464369?text=${waMessage}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3.5 rounded-xl hover:bg-[#1ebe5d] transition-colors text-sm"
+              >
+                <MessageCircle size={18} />
+                Book on WhatsApp
+              </a>
+              <p className="text-gray-400 text-xs text-center mt-3">We'll get back to you within 1 hour</p>
             </div>
           </div>
         </div>

@@ -162,7 +162,7 @@ const navLinks = [
 const mobileLinks = [
   { href: '/',            label: 'Home',    Icon: Home },
   { href: '/packages',    label: 'Explore', Icon: Layers },
-  { href: '/group-trips', label: 'Group',   Icon: Users },
+  { href: '/group-trips', label: 'Trips',   Icon: Users },
   { href: '/blog',        label: 'Blog',    Icon: BookOpen },
   { href: '/contact',     label: 'Contact', Icon: MapPin },
 ];
@@ -175,7 +175,7 @@ export default function Navbar() {
   const closeTimer                          = useRef(null);
   const pathname                            = usePathname();
 
-  const isHeroPage = ['/', '/packages', '/group-trips', '/about'].includes(pathname);
+  const isHeroPage = ['/', '/packages', '/about'].includes(pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);

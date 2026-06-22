@@ -5,7 +5,7 @@ create table if not exists packages (
   title text not null,
   location text not null,
   state text not null,
-  category text not null check (category in ('group','family','sacred','adventure','corporate')),
+  category text not null check (category in ('group','family','sacred','adventure','corporate','weekend','fit')),
   duration_days int not null,
   duration_nights int not null,
   group_size_min int default 1,
@@ -18,6 +18,7 @@ create table if not exists packages (
   exclusions text[],
   things_to_carry text[],
   tour_options jsonb,
+  multi_dates jsonb,
   itinerary jsonb,
   cover_image text,
   gallery_images text[],
@@ -179,4 +180,17 @@ create table if not exists gallery (
   category text,
   sort_order int default 0,
   is_active boolean default true
+);
+
+-- COMPANY TRANSACTIONS (co-founder card expense tracker)
+create table if not exists company_transactions (
+  id uuid default gen_random_uuid() primary key,
+  amount int not null,
+  merchant text not null,
+  purpose text not null,
+  card_holder text not null check (card_holder in ('karan', 'lakshay')),
+  category text not null default 'other',
+  transaction_date date not null default current_date,
+  notes text,
+  created_at timestamptz default now()
 );

@@ -26,7 +26,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               {[
                 ['All Packages', '/packages'],
-                ['Group Trips', '/group-trips'],
+                ['Upcoming Trips', '/group-trips'],
                 ['Blog', '/blog'],
                 ['About Us', '/about'],
                 ['Contact', '/contact'],
@@ -45,7 +45,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Trip Types</h4>
             <ul className="space-y-2 text-sm">
               {[
-                ['Group Trips', '/packages?category=group'],
+                ['Fixed Departures', '/packages?category=group'],
                 ['Family Packages', '/packages?category=family'],
                 ['Adventure & Treks', '/packages?category=adventure'],
                 ['Corporate Trips', '/packages?category=corporate'],

@@ -17,10 +17,10 @@ const trustBadges = ['24×7 Support', '100% Personalised', '4.9+ Rated'];
 const banners = [
   {
     image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1600&q=80',
-    tag: 'Community Trips',
+    tag: 'Fixed Departures',
     title: 'Travel With Strangers,\nReturn With Friends',
-    cta: 'Browse Group Trips',
-    href: '/group-trips',
+    cta: 'View Packages',
+    href: '/packages',
     gradient: 'from-black/70 via-black/30 to-transparent',
     align: 'left',
     ctaColor: 'bg-white text-[#1a1a1a] hover:bg-[#5bc1d5] hover:text-white',
@@ -129,7 +129,7 @@ const staticTestimonials = [
 ];
 
 const footerLinks = {
-  Explore:        [['All Packages', '/packages'], ['Group Trips', '/group-trips'], ['Blog', '/blog'], ['Upcoming Trips', '/group-trips']],
+  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/group-trips'], ['Blog', '/blog'], ['About Us', '/about']],
   'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
   Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/916396464369'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
@@ -149,7 +149,7 @@ function VibeVideoCard({ src }) {
 
   return (
     <div className="flex-shrink-0 relative rounded-2xl overflow-hidden shadow-lg bg-black"
-      style={{ width: '270px', height: '480px' }}>
+      style={{ width: '320px', height: '560px' }}>
       <video
         ref={videoRef}
         src={src}
@@ -177,11 +177,11 @@ function SectionHeader({ title, subtitle, action }) {
   return (
     <div className="relative mb-7 text-center">
       {action && <div className="absolute right-0 top-0 hidden sm:block">{action}</div>}
-      <h2 className="text-3xl font-semibold text-gray-800 sm:text-4xl md:text-5xl">
+      <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
         <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>{firstWord}</span>
         {rest && <span> {rest}</span>}
       </h2>
-      {subtitle && <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto leading-relaxed">{subtitle}</p>}
+      {subtitle && <p className="text-gray-800 text-sm md:text-base mt-3 max-w-lg mx-auto leading-relaxed tracking-wide">{subtitle}</p>}
       {action && <div className="mt-3 flex justify-center sm:hidden">{action}</div>}
     </div>
   );
@@ -250,8 +250,11 @@ export default function HomepageClient() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [carouselPage, setCarouselPage] = useState(0);
   const [weekendPage, setWeekendPage]   = useState(0);
+  const [weekendFilter, setWeekendFilter] = useState('all');
   const [communityPage, setCommunityPage] = useState(0);
+  const [communityFilter, setCommunityFilter] = useState('all');
   const [fitPage, setFitPage]           = useState(0);
+  const [fitFilter, setFitFilter]       = useState('all');
   const [heroSearch, setHeroSearch]     = useState('');
 
   const worldRef      = useRef(null);
@@ -322,7 +325,7 @@ export default function HomepageClient() {
     { id: 'u50',    label: 'Under ₹50K' },
     { id: '50-150', label: '₹50K to ₹1.5L' },
     { id: '150+',   label: '₹1.5L to ₹5L' },
-    { id: 'upcoming', label: 'All Upcoming Trips' },
+    { id: 'upcoming', label: 'Fixed Departures' },
   ];
 
   const filtered = (() => {
@@ -427,12 +430,12 @@ export default function HomepageClient() {
       </div>
 
       {/* ── TRIP CATEGORIES ── */}
-      <section className="py-20 bg-[#fafafa]">
+      <section className="py-20 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
-          <SectionHeader title="Explore by Category" subtitle="Find the perfect trip for your travel style" />
+          <SectionHeader title="Explore by Category" subtitle="Pick your vibe — every kind of trip, every kind of traveler." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { label: 'Group Trips',     tag: 'Community',    href: '/group-trips',                                                           img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
+              { label: 'Fixed Departures', tag: 'Group',        href: '/packages?category=group',                                               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
               { label: 'FIT Packages',   tag: 'Personalised', href: '/packages?category=fit',                                                  img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
               { label: 'Weekend Escapes', tag: 'Quick Trips',  href: '/packages?search=weekend',                                               img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80' },
               { label: 'Adventure Treks', tag: 'Adventure',    href: '/packages?category=group&vibe=Treks',                                    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
@@ -445,8 +448,8 @@ export default function HomepageClient() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p className="text-[10px] font-semibold tracking-widest uppercase text-[#5bc1d5] mb-1">{cat.tag}</p>
-                  <p className="text-white font-bold text-[15px] leading-tight">{cat.label}</p>
+                  <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5bc1d5] mb-1">{cat.tag}</p>
+                  <p className="text-white text-[16px] leading-tight">{cat.label}</p>
                 </div>
               </Link>
             ))}
@@ -460,11 +463,11 @@ export default function HomepageClient() {
 
           {/* Heading — mb-8 text-center (exact DV) */}
           <div className="mb-8 text-center">
-            <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+            <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
               <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Recommended </span>
               <span>Trips</span>
             </h2>
-            <p className="mt-4 text-base text-gray-600 md:text-lg">
+            <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
               best suited for new explorers with a mix of popular and offbeat destinations
             </p>
           </div>
@@ -577,7 +580,7 @@ export default function HomepageClient() {
             <div className="flex items-center justify-between mb-5">
               <div>
                 <p className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#5bc1d5] mb-1">Fly Away</p>
-                <h3 className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-3xl">
+                <h3 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>International </span>
                   <span>Gateways</span>
                 </h3>
@@ -640,7 +643,7 @@ export default function HomepageClient() {
             <div className="flex items-center justify-between mb-5">
               <div>
                 <p className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#5bc1d5] mb-1">Incredible India</p>
-                <h3 className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-3xl">
+                <h3 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Domestic </span>
                   <span>Getaways</span>
                 </h3>
@@ -703,26 +706,44 @@ export default function HomepageClient() {
 
       {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
       {(() => {
-        const weekendPkgs = packages.slice(0, 8);
+        const allWeekend = packages.slice(0, 8);
+        const weekendPkgs = (() => {
+          if (weekendFilter === 'u50')    return allWeekend.filter(p => (p.price_per_person || 0) < 50000);
+          if (weekendFilter === '50-150') return allWeekend.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
+          if (weekendFilter === '150+')   return allWeekend.filter(p => (p.price_per_person || 0) >= 150000);
+          return allWeekend;
+        })();
         const wTotalPages = Math.max(1, Math.ceil(weekendPkgs.length / CARDS_PER_PAGE));
         const wSafePage = Math.min(weekendPage, wTotalPages - 1);
         return (
           <section className="relative bg-white py-16 md:py-24">
             <div className="mx-auto max-w-[1600px] px-4">
               <div className="mb-8 text-center">
-                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Weekend </span>
                   <span>Escapes</span>
                 </h2>
-                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
                   Short on time? These quick getaways pack in all the fun
                 </p>
               </div>
 
-              {/* Prev/Next */}
-              {weekendPkgs.length > 0 && (
-                <div className="flex justify-end mb-4">
-                  <div className="flex items-center gap-1">
+              {/* Filters + Prev/Next */}
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
+                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
+                    <button key={f.id} onClick={() => { setWeekendFilter(f.id); setWeekendPage(0); }}
+                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                        weekendFilter === f.id
+                          ? 'border-gray-800 bg-gray-800 text-white shadow-sm'
+                          : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'
+                      }`}>
+                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
+                    </button>
+                  ))}
+                </div>
+                {weekendPkgs.length > 0 && (
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     <button onClick={() => goToWeekendPage(Math.max(0, wSafePage - 1))} disabled={wSafePage === 0}
                       className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
                       <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
@@ -732,10 +753,10 @@ export default function HomepageClient() {
                       <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
                     </button>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              <div className="mt-2">
+              <div className="mt-6">
                 {weekendPkgs.length === 0 ? (
                   <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
                     {[1,2,3,4].map(i => (
@@ -790,25 +811,44 @@ export default function HomepageClient() {
 
       {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
       {(() => {
-        const cTotalPages = Math.max(1, Math.ceil(groupPackages.length / CARDS_PER_PAGE));
+        const allCommunity = groupPackages;
+        const filteredCommunity = (() => {
+          if (communityFilter === 'u50')    return allCommunity.filter(p => (p.price_per_person || 0) < 50000);
+          if (communityFilter === '50-150') return allCommunity.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
+          if (communityFilter === '150+')   return allCommunity.filter(p => (p.price_per_person || 0) >= 150000);
+          return allCommunity;
+        })();
+        const cTotalPages = Math.max(1, Math.ceil(filteredCommunity.length / CARDS_PER_PAGE));
         const cSafePage = Math.min(communityPage, cTotalPages - 1);
         return (
           <section className="relative py-16 md:py-24 px-4 bg-[#fafafa]">
             <div className="max-w-[1600px] mx-auto">
               <div className="mb-8 text-center">
-                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Upcoming </span>
-                  <span>Community Trips</span>
+                  <span>Fixed Departures</span>
                 </h2>
-                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
                   Fixed departures with confirmed dates — join now
                 </p>
               </div>
 
-              {/* Prev/Next */}
-              {groupPackages.length > 0 && (
-                <div className="flex justify-end mb-4">
-                  <div className="flex items-center gap-1">
+              {/* Filters + Prev/Next */}
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
+                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
+                    <button key={f.id} onClick={() => { setCommunityFilter(f.id); setCommunityPage(0); }}
+                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                        communityFilter === f.id
+                          ? 'border-gray-800 bg-gray-800 text-white shadow-sm'
+                          : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'
+                      }`}>
+                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
+                    </button>
+                  ))}
+                </div>
+                {filteredCommunity.length > 0 && (
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     <button onClick={() => goToCommunityPage(Math.max(0, cSafePage - 1))} disabled={cSafePage === 0}
                       className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
                       <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
@@ -818,11 +858,11 @@ export default function HomepageClient() {
                       <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
                     </button>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              <div className="mt-2">
-                {groupPackages.length === 0 ? (
+              <div className="mt-6">
+                {filteredCommunity.length === 0 ? (
                   <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
                     {[1,2,3,4].map(i => (
                       <div key={i}>
@@ -839,7 +879,7 @@ export default function HomepageClient() {
                   <div ref={communityViewportRef} className="overflow-x-hidden p-1">
                     <div ref={communityTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
                       style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-                      {groupPackages.map(pkg => (
+                      {filteredCommunity.map(pkg => (
                         <div key={pkg.id}
                           className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
                           <PackageCard pkg={pkg} />
@@ -851,7 +891,7 @@ export default function HomepageClient() {
               </div>
 
               {/* Dots */}
-              {groupPackages.length > 0 && (
+              {filteredCommunity.length > 0 && (
                 <div className="flex items-center gap-2 mt-8">
                   {Array.from({ length: cTotalPages }).map((_, i) => (
                     <button key={i} onClick={() => goToCommunityPage(i)}
@@ -893,24 +933,42 @@ export default function HomepageClient() {
           { id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan', category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7, slug: 'packages?search=rajasthan', cover_image: null },
           { id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives', category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5, slug: 'packages?search=maldives', cover_image: null },
         ];
-        const fTotalPages = Math.max(1, Math.ceil(fitPackages.length / CARDS_PER_PAGE));
+        const filteredFit = (() => {
+          if (fitFilter === 'u50')    return fitPackages.filter(p => (p.price_per_person || 0) < 50000);
+          if (fitFilter === '50-150') return fitPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
+          if (fitFilter === '150+')   return fitPackages.filter(p => (p.price_per_person || 0) >= 150000);
+          return fitPackages;
+        })();
+        const fTotalPages = Math.max(1, Math.ceil(filteredFit.length / CARDS_PER_PAGE));
         const fSafePage = Math.min(fitPage, fTotalPages - 1);
         return (
           <section className="relative py-16 md:py-24 bg-[#fafafa]">
             <div className="max-w-[1600px] mx-auto px-4">
               <div className="mb-8 text-center">
-                <h2 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Personalised </span>
                   <span>Tour Packages</span>
                 </h2>
-                <p className="mt-4 text-base text-gray-600 md:text-lg">
+                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
                   Handcrafted FIT packages built around your schedule, budget & travel style
                 </p>
               </div>
 
-              {/* Prev/Next */}
-              <div className="flex justify-end mb-4">
-                <div className="flex items-center gap-1">
+              {/* Filters + Prev/Next */}
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
+                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
+                    <button key={f.id} onClick={() => { setFitFilter(f.id); setFitPage(0); }}
+                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                        fitFilter === f.id
+                          ? 'border-gray-800 bg-gray-800 text-white shadow-sm'
+                          : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'
+                      }`}>
+                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
                   <button onClick={() => goToFitPage(Math.max(0, fSafePage - 1))} disabled={fSafePage === 0}
                     className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
                     <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
@@ -922,10 +980,11 @@ export default function HomepageClient() {
                 </div>
               </div>
 
-              <div ref={fitViewportRef} className="overflow-x-hidden p-1">
+              <div className="mt-6">
+                <div ref={fitViewportRef} className="overflow-x-hidden p-1">
                 <div ref={fitTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
                   style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-                  {fitPackages.map(pkg => (
+                  {filteredFit.map(pkg => (
                     <div key={pkg.id}
                       className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
                       <PackageCard pkg={pkg} />
@@ -933,14 +992,17 @@ export default function HomepageClient() {
                   ))}
                 </div>
               </div>
+              </div>
 
               {/* Dots */}
-              <div className="flex items-center gap-2 mt-8">
-                {Array.from({ length: fTotalPages }).map((_, i) => (
-                  <button key={i} onClick={() => goToFitPage(i)}
-                    className={`rounded-full transition-all duration-300 ${i === fSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
-                ))}
-              </div>
+              {filteredFit.length > 0 && (
+                <div className="flex items-center gap-2 mt-8">
+                  {Array.from({ length: fTotalPages }).map((_, i) => (
+                    <button key={i} onClick={() => goToFitPage(i)}
+                      className={`rounded-full transition-all duration-300 ${i === fSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
+                  ))}
+                </div>
+              )}
 
               <div className="mt-8 flex justify-center">
                 <Link href="/packages?search=fit"
@@ -1010,7 +1072,7 @@ export default function HomepageClient() {
           <section className="py-20 px-4 sm:px-8 bg-[#fafafa]">
             <div className="max-w-[1600px] mx-auto">
               <div className="relative mb-7 text-center">
-                <h2 className="text-3xl font-semibold text-gray-800 sm:text-4xl md:text-5xl">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
                   What our{' '}
                   <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Travel Teasers</span>
                   {' '}say
@@ -1095,7 +1157,7 @@ export default function HomepageClient() {
       {/* ── FAQ ──────────────────────────────────────────────────── */}
       <section id="faq" className="py-24 bg-[#fafafa]">
         <div className="max-w-[1600px] mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Left: Colorful illustration + heading */}
             <div className="rounded-3xl bg-gradient-to-br from-[#e6f9fc] via-[#f0fbff] to-[#eef7f0] p-8 sm:p-10 flex flex-col justify-between min-h-[300px] sm:min-h-[500px] relative overflow-hidden">
@@ -1138,21 +1200,21 @@ export default function HomepageClient() {
             {/* Right: Clean accordion */}
             <div className="py-2">
               {faqItems.map((item, i) => (
-                <div key={i} className={`border-b border-gray-100 transition-all duration-200 ${openFaq === i ? 'bg-white rounded-xl px-4 mb-1 shadow-sm border-b-0' : ''}`}>
+                <div key={i} className={`px-4 border-b border-gray-100 transition-all duration-300 ${openFaq === i ? 'bg-white rounded-xl mb-1 shadow-sm border-b-0' : ''}`}>
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between gap-4 py-5 text-left group">
-                    <span className={`text-[17px] font-semibold leading-snug transition-colors ${
+                    <span className={`text-[19px] font-semibold leading-snug transition-colors ${
                       openFaq === i ? 'text-[#1a1a1a]' : 'text-[#1a1a1a] group-hover:text-[#5bc1d5]'
                     }`}>
                       {item.q}
                     </span>
-                    <ChevronDown size={18} className={`flex-shrink-0 transition-transform duration-200 ${
+                    <ChevronDown size={18} className={`flex-shrink-0 transition-transform duration-300 ${
                       openFaq === i ? 'rotate-180 text-[#5bc1d5]' : 'text-gray-400 group-hover:text-[#5bc1d5]'
                     }`} />
                   </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 pb-5' : 'max-h-0'}`}>
-                    <p className="text-gray-500 text-[16px] leading-relaxed">
+                  <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaq === i ? 'max-h-60 pb-5' : 'max-h-0'}`}>
+                    <p className="text-gray-500 text-[18px] leading-relaxed">
                       {item.a}
                     </p>
                   </div>
