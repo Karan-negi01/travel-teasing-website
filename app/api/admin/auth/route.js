@@ -7,7 +7,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
   const response = NextResponse.json({ success: true });
-  response.cookies.set('admin_auth', 'true', { httpOnly: true, maxAge: 86400, path: '/', sameSite: 'lax' });
+  response.cookies.set('admin_auth', 'v3', { httpOnly: true, maxAge: 86400, path: '/', sameSite: 'lax' });
   return response;
 }
 
