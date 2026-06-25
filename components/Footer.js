@@ -1,118 +1,81 @@
+'use client';
 import Link from 'next/link';
-import { Mountain, MessageCircle, Mail } from 'lucide-react';
+import { MessageCircle, Play } from 'lucide-react';
 import InstagramIcon from './InstagramIcon';
+
+const footerLinks = {
+  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/group-trips'], ['Blog', '/blog'], ['About Us', '/about']],
+  'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
+  Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/916396464369'], ['FAQ', '/#faq']],
+  'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
+};
 
 export default function Footer() {
   return (
     <footer className="bg-[#1a1a1a] text-gray-300">
-      <div className="max-w-[1600px] mx-auto px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Logo + tagline */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Mountain size={28} className="text-[#E8651A]" />
-              <span className="text-white font-bold text-xl">
-                Travel Teasing
-              </span>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              India's trusted travel partner for group trips, family packages, sacred journeys, and adventure treks.
-            </p>
-          </div>
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 pt-14 pb-10">
 
-          {/* Explore */}
+        {/* CTA */}
+        <div className="grid lg:grid-cols-2 gap-10 items-center pb-12 border-b border-white/10">
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Explore</h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                ['All Packages', '/packages'],
-                ['Upcoming Trips', '/group-trips'],
-                ['Blog', '/blog'],
-                ['About Us', '/about'],
-                ['Contact', '/contact'],
-              ].map(([label, href]) => (
-                <li key={href}>
-                  <Link href={href} className="text-gray-400 hover:text-[#E8651A] transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <p className="text-[#5bc1d5] text-xs font-bold tracking-[0.15em] uppercase mb-3">From Tourist To Traveller</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+              Memories are Waiting,<br />
+              let's make them together!
+            </h2>
           </div>
-
-          {/* Trip Types */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Trip Types</h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                ['Fixed Departures', '/packages?category=group'],
-                ['Family Packages', '/packages?category=family'],
-                ['Adventure & Treks', '/packages?category=adventure'],
-                ['Corporate Trips', '/packages?category=corporate'],
-              ].map(([label, href]) => (
-                <li key={href}>
-                  <Link href={href} className="text-gray-400 hover:text-[#E8651A] transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Destinations & Connect */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Popular Destinations</h4>
-            <ul className="space-y-2 text-sm mb-6">
-              {['Kasol', 'Ladakh', 'Spiti Valley', 'Kedarnath', 'Varanasi', 'Manali'].map((dest) => (
-                <li key={dest}>
-                  <Link
-                    href={`/packages?search=${dest}`}
-                    className="text-gray-400 hover:text-[#E8651A] transition-colors"
-                  >
-                    {dest}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <h4 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Connect With Us</h4>
-            <div className="flex flex-col gap-2 text-sm">
-              <a
-                href="https://wa.me/916396464369"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-400 hover:text-[#25D366] transition-colors"
-              >
-                <MessageCircle size={16} />
-                WhatsApp Us
-              </a>
-              <a
-                href="mailto:hello@travelteasing.com"
-                className="flex items-center gap-2 text-gray-400 hover:text-[#E8651A] transition-colors"
-              >
-                <Mail size={16} />
-                hello@travelteasing.com
-              </a>
-              <a
-                href="https://instagram.com/travelteasing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors"
-              >
-                <InstagramIcon size={16} />
-                @travelteasing
-              </a>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/contact"
+              className="flex-1 bg-[#5bc1d5] text-white py-3 px-6 rounded-full font-semibold text-sm hover:bg-[#4ab0c4] transition-colors shadow-lg shadow-[#5bc1d5]/20 text-center">
+              Plan Your Trip
+            </Link>
+            <a href="https://wa.me/916396464369?text=Hi! I want to plan a trip." target="_blank" rel="noopener noreferrer"
+              className="flex-1 border border-white/20 text-white py-3 px-6 rounded-full font-semibold text-sm text-center hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
+              <MessageCircle size={15} /> WhatsApp Us
+            </a>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/10">
-        <div className="max-w-[1600px] mx-auto px-8 py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Travel Teasing. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy-policy" className="hover:text-[#E8651A] transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-[#E8651A] transition-colors">Terms of Service</Link>
+        {/* Links */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pt-10">
+          <div className="col-span-2 md:col-span-1">
+            <p className="text-white font-bold text-base mb-3">Travel Teasing</p>
+            <p className="text-[#f2f2f2]/50 text-xs leading-relaxed mb-4">India's trusted travel partner for group trips, weekend escapes & adventure treks.</p>
+            <div className="flex gap-3">
+              <a href="https://youtube.com/@travelteasing" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">
+                <Play size={13} />
+              </a>
+              <a href="https://instagram.com/travelteasing" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">
+                <InstagramIcon size={13} />
+              </a>
+              <a href="https://wa.me/916396464369" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">
+                <MessageCircle size={13} />
+              </a>
+            </div>
           </div>
+
+          {Object.entries(footerLinks).map(([section, links]) => (
+            <div key={section}>
+              <h4 className="text-white font-semibold text-sm mb-3">{section}</h4>
+              <ul className="space-y-2">
+                {links.map(([label, href]) => (
+                  <li key={label}>
+                    <Link href={href} className="text-[#f2f2f2]/50 text-xs hover:text-[#5bc1d5] transition-colors">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-[#f2f2f2]/30">
+          <p>© {new Date().getFullYear()} Travel Teasing. All rights reserved.</p>
+          <p>Made with ❤️ in India</p>
         </div>
       </div>
     </footer>
