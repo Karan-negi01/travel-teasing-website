@@ -1226,8 +1226,8 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── FOOTER CTA ───────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] px-4 sm:px-8 pt-14 pb-10 mt-2">
+      {/* ── FOOTER removed — handled by ConditionalLayout Footer component ── */}
+      {false && <section className="bg-[#1a1a1a] px-4 sm:px-8 pt-14 pb-10 mt-2">
         <div className="max-w-[1600px] mx-auto">
 
           {/* CTA headline + buttons */}
@@ -1295,7 +1295,7 @@ export default function HomepageClient() {
             <p>Made with ❤️ in India</p>
           </div>
         </div>
-      </section>
+      </section>}
 
       <EnquiryModal open={enquiryOpen} onClose={() => setEnquiryOpen(false)} enquiryType="general" />
     </div>

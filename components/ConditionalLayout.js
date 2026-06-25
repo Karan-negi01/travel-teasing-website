@@ -32,8 +32,7 @@ export default function ConditionalLayout({ children }) {
 
       {/* pb-16 on mobile to avoid content hiding behind bottom nav */}
       <main className="flex-1 pb-16 md:pb-0">{children}</main>
-      {/* Homepage has its own built-in footer — skip the standalone Footer there */}
-      {pathname !== '/' && <Footer />}
+      <Footer />
       <FloatingWhatsApp />
     </>
   );
