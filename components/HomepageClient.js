@@ -10,6 +10,7 @@ import {
 import PackageCard from './PackageCard';
 import EnquiryModal from './EnquiryModal';
 import InstagramIcon from './InstagramIcon';
+import { CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
 /* ─── Static data ──────────────────────────────────────────────── */
 const trustBadges = ['24×7 Support', '100% Personalised', '4.9+ Rated'];
@@ -93,6 +94,77 @@ const vibeVideos = [
   'https://assets.mixkit.co/videos/1191/1191-720.mp4',
   'https://assets.mixkit.co/videos/1170/1170-720.mp4',
 ];
+
+const CATEGORIES = [
+  { key: 'treks',     label: 'Treks',          emoji: '🏔️', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=85', tagline: 'Conquer peaks, breathe mountains.', trips: '24+', tag: 'Adventure' },
+  { key: 'honeymoon', label: 'Honeymoon',       emoji: '💕', img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=85', tagline: 'Begin forever in the most beautiful places.', trips: '18+', tag: 'Romantic' },
+  { key: 'beaches',   label: 'Beaches',         emoji: '🏖️', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85', tagline: 'Sun, sand and the sound of waves.', trips: '15+', tag: 'Coastal' },
+  { key: 'offbeat',   label: 'Offbeat',         emoji: '🌿', img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1400&q=85', tagline: "Go where Google Maps hasn't been updated.", trips: '12+', tag: 'Hidden Gems' },
+  { key: 'wildlife',  label: 'Wildlife',        emoji: '🦁', img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=85', tagline: 'Into the wild. Real. Raw. Unforgettable.', trips: '10+', tag: 'Nature' },
+  { key: 'heritage',  label: 'Heritage',        emoji: '🏛️', img: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1400&q=85', tagline: "India's living history, waiting to be walked.", trips: '14+', tag: 'Culture' },
+  { key: 'womens',    label: "Women's Only",    emoji: '👸', img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=1400&q=85', tagline: 'Safe, curated trips built for women.', trips: '8+', tag: 'Safe Travel' },
+  { key: 'weekend',   label: 'Weekend Escapes', emoji: '🌅', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=85', tagline: 'Two days. Infinite memories.', trips: '20+', tag: 'Quick Trips' },
+];
+
+function CategorySection() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  return (
+    <section className="py-16 md:py-20">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+        <SectionHeader title="Explore by Category" subtitle="Pick your vibe — every kind of trip, every kind of traveler." />
+        <div className="mt-8 flex gap-2 h-[240px] sm:h-[360px]">
+          {CATEGORIES.map((cat, i) => {
+            const ct = CATEGORY_THEMES[cat.key];
+            const isActive = activeIdx === i;
+            return (
+              <Link key={cat.key} href={`/packages?category=${cat.key}`}
+                onMouseEnter={() => setActiveIdx(i)}
+                className="relative overflow-hidden rounded-2xl flex-shrink-0 cursor-pointer shadow-md"
+                style={{
+                  width: isActive ? '420px' : '72px',
+                  transition: 'width 0.55s cubic-bezier(0.4,0,0.2,1)',
+                  textDecoration: 'none',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={cat.img} alt={cat.label}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.55s ease' }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                {/* Theme color bottom strip */}
+                <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ background: ct.primary }} />
+
+                <div className="absolute inset-0">
+                  <div style={{
+                    position: 'absolute',
+                    bottom: isActive ? '24px' : '50%',
+                    left: isActive ? '20px' : '50%',
+                    transform: isActive ? 'translate(0,0) rotate(0deg)' : 'translate(-50%,50%) rotate(-90deg)',
+                    transition: 'all 0.55s cubic-bezier(0.4,0,0.2,1)',
+                    transformOrigin: 'center center',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    <span style={{ fontSize: isActive ? '32px' : '18px', display: 'block', marginBottom: isActive ? '6px' : '0', transition: 'font-size 0.4s ease' }}>
+                      {cat.emoji}
+                    </span>
+                    <p style={{ color: '#fff', fontWeight: 700, fontSize: isActive ? '20px' : '12px', fontFamily: "'Poppins', sans-serif", margin: 0, transition: 'font-size 0.4s ease' }}>
+                      {cat.label}
+                    </p>
+                    {isActive && (
+                      <p style={{ color: ct.primary, fontSize: '11px', margin: '4px 0 0', fontFamily: "'Poppins', sans-serif" }}>
+                        {cat.trips} packages →
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const CATEGORY_STYLE = {
   'destination-guide': { bg: 'bg-teal-50',   text: 'text-teal-700',   label: 'Destination Guide' },
@@ -239,6 +311,7 @@ function PromoBanner({ b }) {
 /* ─── Main Component ───────────────────────────────────────────── */
 export default function HomepageClient() {
   const router = useRouter();
+  // Theme context not needed on homepage — categories apply theme on their own pages
   const [packages, setPackages]         = useState([]);
   const [groupPackages, setGroupPackages] = useState([]);
   const [testimonials, setTestimonials]   = useState([]);
@@ -362,11 +435,6 @@ export default function HomepageClient() {
           {/* Heading block */}
           <div className="flex flex-col items-center gap-3">
 
-            {/* Eyebrow — tiny, spaced */}
-            <p className="text-white/40 text-[10px] font-semibold tracking-[0.5em] uppercase">
-              India &nbsp;·&nbsp; Community Travel &nbsp;·&nbsp; Since 2019
-            </p>
-
             {/* Main heading — outline + filled contrast */}
             <h1 className="leading-[0.9] tracking-[-2px]"
               style={{ fontSize: 'clamp(68px, 11vw, 140px)' }}>
@@ -429,33 +497,6 @@ export default function HomepageClient() {
         </div>
       </div>
 
-      {/* ── TRIP CATEGORIES ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1600px] mx-auto px-6">
-          <SectionHeader title="Explore by Category" subtitle="Pick your vibe — every kind of trip, every kind of traveler." />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: 'Fixed Departures', tag: 'Group',        href: '/packages?category=group',                                               img: 'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=600&q=80' },
-              { label: 'FIT Packages',   tag: 'Personalised', href: '/packages?category=fit',                                                  img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&q=80' },
-              { label: 'Weekend Escapes', tag: 'Quick Trips',  href: '/packages?search=weekend',                                               img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80' },
-              { label: 'Adventure Treks', tag: 'Adventure',    href: '/packages?category=group&vibe=Treks',                                    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
-              { label: "Women's Only",    tag: 'Exclusive',    href: "/packages?category=group&subtype=Women's+Only+Group",                    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
-              { label: 'Corporate',       tag: 'Offsite',      href: '/packages?category=corporate',                                           img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80' },
-            ].map(cat => (
-              <Link key={cat.label} href={cat.href}
-                className="group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-                <img src={cat.img} alt={cat.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5bc1d5] mb-1">{cat.tag}</p>
-                  <p className="text-white text-[16px] leading-tight">{cat.label}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── RECOMMENDED TRIPS ── */}
       <section className="relative bg-white py-16 md:py-24">
@@ -704,6 +745,85 @@ export default function HomepageClient() {
         </div>
       </section>
 
+      {/* ── PERSONALISED TOUR PACKAGES (FIT) ────────────────────── */}
+      {(() => {
+        const fitPackages = [
+          { id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir', category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6, slug: 'packages?search=kashmir', cover_image: null },
+          { id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia', category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7, slug: 'packages?search=bali', cover_image: null },
+          { id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh', category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8, slug: 'packages?search=ladakh', cover_image: null },
+          { id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand', category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6, slug: 'packages?search=thailand', cover_image: null },
+          { id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan', category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7, slug: 'packages?search=rajasthan', cover_image: null },
+          { id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives', category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5, slug: 'packages?search=maldives', cover_image: null },
+        ];
+        const filteredFit = (() => {
+          if (fitFilter === 'u50')    return fitPackages.filter(p => (p.price_per_person || 0) < 50000);
+          if (fitFilter === '50-150') return fitPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
+          if (fitFilter === '150+')   return fitPackages.filter(p => (p.price_per_person || 0) >= 150000);
+          return fitPackages;
+        })();
+        const fTotalPages = Math.max(1, Math.ceil(filteredFit.length / CARDS_PER_PAGE));
+        const fSafePage = Math.min(fitPage, fTotalPages - 1);
+        return (
+          <section className="relative py-16 md:py-24 bg-white">
+            <div className="max-w-[1600px] mx-auto px-4">
+              <div className="mb-8 text-center">
+                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Personalised </span>
+                  <span>Tour Packages</span>
+                </h2>
+                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
+                  Handcrafted FIT packages built around your schedule, budget & travel style
+                </p>
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
+                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
+                    <button key={f.id} onClick={() => { setFitFilter(f.id); setFitPage(0); }}
+                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${fitFilter === f.id ? 'border-gray-800 bg-gray-800 text-white shadow-sm' : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'}`}>
+                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <button onClick={() => goToFitPage(Math.max(0, fSafePage - 1))} disabled={fSafePage === 0}
+                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                    <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
+                  </button>
+                  <button onClick={() => goToFitPage(Math.min(fTotalPages - 1, fSafePage + 1))} disabled={fSafePage === fTotalPages - 1}
+                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
+                    <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-6">
+                <div ref={fitViewportRef} className="overflow-x-hidden p-1">
+                  <div ref={fitTrackRef} className="flex touch-pan-y gap-4 sm:gap-6" style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+                    {filteredFit.map(pkg => (
+                      <div key={pkg.id} className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
+                        <PackageCard pkg={pkg} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {filteredFit.length > 0 && (
+                <div className="flex items-center gap-2 mt-8">
+                  {Array.from({ length: fTotalPages }).map((_, i) => (
+                    <button key={i} onClick={() => goToFitPage(i)}
+                      className={`rounded-full transition-all duration-300 ${i === fSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
+                  ))}
+                </div>
+              )}
+              <div className="mt-8 flex justify-center">
+                <Link href="/packages?search=fit" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+                  View All FIT Packages <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
       {(() => {
         const allWeekend = packages.slice(0, 8);
@@ -923,98 +1043,6 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── PERSONALISED TOUR PACKAGES (FIT) ────────────────────── */}
-      {(() => {
-        const fitPackages = [
-          { id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir', category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6, slug: 'packages?search=kashmir', cover_image: null },
-          { id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia', category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7, slug: 'packages?search=bali', cover_image: null },
-          { id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh', category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8, slug: 'packages?search=ladakh', cover_image: null },
-          { id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand', category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6, slug: 'packages?search=thailand', cover_image: null },
-          { id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan', category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7, slug: 'packages?search=rajasthan', cover_image: null },
-          { id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives', category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5, slug: 'packages?search=maldives', cover_image: null },
-        ];
-        const filteredFit = (() => {
-          if (fitFilter === 'u50')    return fitPackages.filter(p => (p.price_per_person || 0) < 50000);
-          if (fitFilter === '50-150') return fitPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
-          if (fitFilter === '150+')   return fitPackages.filter(p => (p.price_per_person || 0) >= 150000);
-          return fitPackages;
-        })();
-        const fTotalPages = Math.max(1, Math.ceil(filteredFit.length / CARDS_PER_PAGE));
-        const fSafePage = Math.min(fitPage, fTotalPages - 1);
-        return (
-          <section className="relative py-16 md:py-24 bg-[#fafafa]">
-            <div className="max-w-[1600px] mx-auto px-4">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
-                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Personalised </span>
-                  <span>Tour Packages</span>
-                </h2>
-                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
-                  Handcrafted FIT packages built around your schedule, budget & travel style
-                </p>
-              </div>
-
-              {/* Filters + Prev/Next */}
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
-                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
-                    <button key={f.id} onClick={() => { setFitFilter(f.id); setFitPage(0); }}
-                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
-                        fitFilter === f.id
-                          ? 'border-gray-800 bg-gray-800 text-white shadow-sm'
-                          : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'
-                      }`}>
-                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <button onClick={() => goToFitPage(Math.max(0, fSafePage - 1))} disabled={fSafePage === 0}
-                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                    <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
-                  </button>
-                  <button onClick={() => goToFitPage(Math.min(fTotalPages - 1, fSafePage + 1))} disabled={fSafePage === fTotalPages - 1}
-                    className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                    <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <div ref={fitViewportRef} className="overflow-x-hidden p-1">
-                <div ref={fitTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
-                  style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-                  {filteredFit.map(pkg => (
-                    <div key={pkg.id}
-                      className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
-                      <PackageCard pkg={pkg} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              </div>
-
-              {/* Dots */}
-              {filteredFit.length > 0 && (
-                <div className="flex items-center gap-2 mt-8">
-                  {Array.from({ length: fTotalPages }).map((_, i) => (
-                    <button key={i} onClick={() => goToFitPage(i)}
-                      className={`rounded-full transition-all duration-300 ${i === fSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-8 flex justify-center">
-                <Link href="/packages?search=fit"
-                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
-                  View All FIT Packages <ArrowRight size={14} />
-                </Link>
-              </div>
-            </div>
-          </section>
-        );
-      })()}
-
       {/* ── INSTAGRAM MOMENTS ────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
@@ -1105,6 +1133,9 @@ export default function HomepageClient() {
         );
       })()}
 
+      {/* ── BANNER 3 — Leh Ladakh ── */}
+      <PromoBanner b={banners[2]} />
+
       {/* ── TRAVEL GUIDES & STORIES ───────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-[1600px] mx-auto px-6">
@@ -1150,9 +1181,6 @@ export default function HomepageClient() {
           </div>
         </div>
       </section>
-
-      {/* ── BANNER 3 — Leh Ladakh ── */}
-      <PromoBanner b={banners[2]} />
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
       <section id="faq" className="py-24 bg-[#fafafa]">

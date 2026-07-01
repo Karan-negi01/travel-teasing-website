@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import FloatingWhatsApp from './FloatingWhatsApp';
 import AnnouncementBar from './AnnouncementBar';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 // Pages where hero fills full viewport — navbar floats over them transparently
 const HERO_PAGES = ['/', '/packages', '/about'];
@@ -16,10 +17,9 @@ export default function ConditionalLayout({ children }) {
   if (isAdmin) return <>{children}</>;
 
   return (
-    <>
-      {/* Fixed top: announcement bar + navbar stacked */}
+    <ThemeProvider>
+      {/* Fixed top: navbar */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        <AnnouncementBar />
         <Navbar />
       </div>
 
@@ -34,6 +34,6 @@ export default function ConditionalLayout({ children }) {
       <main className="flex-1 pb-16 md:pb-0">{children}</main>
       <Footer />
       <FloatingWhatsApp />
-    </>
+    </ThemeProvider>
   );
 }

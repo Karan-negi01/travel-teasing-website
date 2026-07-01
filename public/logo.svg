@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 72" fill="none">
+  <!-- Suitcase body -->
+  <rect x="4" y="20" width="52" height="44" rx="8" fill="#1a1a1a"/>
+  <!-- Suitcase handle -->
+  <path d="M18 20 L18 13 Q18 8 24 8 L32 8 Q38 8 38 13 L38 20" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <!-- Suitcase horizontal stripe -->
+  <rect x="4" y="38" width="52" height="6" fill="white"/>
+  <!-- Suitcase clasp -->
+  <rect x="25" y="26" width="10" height="8" rx="2" fill="white" opacity="0.6"/>
+  <!-- Airplane (white overlay on suitcase) -->
+  <!-- Main fuselage -->
+  <ellipse cx="38" cy="30" rx="16" ry="5" transform="rotate(-35 38 30)" fill="white"/>
+  <!-- Main wing -->
+  <polygon points="24,26 44,18 40,36" fill="white"/>
+  <!-- Tail fin -->
+  <polygon points="22,42 28,30 35,38" fill="white"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="20" rx="4" ry="2.5" transform="rotate(-35 50 20)" fill="white"/>
+
+  <!-- TRAVEL text -->
+  <text x="70" y="40"
+    font-family="Arial Black, 'Arial Bold', Gadget, sans-serif"
+    font-weight="900"
+    font-size="28"
+    fill="#1a1a1a"
+    letter-spacing="-1">TRAVEL</text>
+  <!-- TEASING text -->
+  <text x="70" y="68"
+    font-family="Arial Black, 'Arial Bold', Gadget, sans-serif"
+    font-weight="900"
+    font-size="28"
+    fill="#1a1a1a"
+    letter-spacing="-1">TEASING</text>
+</svg>
