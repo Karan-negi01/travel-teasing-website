@@ -183,96 +183,76 @@ const CATEGORY_META = {
   },
 };
 
-/* ─── Destination Cards (horizontal parallax scroll) ─────────── */
+/* ─── Destination Cards ───────────────────────────────────────── */
 function DestinationCards({ destinations, catTheme }) {
   const [hovered, setHovered] = useState(null);
-  const [mousePos, setMousePos] = useState({});
 
-  const handleMouseMove = (e, idx) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 12;
-    setMousePos(prev => ({ ...prev, [idx]: { x, y } }));
-  };
+  // Split into featured (first 2 big) + rest (4 small)
+  const featured = destinations.slice(0, 2);
+  const rest = destinations.slice(2);
 
   return (
-    <section style={{ padding: '60px 0 40px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '28px' }}>
-          <h2 style={{
-            fontSize: '26px', fontWeight: 700, color: '#1a1a1a',
-            fontFamily: "'Poppins', sans-serif", margin: 0,
-          }}>Popular Destinations</h2>
-          <span style={{ fontSize: '13px', color: '#9ca3af', fontFamily: "'Poppins', sans-serif" }}>scroll to explore →</span>
+    <section style={{ padding: '80px 0 0', background: '#0d0d0d' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 60px' }}>
+
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '36px' }}>
+          <div>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", margin: '0 0 8px' }}>Where to go</p>
+            <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>Popular Destinations</h2>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
+            <MapPin size={12} color={catTheme.primary} />
+            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontFamily: "'Poppins', sans-serif" }}>{destinations.length} destinations</span>
+          </div>
         </div>
-      </div>
 
-      {/* Scrollable row — full width with side padding fade */}
-      <div style={{ position: 'relative' }}>
-        {/* Left fade */}
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '60px', background: 'linear-gradient(to right, white, transparent)', zIndex: 2, pointerEvents: 'none' }} />
-        {/* Right fade */}
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '60px', background: 'linear-gradient(to left, white, transparent)', zIndex: 2, pointerEvents: 'none' }} />
-
-        <div style={{
-          display: 'flex', gap: '16px', overflowX: 'auto', padding: '12px 60px 24px',
-          scrollbarWidth: 'none', msOverflowStyle: 'none',
-        }}
-        className="hide-scrollbar">
-          {destinations.map((dest, i) => {
-            const pos = mousePos[i] || { x: 0, y: 0 };
+        {/* Top row — 2 large cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+          {featured.map((dest, i) => {
             const isHov = hovered === i;
             return (
-              <div
-                key={dest.name}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => { setHovered(null); setMousePos(prev => ({ ...prev, [i]: { x: 0, y: 0 } })); }}
-                onMouseMove={e => handleMouseMove(e, i)}
-                style={{
-                  flexShrink: 0, width: '220px', height: '300px',
-                  borderRadius: '20px', overflow: 'hidden',
-                  position: 'relative', cursor: 'pointer',
-                  transform: isHov ? 'translateY(-8px) scale(1.03)' : 'translateY(0) scale(1)',
-                  transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)',
-                  boxShadow: isHov
-                    ? `0 20px 48px rgba(0,0,0,0.22), 0 0 0 2px ${catTheme.primary}`
-                    : '0 4px 16px rgba(0,0,0,0.12)',
-                }}
-              >
-                {/* Image with parallax */}
+              <div key={dest.name} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
+                style={{ height: '360px', borderRadius: '24px', overflow: 'hidden', position: 'relative', cursor: 'pointer', transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)', transform: isHov ? 'scale(1.015)' : 'scale(1)' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={dest.img} alt={dest.name}
-                  style={{
-                    position: 'absolute', inset: '-12px',
-                    width: 'calc(100% + 24px)', height: 'calc(100% + 24px)',
-                    objectFit: 'cover', display: 'block',
-                    transform: isHov ? `translate(${-pos.x}px, ${-pos.y}px) scale(1.08)` : 'translate(0,0) scale(1)',
-                    transition: isHov ? 'transform 0.1s ease' : 'transform 0.5s ease',
-                  }}
-                />
-                {/* Gradient */}
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  background: isHov
-                    ? `linear-gradient(to top, ${catTheme.accent}ee 0%, rgba(0,0,0,0.1) 60%, transparent 100%)`
-                    : 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 60%)',
-                  transition: 'background 0.35s ease',
-                }} />
-                {/* Name */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 18px' }}>
-                  {isHov && (
-                    <div style={{
-                      display: 'inline-block', background: catTheme.primary, color: '#fff',
-                      fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em',
-                      padding: '3px 10px', borderRadius: '999px', marginBottom: '6px',
-                      fontFamily: "'Poppins', sans-serif",
-                    }}>EXPLORE</div>
-                  )}
-                  <p style={{
-                    color: '#fff', fontSize: '18px', fontWeight: 700,
-                    fontFamily: "'Poppins', sans-serif", margin: 0, lineHeight: 1.2,
-                  }}>{dest.name}</p>
+                <img src={dest.img} alt={dest.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transform: isHov ? 'scale(1.06)' : 'scale(1)', transition: 'transform 0.6s ease', filter: 'brightness(0.75)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)` }} />
+                {isHov && <div style={{ position: 'absolute', inset: 0, background: `${catTheme.primary}18`, transition: 'opacity 0.3s' }} />}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                    <MapPin size={11} color={catTheme.primary} />
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: catTheme.primary, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.1em', textTransform: 'uppercase' }}>India</span>
+                  </div>
+                  <p style={{ color: '#fff', fontSize: '26px', fontWeight: 800, fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px', lineHeight: 1.1 }}>{dest.name}</p>
+                  <div style={{ marginTop: '14px', opacity: isHov ? 1 : 0, transform: isHov ? 'translateY(0)' : 'translateY(8px)', transition: 'all 0.3s ease' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: catTheme.primary, color: '#fff', fontSize: '11px', fontWeight: 700, padding: '7px 16px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>
+                      Explore packages →
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Bottom row — 4 smaller cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', paddingBottom: '80px' }}>
+          {rest.map((dest, i) => {
+            const idx = i + 2;
+            const isHov = hovered === idx;
+            return (
+              <div key={dest.name} onMouseEnter={() => setHovered(idx)} onMouseLeave={() => setHovered(null)}
+                style={{ height: '220px', borderRadius: '20px', overflow: 'hidden', position: 'relative', cursor: 'pointer', transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)', transform: isHov ? 'scale(1.03)' : 'scale(1)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={dest.img} alt={dest.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transform: isHov ? 'scale(1.08)' : 'scale(1)', transition: 'transform 0.6s ease', filter: 'brightness(0.75)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 60%)' }} />
+                {isHov && <div style={{ position: 'absolute', inset: 0, border: `2px solid ${catTheme.primary}`, borderRadius: '20px' }} />}
+                <div style={{ position: 'absolute', bottom: '18px', left: '18px', right: '18px' }}>
+                  <p style={{ color: '#fff', fontSize: '16px', fontWeight: 700, fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.2px' }}>{dest.name}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', opacity: isHov ? 1 : 0, transition: 'opacity 0.2s' }}>
+                    <MapPin size={9} color={catTheme.primary} />
+                    <span style={{ fontSize: '10px', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", fontWeight: 600 }}>View trips →</span>
+                  </div>
                 </div>
               </div>
             );
@@ -288,89 +268,61 @@ function ItineraryTeaser({ itinerary, catTheme }) {
   const [openDay, setOpenDay] = useState(null);
 
   return (
-    <section style={{ padding: '20px 0 60px', background: 'transparent' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 40px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+    <section style={{ padding: '72px 0 0', background: '#0d0d0d' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 60px' }}>
+
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '48px' }}>
           <div>
-            <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#1a1a1a', fontFamily: "'Poppins', sans-serif", margin: '0 0 4px' }}>
-              Sample Itinerary
-            </h2>
-            <p style={{ fontSize: '14px', color: '#9ca3af', fontFamily: "'Poppins', sans-serif", margin: 0 }}>
-              A glimpse of what your trip could look like
-            </p>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", margin: '0 0 8px' }}>Day by day</p>
+            <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>Sample Itinerary</h2>
           </div>
-          <div style={{ flex: 1, height: '1px', background: '#f0f0f0' }} />
-          <div style={{
-            background: catTheme.pill, color: catTheme.pillText,
-            padding: '6px 14px', borderRadius: '999px',
-            fontSize: '12px', fontWeight: 600, fontFamily: "'Poppins', sans-serif",
-            whiteSpace: 'nowrap',
-          }}>Customisable for you</div>
+          <span style={{ fontSize: '11px', fontWeight: 600, color: catTheme.primary, background: `${catTheme.primary}18`, border: `1px solid ${catTheme.primary}33`, padding: '5px 14px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", whiteSpace: 'nowrap' }}>Fully customisable</span>
         </div>
 
         {/* Timeline */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {itinerary.map((item, i) => {
             const isOpen = openDay === i;
             const isLast = i === itinerary.length - 1;
             return (
               <div key={i} style={{ display: 'flex', gap: '0' }}>
-                {/* Left: timeline */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '56px', flexShrink: 0 }}>
+                {/* Left dot + line */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '52px', flexShrink: 0, paddingTop: '14px' }}>
                   <div style={{
-                    width: '40px', height: '40px', borderRadius: '50%',
-                    background: isOpen ? catTheme.primary : catTheme.pill,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '18px', flexShrink: 0,
-                    transition: 'background 0.25s ease',
-                    boxShadow: isOpen ? `0 0 0 4px ${catTheme.primary}33` : 'none',
-                  }}>{item.icon}</div>
-                  {!isLast && (
-                    <div style={{ width: '2px', flex: 1, minHeight: '20px', background: isOpen ? catTheme.primary : '#e5e7eb', transition: 'background 0.25s ease' }} />
-                  )}
+                    width: '12px', height: '12px', borderRadius: '50%', flexShrink: 0,
+                    background: isOpen ? catTheme.primary : 'rgba(255,255,255,0.15)',
+                    border: `2px solid ${isOpen ? catTheme.primary : 'rgba(255,255,255,0.2)'}`,
+                    boxShadow: isOpen ? `0 0 0 4px ${catTheme.primary}25` : 'none',
+                    transition: 'all 0.25s ease',
+                  }} />
+                  {!isLast && <div style={{ width: '1px', flex: 1, minHeight: '24px', background: isOpen ? `${catTheme.primary}50` : 'rgba(255,255,255,0.08)', transition: 'background 0.25s ease', marginTop: '6px' }} />}
                 </div>
 
-                {/* Right: content */}
-                <div style={{ flex: 1, paddingBottom: isLast ? '0' : '4px', paddingLeft: '16px' }}>
-                  <button
-                    onClick={() => setOpenDay(isOpen ? null : i)}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '12px 20px', borderRadius: '14px',
-                      background: isOpen ? catTheme.soft : 'transparent',
-                      border: `1px solid ${isOpen ? catTheme.primary + '44' : 'transparent'}`,
-                      cursor: 'pointer', textAlign: 'left', transition: 'all 0.25s ease',
-                    }}
-                    onMouseEnter={e => { if (!isOpen) e.currentTarget.style.background = catTheme.soft; }}
-                    onMouseLeave={e => { if (!isOpen) e.currentTarget.style.background = 'transparent'; }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <span style={{
-                        fontSize: '11px', fontWeight: 700, color: catTheme.pillText,
-                        fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em',
-                        background: catTheme.pill, padding: '3px 10px', borderRadius: '999px',
-                        whiteSpace: 'nowrap',
-                      }}>{item.day}</span>
-                      <span style={{
-                        fontSize: '15px', fontWeight: 600, color: '#1a1a1a',
-                        fontFamily: "'Poppins', sans-serif",
-                      }}>{item.title}</span>
+                {/* Content */}
+                <div style={{ flex: 1, paddingBottom: isLast ? '0' : '4px' }}>
+                  <button onClick={() => setOpenDay(isOpen ? null : i)} style={{
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '10px 18px', borderRadius: '14px', border: `1px solid ${isOpen ? catTheme.primary + '30' : 'transparent'}`,
+                    background: isOpen ? `${catTheme.primary}10` : 'transparent',
+                    cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={e => { if (!isOpen) { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}}
+                  onMouseLeave={e => { if (!isOpen) { e.currentTarget.style.background = 'transparent'; }}}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                      <div>
+                        <span style={{ fontSize: '10px', fontWeight: 700, color: catTheme.primary, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em', display: 'block' }}>{item.day}</span>
+                        <span style={{ fontSize: '15px', fontWeight: 600, color: isOpen ? '#fff' : 'rgba(255,255,255,0.7)', fontFamily: "'Poppins', sans-serif", transition: 'color 0.2s' }}>{item.title}</span>
+                      </div>
                     </div>
-                    <div style={{ color: catTheme.primary, flexShrink: 0 }}>
-                      {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    <div style={{ color: isOpen ? catTheme.primary : 'rgba(255,255,255,0.2)', flexShrink: 0, transition: 'color 0.2s' }}>
+                      {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                     </div>
                   </button>
-
-                  {/* Expanded content */}
                   {isOpen && (
-                    <div style={{
-                      padding: '12px 20px 20px',
-                      animation: 'expandIn 0.2s ease',
-                    }}>
-                      <p style={{
-                        fontSize: '14px', color: '#6b7280', lineHeight: 1.75,
-                        fontFamily: "'Poppins', sans-serif", margin: 0,
-                      }}>{item.desc}</p>
+                    <div style={{ padding: '4px 18px 20px 48px', animation: 'expandIn 0.2s ease' }}>
+                      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, fontFamily: "'Poppins', sans-serif", margin: 0 }}>{item.desc}</p>
                     </div>
                   )}
                 </div>
@@ -379,34 +331,22 @@ function ItineraryTeaser({ itinerary, catTheme }) {
           })}
         </div>
 
-        {/* CTA */}
+        {/* CTA Banner */}
         <div style={{
-          marginTop: '32px', padding: '24px 28px',
-          borderRadius: '20px', background: catTheme.soft,
-          border: `1px solid ${catTheme.primary}33`,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: '16px',
+          margin: '56px 0 0', padding: '36px 40px',
+          borderRadius: '24px',
+          background: `linear-gradient(135deg, ${catTheme.primary}22 0%, ${catTheme.primary}08 100%)`,
+          border: `1px solid ${catTheme.primary}30`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap',
         }}>
           <div>
-            <p style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a1a', fontFamily: "'Poppins', sans-serif", margin: '0 0 4px' }}>
-              Want a custom itinerary?
-            </p>
-            <p style={{ fontSize: '13px', color: '#9ca3af', fontFamily: "'Poppins', sans-serif", margin: 0 }}>
-              Tell us your dates, group size and budget — we'll build it for you.
-            </p>
+            <p style={{ fontSize: '20px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: '0 0 6px', letterSpacing: '-0.3px' }}>Want a custom itinerary?</p>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: "'Poppins', sans-serif", margin: 0 }}>Tell us your dates, group size and budget — we'll craft it for you.</p>
           </div>
-          <a href="https://wa.me/916396464369?text=Hi! I want a custom itinerary."
-            target="_blank" rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              background: catTheme.primary, color: '#fff',
-              padding: '12px 24px', borderRadius: '999px',
-              textDecoration: 'none', fontWeight: 600, fontSize: '14px',
-              fontFamily: "'Poppins', sans-serif", whiteSpace: 'nowrap',
-              transition: 'opacity 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+          <a href="https://wa.me/916396464369?text=Hi! I want a custom itinerary." target="_blank" rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", whiteSpace: 'nowrap', boxShadow: `0 8px 28px ${catTheme.primary}50`, transition: 'transform 0.15s ease' }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
           >
             <MessageCircle size={16} /> Plan My Trip
           </a>
@@ -414,10 +354,7 @@ function ItineraryTeaser({ itinerary, catTheme }) {
       </div>
 
       <style>{`
-        @keyframes expandIn {
-          from { opacity: 0; transform: translateY(-6px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes expandIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
     </section>
@@ -486,96 +423,208 @@ function PackagesContent() {
   const catTheme = CATEGORY_THEMES[urlCategory] || CATEGORY_THEMES.default;
 
   return (
-    <div style={{ background: theme.bg, transition: 'background 0.5s ease' }}>
+    <div style={{ background: '#0d0d0d', minHeight: '100vh' }}>
 
       {/* ── HERO ── */}
       {meta ? (
-        <section style={{ position: 'relative', minHeight: '520px', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
+        <section style={{ position: 'relative', height: '100vh', minHeight: '600px', maxHeight: '820px', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={meta.img} alt={meta.title}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.15) 100%)' }} />
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${catTheme.accent}33 0%, transparent 60%)` }} />
-          <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '100px 40px 60px' }}>
-            <div style={{ display: 'inline-block', marginBottom: '16px', background: catTheme.primary, color: '#fff', padding: '4px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', fontFamily: "'Poppins', sans-serif" }}>{meta.badge}</div>
-            <h1 style={{ fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-1px' }}>{meta.title}</h1>
-            <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.8)', fontFamily: "'Poppins', sans-serif", marginBottom: '12px', fontStyle: 'italic' }}>{meta.subtitle}</p>
-            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.6)', fontFamily: "'Poppins', sans-serif", maxWidth: '560px', lineHeight: 1.7, marginBottom: '36px' }}>{meta.description}</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              {meta.highlights.map(h => (
-                <div key={h} style={{ display: 'flex', alignItems: 'center', gap: '7px', background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: `1px solid ${catTheme.primary}55`, borderRadius: '999px', padding: '8px 18px', fontSize: '13px', fontWeight: 600, color: '#fff', fontFamily: "'Poppins', sans-serif" }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: catTheme.primary, display: 'inline-block', flexShrink: 0 }} />
-                  {h}
-                </div>
-              ))}
+          {/* Dark gradient bottom-heavy */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.1) 100%)' }} />
+          {/* Color tint from left */}
+          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(120deg, ${catTheme.accent}55 0%, transparent 55%)` }} />
+
+          <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '0 60px 70px' }}>
+            {/* Badge */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px', background: `${catTheme.primary}22`, border: `1px solid ${catTheme.primary}66`, color: catTheme.primary, padding: '5px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', fontFamily: "'Poppins', sans-serif", backdropFilter: 'blur(8px)' }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: catTheme.primary, display: 'inline-block' }} />
+              {meta.badge}
             </div>
+
+            {/* Title */}
+            <h1 style={{ fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 900, color: '#fff', fontFamily: "'Poppins', sans-serif", lineHeight: 1.0, marginBottom: '18px', letterSpacing: '-2px' }}>{meta.title}</h1>
+            <p style={{ fontSize: 'clamp(15px, 1.8vw, 20px)', color: 'rgba(255,255,255,0.65)', fontFamily: "'Poppins', sans-serif", maxWidth: '600px', lineHeight: 1.65, marginBottom: '40px' }}>{meta.subtitle}</p>
+
+            {/* Stats + highlights row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flexWrap: 'wrap' }}>
+              {/* Stats */}
+              <div style={{ display: 'flex', gap: '28px' }}>
+                {[['24+', 'Trips'], ['4.9★', 'Rating'], ['5K+', 'Travelers']].map(([val, lbl]) => (
+                  <div key={lbl}>
+                    <div style={{ fontSize: '22px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", lineHeight: 1 }}>{val}</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '3px' }}>{lbl}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Divider */}
+              <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.15)' }} />
+
+              {/* Highlight pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {meta.highlights.map(h => (
+                  <div key={h} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: '999px', padding: '7px 16px', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.85)', fontFamily: "'Poppins', sans-serif" }}>
+                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: catTheme.primary, display: 'inline-block', flexShrink: 0 }} />
+                    {h}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Scroll hint */}
+          <div style={{ position: 'absolute', bottom: '28px', right: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.4 }}>
+            <div style={{ width: '1px', height: '40px', background: '#fff' }} />
+            <span style={{ fontSize: '9px', color: '#fff', letterSpacing: '0.15em', fontFamily: "'Poppins', sans-serif", writingMode: 'vertical-rl' }}>SCROLL</span>
           </div>
         </section>
       ) : (
-        <section style={{ position: 'relative', height: '260px', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+        <section style={{ position: 'relative', height: '320px', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200" alt="Packages" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }} />
-          <div style={{ position: 'relative', zIndex: 1, padding: '0 40px' }}>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Home / Packages</p>
-            <h1 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif" }}>All Packages</h1>
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80" alt="Packages" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%)' }} />
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 60px 48px', width: '100%' }}>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '12px', marginBottom: '8px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.1em' }}>HOME / PACKAGES</p>
+            <h1 style={{ fontSize: 'clamp(32px, 4vw, 56px)', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", letterSpacing: '-1px' }}>All Packages</h1>
           </div>
         </section>
       )}
 
+      {/* ── DESTINATIONS SCROLL ── */}
+      {meta && <DestinationCards destinations={meta.destinations} catTheme={catTheme} />}
 
-      {/* ── PACKAGES ── */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px 48px' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1a1a1a', fontFamily: "'Poppins', sans-serif", marginBottom: '6px' }}>
-            {meta ? `${meta.title} Packages` : 'All Packages'}
-          </h2>
-          <div style={{ width: '40px', height: '3px', borderRadius: '2px', background: catTheme.primary }} />
-        </div>
+      {/* ── PACKAGES SECTION ── */}
+      <div style={{ background: '#0d0d0d', padding: '72px 0 80px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 60px' }}>
 
-        {/* Search + Sort */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', flexWrap: 'wrap' }}>
-          <form onSubmit={e => { e.preventDefault(); setSearch(searchInput); }}
-            style={{ display: 'flex', flex: 1, minWidth: '200px', borderRadius: '999px', overflow: 'hidden', border: '1.5px solid #e5e7eb', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-            <input value={searchInput} onChange={e => setSearchInput(e.target.value)}
-              placeholder="Search destinations..."
-              style={{ flex: 1, padding: '12px 20px', fontSize: '14px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif" }} />
-            <button type="submit" style={{ background: catTheme.primary, color: '#fff', border: 'none', padding: '12px 20px', cursor: 'pointer' }}>
-              <Search size={17} />
-            </button>
-          </form>
-          <select value={sort} onChange={e => setSort(e.target.value)} style={{ border: '1.5px solid #e5e7eb', borderRadius: '999px', padding: '12px 20px', fontSize: '14px', outline: 'none', color: '#374151', background: '#fff', fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
-            <option value="featured">Sort: Popularity</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="duration">Duration</option>
-          </select>
-        </div>
-
-        {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-            {[1,2,3,4,5,6].map(i => <div key={i} style={{ background: '#f3f4f6', borderRadius: '16px', height: '320px' }} className="animate-pulse" />)}
-          </div>
-        ) : packages.length > 0 ? (
-          <>
-            <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '20px', fontFamily: "'Poppins', sans-serif" }}>{packages.length} package{packages.length !== 1 ? 's' : ''} found</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-              {packages.map(pkg => <PackageCard key={pkg.id} pkg={pkg} />)}
+          {/* Header row */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
+            <div>
+              <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", margin: '0 0 8px' }}>Our picks</p>
+              <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>
+                {meta ? `${meta.title} Packages` : 'All Packages'}
+              </h2>
             </div>
-          </>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <div style={{ fontSize: '56px', marginBottom: '16px' }}>🗺️</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1a1a1a', marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>No packages right now</h3>
-            <p style={{ color: '#9ca3af', marginBottom: '28px', fontFamily: "'Poppins', sans-serif" }}>We're crafting the perfect trip. Contact us for a custom package!</p>
-            <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '12px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 600, fontSize: '14px', fontFamily: "'Poppins', sans-serif" }}>
-              <MessageCircle size={18} /> WhatsApp Us
-            </a>
+
+            {/* Search + Sort */}
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <form onSubmit={e => { e.preventDefault(); setSearch(searchInput); }}
+                style={{ display: 'flex', alignItems: 'center', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                <input value={searchInput} onChange={e => setSearchInput(e.target.value)}
+                  placeholder="Search destinations..."
+                  style={{ flex: 1, padding: '10px 16px', fontSize: '13px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif", color: '#fff', width: '220px' }} />
+                <button type="submit" style={{ background: catTheme.primary, color: '#fff', border: 'none', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                  <Search size={14} />
+                </button>
+              </form>
+              <select value={sort} onChange={e => setSort(e.target.value)}
+                style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '10px 14px', fontSize: '13px', outline: 'none', color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.05)', fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
+                <option value="featured">Popularity</option>
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+                <option value="duration">Duration</option>
+              </select>
+            </div>
           </div>
-        )}
+
+          {loading ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+              {[1,2,3,4,5,6].map(i => <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '20px', height: '340px', animation: 'pulse 1.5s ease infinite' }} />)}
+            </div>
+          ) : packages.length > 0 ? (
+            <>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', marginBottom: '32px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>{packages.length} package{packages.length !== 1 ? 's' : ''} found</p>
+
+              {/* Featured first package — large horizontal card */}
+              {urlCategory && (() => {
+                const fp = packages[0];
+                const fpImg = fp.cover_image || 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800';
+                return (
+                  <div style={{ display: 'flex', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#181818', minHeight: '340px', cursor: 'pointer' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                    onClick={() => window.location.href = `/packages/${fp.slug}${urlCategory ? `?from=${urlCategory}` : ''}`}>
+                    {/* Left: image */}
+                    <div style={{ flex: '0 0 48%', position: 'relative', overflow: 'hidden' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={fpImg} alt={fp.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, transparent 60%, #181818 100%)' }} />
+                      <div style={{ position: 'absolute', top: '20px', left: '20px', background: `${catTheme.primary}22`, border: `1px solid ${catTheme.primary}55`, color: catTheme.primary, fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', padding: '5px 12px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", backdropFilter: 'blur(8px)' }}>
+                        ✦ FEATURED
+                      </div>
+                    </div>
+                    {/* Right: details */}
+                    <div style={{ flex: 1, padding: '44px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
+                      <div>
+                        <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', color: catTheme.primary, textTransform: 'uppercase', fontFamily: "'Poppins', sans-serif", margin: '0 0 10px' }}>{meta?.title || ''}</p>
+                        <h3 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', margin: 0, lineHeight: 1.2, fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.5px' }}>{fp.title}</h3>
+                      </div>
+                      {fp.description && (
+                        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', lineHeight: 1.75, fontFamily: "'Poppins', sans-serif", margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                          {fp.description}
+                        </p>
+                      )}
+                      <div style={{ display: 'flex', gap: '28px' }}>
+                        {[
+                          ['₹' + (fp.price_per_person?.toLocaleString('en-IN') || '—'), 'per person'],
+                          [fp.duration_days ? `${fp.duration_nights || fp.duration_days - 1}N / ${fp.duration_days}D` : '—', 'duration'],
+                          [fp.location || fp.state || '—', 'location'],
+                        ].map(([val, lbl]) => (
+                          <div key={lbl}>
+                            <div style={{ fontSize: '17px', fontWeight: 700, color: '#fff', fontFamily: "'Poppins', sans-serif" }}>{val}</div>
+                            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: "'Poppins', sans-serif", marginTop: '3px' }}>{lbl}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: catTheme.primary, color: '#fff', fontSize: '13px', fontWeight: 700, padding: '11px 24px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif" }}>
+                          View Package →
+                        </div>
+                        <a href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + fp.title + '. Please share more details.')}
+                          target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600, padding: '11px 20px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>
+                          WhatsApp
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Remaining packages grid */}
+              {(urlCategory ? packages.slice(1) : packages).length > 0 && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+                  {(urlCategory ? packages.slice(1) : packages).map(pkg => (
+                    urlCategory
+                      ? <PackageCard key={pkg.id} pkg={pkg} fromCategory={urlCategory} dark />
+                      : <PackageCard key={pkg.id} pkg={pkg} />
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '80px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: `${catTheme.primary}20`, border: `1px solid ${catTheme.primary}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>{catTheme.emoji}</div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
+              <p style={{ color: 'rgba(255,255,255,0.35)', marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
+              <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", boxShadow: `0 8px 28px ${catTheme.primary}50` }}>
+                <MessageCircle size={16} /> Chat on WhatsApp
+              </a>
+            </div>
+          )}
+        </div>
       </div>
 
+
+      <style>{`
+        @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+        @keyframes heroFadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes heroZoom { from { transform:scale(1.06); } to { transform:scale(1); } }
+        @keyframes scrollBounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+      `}</style>
     </div>
   );
 }
