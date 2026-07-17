@@ -37,7 +37,7 @@ export default function PackageDetailPage({ params }) {
   const fromCategory = searchParams.get('from');
   const [pkg, setPkg] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { applyTheme } = useTheme();
+  const { applyTheme, darkMode, theme } = useTheme();
   const [activeTab, setActiveTab] = useState('about');
   const [openFaq, setOpenFaq] = useState(null);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
@@ -123,11 +123,36 @@ export default function PackageDetailPage({ params }) {
   const catTheme = CATEGORY_THEMES[resolvedThemeKey] || CATEGORY_THEMES.default;
   const accent = catTheme.primary;
 
+  const c = {
+    pageBg:      darkMode ? '#0d0d0d'                   : (theme?.bg || '#f8f8f6'),
+    cardBg:      darkMode ? '#181818'                   : '#ffffff',
+    textPrimary: darkMode ? '#ffffff'                   : '#111111',
+    textSub:     darkMode ? 'rgba(255,255,255,0.6)'     : 'rgba(0,0,0,0.62)',
+    textMuted:   darkMode ? 'rgba(255,255,255,0.4)'     : 'rgba(0,0,0,0.42)',
+    textFaint:   darkMode ? 'rgba(255,255,255,0.25)'    : 'rgba(0,0,0,0.28)',
+    textLabel:   darkMode ? 'rgba(255,255,255,0.35)'    : 'rgba(0,0,0,0.38)',
+    border:      darkMode ? 'rgba(255,255,255,0.07)'    : 'rgba(0,0,0,0.08)',
+    borderMid:   darkMode ? 'rgba(255,255,255,0.1)'     : 'rgba(0,0,0,0.12)',
+    surface:     darkMode ? 'rgba(255,255,255,0.03)'    : 'rgba(0,0,0,0.03)',
+    surfaceHov:  darkMode ? 'rgba(255,255,255,0.05)'    : 'rgba(0,0,0,0.05)',
+    tabsBg:      darkMode ? 'rgba(18,18,18,0.85)'       : 'rgba(255,255,255,0.85)',
+    tabsActive:  darkMode ? 'rgba(255,255,255,0.1)'     : 'rgba(0,0,0,0.08)',
+    tabsActiveBorder: darkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.15)',
+    tabsInactive: darkMode ? 'rgba(255,255,255,0.4)'   : 'rgba(0,0,0,0.4)',
+    tabsHov:     darkMode ? 'rgba(255,255,255,0.7)'     : 'rgba(0,0,0,0.7)',
+    tabsHovBg:   darkMode ? 'rgba(255,255,255,0.05)'    : 'rgba(0,0,0,0.05)',
+    dot:         darkMode ? 'rgba(255,255,255,0.2)'     : 'rgba(0,0,0,0.2)',
+    shadow:      darkMode ? 'rgba(0,0,0,0.4)'           : 'rgba(0,0,0,0.12)',
+    mobileCta:   darkMode ? '#181818'                   : '#ffffff',
+    selectBg:    darkMode ? 'rgba(255,255,255,0.07)'    : 'rgba(0,0,0,0.05)',
+    selectColor: darkMode ? '#ffffff'                   : '#111111',
+  };
+
   return (
-    <div style={{ background: '#0d0d0d', minHeight: '100vh', fontFamily: "'Poppins', sans-serif", color: '#fff' }}>
+    <div style={{ background: c.pageBg, minHeight: '100vh', fontFamily: "'Poppins', sans-serif", color: c.textPrimary }}>
 
       {/* ── CINEMATIC SLIDER HERO ── */}
-      <div style={{ position: 'relative', width: '100%', height: '100vh', minHeight: '620px', maxHeight: '820px', overflow: 'hidden', background: '#0a0a0a' }}>
+      <div style={{ position: 'relative', width: '100%', height: '85vh', minHeight: '580px', maxHeight: '820px', overflow: 'hidden', background: '#0a0a0a' }}>
 
         {/* Background images — crossfade */}
         {slides.map((slide, i) => (
@@ -264,20 +289,20 @@ export default function PackageDetailPage({ params }) {
 
 
       {/* ── STICKY TABS ── */}
-      <div className="sticky z-20" style={{ top: '72px', display: 'flex', justifyContent: 'center', padding: '12px 48px', pointerEvents: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(18,18,18,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '5px', width: 'fit-content', pointerEvents: 'auto', boxShadow: '0 4px 24px rgba(0,0,0,0.4)' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 48px', pointerEvents: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: c.tabsBg, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: `1px solid ${c.borderMid}`, borderRadius: '14px', padding: '5px', width: 'fit-content', pointerEvents: 'auto', boxShadow: `0 4px 24px ${c.shadow}` }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => scrollToSection(t.id)} style={{
-              padding: '9px 20px', fontSize: '13px', fontWeight: activeTab === t.id ? 600 : 400,
-              color: activeTab === t.id ? '#fff' : 'rgba(255,255,255,0.4)',
-              background: activeTab === t.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-              border: activeTab === t.id ? '1px solid rgba(255,255,255,0.12)' : '1px solid transparent',
+              padding: '9px 24px', fontSize: '18px', fontWeight: activeTab === t.id ? 600 : 400, textTransform: 'uppercase', letterSpacing: '0.04em',
+              color: activeTab === t.id ? c.textPrimary : c.tabsInactive,
+              background: activeTab === t.id ? c.tabsActive : 'transparent',
+              border: activeTab === t.id ? `1px solid ${c.tabsActiveBorder}` : '1px solid transparent',
               borderRadius: '10px', cursor: 'pointer', whiteSpace: 'nowrap',
               transition: 'all 0.2s ease', fontFamily: "'Poppins', sans-serif",
               letterSpacing: '0.01em',
             }}
-            onMouseEnter={e => { if (activeTab !== t.id) { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}}
-            onMouseLeave={e => { if (activeTab !== t.id) { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.background = 'transparent'; }}}
+            onMouseEnter={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.tabsHov; e.currentTarget.style.background = c.tabsHovBg; }}}
+            onMouseLeave={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.tabsInactive; e.currentTarget.style.background = 'transparent'; }}}
             >
               {t.label}
             </button>
@@ -286,7 +311,7 @@ export default function PackageDetailPage({ params }) {
       </div>
 
       {/* ── CONTENT + SIDEBAR ── */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 48px 80px', background: '#0d0d0d' }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 48px 80px', background: c.pageBg }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '64px', alignItems: 'start' }}>
 
           {/* LEFT */}
@@ -296,10 +321,10 @@ export default function PackageDetailPage({ params }) {
             <section ref={el => sectionRefs.current['about'] = el} className="scroll-mt-32">
 
               {/* Section heading */}
-              <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#fff', marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</h2>
+              <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</p>
 
               {/* Description */}
-              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: 2, marginBottom: '40px' }}>{pkg.description}</p>
+              <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, marginBottom: '40px' }}>{pkg.description}</p>
 
               {/* Info row */}
               {(() => {
@@ -310,11 +335,11 @@ export default function PackageDetailPage({ params }) {
                   { label: 'Trip Type', value: pkg.subtype || pkg.vibe || 'Private' },
                 ];
                 return (
-                  <div style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, marginBottom: '36px', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, marginBottom: '36px', border: `1px solid ${c.border}`, borderRadius: '14px', overflow: 'hidden' }}>
                     {items.map(({ label, value }, idx) => (
-                      <div key={label} style={{ padding: '20px 24px', borderRight: idx < items.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none', textAlign: 'center' }}>
-                        <div style={{ fontSize: '10px', fontWeight: 600, color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '7px' }}>{label}</div>
-                        <div style={{ fontSize: '15px', fontWeight: 600, color: '#fff' }}>{value}</div>
+                      <div key={label} style={{ padding: '20px 24px', borderRight: idx < items.length - 1 ? `1px solid ${c.border}` : 'none', textAlign: 'center' }}>
+                        <div style={{ fontSize: '18px', fontWeight: 600, color: c.textLabel, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '9px' }}>{label}</div>
+                        <div style={{ fontSize: '18px', fontWeight: 600, color: c.textPrimary }}>{value}</div>
                       </div>
                     ))}
                   </div>
@@ -324,12 +349,12 @@ export default function PackageDetailPage({ params }) {
               {/* Highlights */}
               {pkg.highlights?.length > 0 && (
                 <div>
-                  <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.28)', marginBottom: '20px' }}>Highlights</p>
+                  <p style={{ fontSize: '26px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: c.textPrimary, marginBottom: '20px' }}>Highlights</p>
                   <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     {pkg.highlights.map((h, i) => (
-                      <li key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                        <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: `${accent}20`, border: `1px solid ${accent}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px', fontSize: '9px', color: accent, fontWeight: 700 }}>✓</span>
-                        <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>{h}</span>
+                      <li key={i} style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}><circle cx="10" cy="10" r="10" fill={accent}/><path d="M5.5 10.5l3 3 6-6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        <span style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.5 }}>{h}</span>
                       </li>
                     ))}
                   </ul>
@@ -339,28 +364,28 @@ export default function PackageDetailPage({ params }) {
 
             {/* ITINERARY */}
             <section ref={el => sectionRefs.current['overview'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Tour Itinerary
               </h2>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
 
                 {pkg.itinerary?.map((day, i) => (
-                  <div key={i} style={{ border: '1px solid', borderColor: openDay === i ? `${accent}40` : 'rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden', background: openDay === i ? `${accent}08` : 'transparent', transition: 'all 0.2s ease' }}>
+                  <div key={i} style={{ border: '1px solid', borderColor: openDay === i ? `${accent}40` : c.border, borderRadius: '14px', overflow: 'hidden', background: openDay === i ? `${accent}08` : 'transparent', transition: 'all 0.2s ease' }}>
                       <button onClick={() => setOpenDay(openDay === i ? null : i)} style={{
                         width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                         padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer',
                         textAlign: 'left', fontFamily: "'Poppins', sans-serif", gap: '16px',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                          <span style={{ fontSize: '11px', fontWeight: 700, color: openDay === i ? accent : 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase', minWidth: '48px', flexShrink: 0 }}>DAY {i + 1}</span>
-                          <p style={{ fontSize: '15px', fontWeight: 500, color: openDay === i ? '#fff' : 'rgba(255,255,255,0.75)', margin: 0, transition: 'color 0.2s' }}>{day.title}</p>
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: openDay === i ? accent : c.textFaint, letterSpacing: '0.08em', textTransform: 'uppercase', minWidth: '52px', flexShrink: 0 }}>DAY {i + 1}</span>
+                          <p style={{ fontSize: '18px', fontWeight: 500, color: openDay === i ? c.textPrimary : c.textSub, margin: 0, transition: 'color 0.2s' }}>{day.title}</p>
                         </div>
-                        {openDay === i ? <ChevronUp size={15} color={accent} strokeWidth={2} /> : <ChevronDown size={15} color="rgba(255,255,255,0.2)" strokeWidth={2} />}
+                        {openDay === i ? <ChevronUp size={15} color={accent} strokeWidth={2} /> : <ChevronDown size={15} color={c.textFaint} strokeWidth={2} />}
                       </button>
 
                       {openDay === i && day.description && (
-                        <div style={{ padding: '0 18px 16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                        <div style={{ padding: '0 18px 16px', borderTop: `1px solid ${c.border}` }}>
                           {day.images?.filter(Boolean).length > 0 && (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', margin: '14px 0', borderRadius: '8px', overflow: 'hidden' }}>
                               {day.images.filter(Boolean).slice(0, 3).map((img, ii) => (
@@ -372,9 +397,9 @@ export default function PackageDetailPage({ params }) {
                           )}
                           <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none' }}>
                             {day.description.split('.').filter(s => s.trim().length > 8).map((s, si) => (
-                              <li key={si} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'flex-start' }}>
-                                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', flexShrink: 0, marginTop: '8px' }} />
-                                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>{s.trim()}.</span>
+                              <li key={si} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center' }}>
+                                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
+                                <span style={{ fontSize: '18px', color: c.textMuted, lineHeight: 1.5 }}>{s.trim()}.</span>
                               </li>
                             ))}
                           </ul>
@@ -387,18 +412,15 @@ export default function PackageDetailPage({ params }) {
 
             {/* INCLUSIONS */}
             <section ref={el => sectionRefs.current['inclusions'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                Inclusions & Exclusions
-              </h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
                 {pkg.inclusions?.length > 0 && (
                   <div>
-                    <p style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>Included</p>
+                    <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Included</p>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                       {pkg.inclusions.map((inc, i) => (
-                        <li key={i} style={{ display: 'flex', gap: '10px', marginBottom: '12px', alignItems: 'flex-start' }}>
-                          <span style={{ width: '18px', height: '18px', borderRadius: '50%', background: accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px', fontSize: '9px', color: '#fff', fontWeight: 700 }}>✓</span>
-                          <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{inc}</span>
+                        <li key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center' }}>
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}><circle cx="10" cy="10" r="10" fill={accent}/><path d="M5.5 10.5l3 3 6-6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          <span style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.5 }}>{inc}</span>
                         </li>
                       ))}
                     </ul>
@@ -406,12 +428,12 @@ export default function PackageDetailPage({ params }) {
                 )}
                 {pkg.exclusions?.length > 0 && (
                   <div>
-                    <p style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>Not Included</p>
+                    <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Not Included</p>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                       {pkg.exclusions.map((exc, i) => (
-                        <li key={i} style={{ display: 'flex', gap: '10px', marginBottom: '12px', alignItems: 'flex-start' }}>
-                          <span style={{ width: '18px', height: '18px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px', fontSize: '9px', color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>✕</span>
-                          <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>{exc}</span>
+                        <li key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center' }}>
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}><circle cx="10" cy="10" r="10" fill={accent}/><path d="M6.5 6.5l7 7M13.5 6.5l-7 7" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
+                          <span style={{ fontSize: '18px', color: c.textMuted, lineHeight: 1.5 }}>{exc}</span>
                         </li>
                       ))}
                     </ul>
@@ -419,11 +441,14 @@ export default function PackageDetailPage({ params }) {
                 )}
               </div>
               {pkg.things_to_carry?.length > 0 && (
-                <div style={{ marginTop: '28px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                  <p style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '14px' }}>Things to Carry</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ marginTop: '40px' }}>
+                  <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>Things to Carry</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {pkg.things_to_carry.map((item, i) => (
-                      <span key={i} style={{ padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '13px', color: 'rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.04)' }}>{item}</span>
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
+                        <span style={{ fontSize: '18px', color: c.textSub }}>{item}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -432,7 +457,7 @@ export default function PackageDetailPage({ params }) {
 
             {/* COSTING */}
             <section ref={el => sectionRefs.current['costing'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Pricing
               </h2>
 
@@ -443,28 +468,32 @@ export default function PackageDetailPage({ params }) {
                   const orig = (i === 0 && originalPrice > disc) ? originalPrice : null;
                   const pct = orig ? Math.round(((orig - disc) / orig) * 100) : null;
                   return (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', borderRadius: '12px', border: `1px solid ${i === 0 ? accent + '50' : 'rgba(255,255,255,0.08)'}`, background: i === 0 ? accent + '12' : 'rgba(255,255,255,0.03)' }}>
-                      <span style={{ fontSize: '15px', fontWeight: 500, color: '#fff' }}>{opt.label}</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {orig && <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', textDecoration: 'line-through' }}>₹{orig.toLocaleString('en-IN')}</span>}
-                        <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>₹{disc.toLocaleString('en-IN')}</span>
-                        {pct && <span style={{ fontSize: '11px', fontWeight: 600, background: 'rgba(34,197,94,0.15)', color: '#4ade80', padding: '3px 8px', borderRadius: '4px' }}>−{pct}%</span>}
+                    <div key={i} style={{ borderRadius: '12px', border: `1px solid ${i === 0 ? accent + '50' : c.border}`, background: i === 0 ? accent + '12' : c.surface, overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px' }}>
+                        <span style={{ fontSize: '18px', fontWeight: 500, color: c.textPrimary }}>{opt.label}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          {orig && <span style={{ fontSize: '16px', color: c.textLabel, textDecoration: 'line-through' }}>₹{orig.toLocaleString('en-IN')}</span>}
+                          <span style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary }}>₹{disc.toLocaleString('en-IN')}</span>
+                          {pct && <span style={{ fontSize: '11px', fontWeight: 600, background: 'rgba(34,197,94,0.15)', color: '#4ade80', padding: '3px 8px', borderRadius: '4px' }}>−{pct}%</span>}
+                        </div>
+                      </div>
+                      <div style={{ padding: '10px 22px 14px', borderTop: `1px solid ${i === 0 ? accent + '30' : c.border}` }}>
+                        <span style={{ fontSize: '14px', color: c.textLabel }}>* All prices are per person. GST 5% + TCS 2% applicable.</span>
                       </div>
                     </div>
                   );
                 })}
               </div>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginBottom: '24px' }}>* All prices are per person. GST 5% + TCS 2% applicable.</p>
 
               {/* Batches */}
               {dateOptions.length > 0 && (
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '24px' }}>
-                  <p style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '14px' }}>Available Dates</p>
+                <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '24px' }}>
+                  <p style={{ fontSize: '18px', fontWeight: 600, color: c.textLabel, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px' }}>Available Dates</p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {dateOptions.map((d, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', background: 'rgba(255,255,255,0.03)' }}>
-                        <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>{formatDate(d)}</span>
-                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>{pkg.duration_days} days</span>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: `1px solid ${c.border}`, borderRadius: '8px', background: c.surface }}>
+                        <span style={{ fontSize: '14px', color: c.textSub }}>{formatDate(d)}</span>
+                        <span style={{ fontSize: '12px', color: c.textLabel }}>{pkg.duration_days} days</span>
                       </div>
                     ))}
                   </div>
@@ -474,7 +503,7 @@ export default function PackageDetailPage({ params }) {
 
             {/* FAQ */}
             <section ref={el => sectionRefs.current['faq'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Frequently Asked Questions
               </h2>
               {[
@@ -486,20 +515,20 @@ export default function PackageDetailPage({ params }) {
               ].map((item, i) => {
                 const isOpen = openFaq === i;
                 return (
-                  <div key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', overflow: 'hidden' }}>
+                  <div key={i} style={{ borderBottom: `1px solid ${c.border}`, overflow: 'hidden' }}>
                     <button onClick={() => setOpenFaq(isOpen ? null : i)} style={{
                       width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '18px 0', background: 'none', border: 'none', cursor: 'pointer',
                       textAlign: 'left', fontFamily: "'Poppins', sans-serif", gap: '16px',
                     }}>
-                      <span style={{ fontSize: '15px', fontWeight: 500, color: isOpen ? '#fff' : 'rgba(255,255,255,0.75)', transition: 'color 0.2s' }}>{item.q}</span>
-                      <span style={{ color: isOpen ? accent : 'rgba(255,255,255,0.25)', flexShrink: 0, transition: 'color 0.2s' }}>
+                      <span style={{ fontSize: '18px', fontWeight: 500, color: isOpen ? c.textPrimary : c.textSub, transition: 'color 0.2s' }}>{item.q}</span>
+                      <span style={{ color: isOpen ? accent : c.textFaint, flexShrink: 0, transition: 'color 0.2s' }}>
                         {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                       </span>
                     </button>
                     {isOpen && (
                       <div style={{ paddingBottom: '18px', animation: 'contentFadeUp 0.2s ease both' }}>
-                        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, margin: 0 }}>{item.a}</p>
+                        <p style={{ fontSize: '18px', color: c.textMuted, lineHeight: 1.8, margin: 0 }}>{item.a}</p>
                       </div>
                     )}
                   </div>
@@ -511,18 +540,18 @@ export default function PackageDetailPage({ params }) {
 
           {/* SIDEBAR */}
           <div className="hidden lg:block" style={{ position: 'sticky', top: '148px' }}>
-            <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', overflow: 'hidden', background: '#181818' }}>
+            <div style={{ border: `1px solid ${c.borderMid}`, borderRadius: '16px', overflow: 'hidden', background: c.cardBg }}>
               {/* Price */}
-              <div style={{ padding: '24px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-                <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '8px' }}>Starting from</p>
+              <div style={{ padding: '24px', borderBottom: `1px solid ${c.border}` }}>
+                <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Starting from</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '34px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>
+                  <span style={{ fontSize: '34px', fontWeight: 700, color: c.textPrimary, letterSpacing: '-0.5px' }}>
                     {displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}
                   </span>
-                  {savings && <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.3)', textDecoration: 'line-through' }}>₹{originalPrice?.toLocaleString('en-IN')}</span>}
+                  {savings && <span style={{ fontSize: '14px', color: c.textFaint, textDecoration: 'line-through' }}>₹{originalPrice?.toLocaleString('en-IN')}</span>}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>per person, taxes extra</span>
+                  <span style={{ fontSize: '12px', color: c.textLabel }}>per person, taxes extra</span>
                   {savings && <span style={{ fontSize: '11px', fontWeight: 600, color: '#4ade80', background: 'rgba(34,197,94,0.12)', padding: '2px 7px', borderRadius: '4px' }}>Save ₹{savings.toLocaleString('en-IN')}</span>}
                 </div>
               </div>
@@ -531,9 +560,9 @@ export default function PackageDetailPage({ params }) {
                 {/* Date */}
                 {dateOptions.length > 0 && (
                   <div style={{ marginBottom: '14px' }}>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '6px' }}>Date</label>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Date</label>
                     <select value={JSON.stringify(selectedDate)} onChange={e => setSelectedDate(JSON.parse(e.target.value))}
-                      style={{ width: '100%', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px 12px', fontSize: '14px', color: '#fff', background: 'rgba(255,255,255,0.07)', fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer' }}>
+                      style={{ width: '100%', border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '10px 12px', fontSize: '14px', color: c.selectColor, background: c.selectBg, fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer' }}>
                       {dateOptions.map((d, i) => <option key={i} value={JSON.stringify(d)}>{formatDate(d)}</option>)}
                     </select>
                   </div>
@@ -542,16 +571,16 @@ export default function PackageDetailPage({ params }) {
                 {/* Options */}
                 {pkg.tour_options?.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: '8px' }}>Option</label>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Option</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {pkg.tour_options.map((opt, i) => (
                         <button key={i} onClick={() => setSelectedOption(opt)} style={{
                           width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                           padding: '11px 14px', borderRadius: '8px', cursor: 'pointer',
-                          border: `1.5px solid ${selectedOption?.label === opt.label ? accent : 'rgba(255,255,255,0.1)'}`,
-                          background: selectedOption?.label === opt.label ? accent + '22' : 'rgba(255,255,255,0.04)',
+                          border: `1.5px solid ${selectedOption?.label === opt.label ? accent : c.borderMid}`,
+                          background: selectedOption?.label === opt.label ? accent + '22' : c.surface,
                           fontSize: '13px', fontWeight: 500,
-                          color: selectedOption?.label === opt.label ? '#fff' : 'rgba(255,255,255,0.6)',
+                          color: selectedOption?.label === opt.label ? c.textPrimary : c.textSub,
                           fontFamily: "'Poppins', sans-serif", transition: 'all 0.15s',
                         }}>
                           <span>{opt.label}</span>
@@ -575,10 +604,10 @@ export default function PackageDetailPage({ params }) {
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <a href={pkg.itinerary_pdf || '#'} style={{
                     flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                    border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px',
-                    fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.45)', textDecoration: 'none',
+                    border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '10px',
+                    fontSize: '12px', fontWeight: 500, color: c.textMuted, textDecoration: 'none',
                     opacity: pkg.itinerary_pdf ? 1 : 0.4, pointerEvents: pkg.itinerary_pdf ? 'auto' : 'none',
-                    fontFamily: "'Poppins', sans-serif", background: 'rgba(255,255,255,0.04)',
+                    fontFamily: "'Poppins', sans-serif", background: c.surface,
                   }}>
                     <Download size={13} /> Download PDF
                   </a>
@@ -596,10 +625,10 @@ export default function PackageDetailPage({ params }) {
       </div>
 
       {/* MOBILE CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t px-5 py-3 flex items-center gap-3" style={{ background: '#181818', borderColor: 'rgba(255,255,255,0.1)', boxShadow: '0 -4px 24px rgba(0,0,0,0.4)' }}>
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t px-5 py-3 flex items-center gap-3" style={{ background: c.mobileCta, borderColor: c.border, boxShadow: `0 -4px 24px ${c.shadow}` }}>
         <div className="flex-1">
-          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)' }}>per person</p>
-          <p style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>{displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}</p>
+          <p style={{ fontSize: '10px', color: c.textLabel }}>per person</p>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary }}>{displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}</p>
         </div>
         <a href={`https://wa.me/916396464369?text=${encodeURIComponent(waText)}`} target="_blank" rel="noopener noreferrer"
           style={{ width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#25D366', borderRadius: '10px', color: '#fff', textDecoration: 'none', flexShrink: 0 }}>

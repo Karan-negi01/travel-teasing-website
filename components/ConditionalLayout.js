@@ -8,11 +8,12 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 
 // Pages where hero fills full viewport — navbar floats over them transparently
 const HERO_PAGES = ['/', '/packages', '/about'];
+const isHeroPath = (path) => HERO_PAGES.includes(path) || path?.startsWith('/packages/');
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
   const isAdmin  = pathname?.startsWith('/admin');
-  const isHero   = HERO_PAGES.includes(pathname);
+  const isHero   = isHeroPath(pathname);
 
   if (isAdmin) return <>{children}</>;
 
