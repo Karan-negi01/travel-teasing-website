@@ -561,7 +561,7 @@ export default function PackageDetailPage({ params }) {
                 {/* Options */}
                 {pkg.tour_options?.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Option</label>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Tour Option</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {pkg.tour_options.map((opt, i) => (
                         <button key={i} onClick={() => setSelectedOption(opt)} style={{
