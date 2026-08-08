@@ -533,7 +533,7 @@ export default function PackageDetailPage({ params }) {
             <div style={{ border: `1px solid ${c.borderMid}`, borderRadius: '16px', overflow: 'hidden', background: c.cardBg }}>
               {/* Price */}
               <div style={{ padding: '24px', borderBottom: `1px solid ${c.border}` }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: c.textPrimary, marginBottom: '8px' }}>Starting from</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: c.textPrimary, marginBottom: '8px' }}>Book This Tour</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '34px', fontWeight: 700, color: c.textPrimary, letterSpacing: '-0.5px' }}>
                     {displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}
@@ -541,7 +541,7 @@ export default function PackageDetailPage({ params }) {
                   {savings && <span style={{ fontSize: '14px', color: c.textFaint, textDecoration: 'line-through' }}>₹{originalPrice?.toLocaleString('en-IN')}</span>}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 500, color: c.textPrimary }}>per person, taxes extra</span>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: c.textPrimary }}>+ tax as applicable</span>
                   {savings && <span style={{ fontSize: '11px', fontWeight: 600, color: '#4ade80', background: 'rgba(34,197,94,0.12)', padding: '2px 7px', borderRadius: '4px' }}>Save ₹{savings.toLocaleString('en-IN')}</span>}
                 </div>
               </div>
