@@ -298,20 +298,27 @@ export default function PackageDetailPage({ params }) {
 
 
       {/* ── STICKY TABS ── */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 48px', pointerEvents: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: c.tabsBg, backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: `1px solid ${c.borderMid}`, borderRadius: '14px', padding: '5px', width: 'fit-content', pointerEvents: 'auto', boxShadow: `0 4px 24px ${c.shadow}` }}>
+      <div style={{ background: c.pageBg, borderBottom: `1px solid ${c.border}`, boxShadow: darkMode ? '0 4px 20px rgba(0,0,0,0.3)' : '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '0' }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => scrollToSection(t.id)} style={{
-              padding: '9px 24px', fontSize: '18px', fontWeight: activeTab === t.id ? 600 : 400, textTransform: 'uppercase', letterSpacing: '0.04em',
-              color: activeTab === t.id ? c.textPrimary : c.tabsInactive,
-              background: activeTab === t.id ? c.tabsActive : 'transparent',
-              border: activeTab === t.id ? `1px solid ${c.tabsActiveBorder}` : '1px solid transparent',
-              borderRadius: '10px', cursor: 'pointer', whiteSpace: 'nowrap',
-              transition: 'all 0.2s ease', fontFamily: "'Poppins', sans-serif",
-              letterSpacing: '0.01em',
+              padding: '16px 28px',
+              fontSize: '13px',
+              fontWeight: activeTab === t.id ? 700 : 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              color: activeTab === t.id ? accent : c.tabsInactive,
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === t.id ? `2.5px solid ${accent}` : '2.5px solid transparent',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
+              fontFamily: "'Poppins', sans-serif",
+              marginBottom: '-1px',
             }}
-            onMouseEnter={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.tabsHov; e.currentTarget.style.background = c.tabsHovBg; }}}
-            onMouseLeave={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.tabsInactive; e.currentTarget.style.background = 'transparent'; }}}
+            onMouseEnter={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.textPrimary; }}}
+            onMouseLeave={e => { if (activeTab !== t.id) { e.currentTarget.style.color = c.tabsInactive; }}}
             >
               {t.label}
             </button>
