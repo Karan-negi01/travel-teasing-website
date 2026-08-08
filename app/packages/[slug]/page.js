@@ -321,7 +321,7 @@ export default function PackageDetailPage({ params }) {
 
       {/* ── CONTENT + SIDEBAR ── */}
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 48px 80px', background: c.pageBg, backgroundColor: c.pageBg }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: '64px', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 480px', gap: '64px', alignItems: 'start' }}>
 
           {/* LEFT */}
           <div style={{ animation: 'contentFadeUp 0.5s ease both' }}>
