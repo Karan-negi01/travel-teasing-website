@@ -550,7 +550,7 @@ export default function PackageDetailPage({ params }) {
                 {/* Date */}
                 {dateOptions.length > 0 && (
                   <div style={{ marginBottom: '14px' }}>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Date</label>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Date</label>
                     <select value={JSON.stringify(selectedDate)} onChange={e => setSelectedDate(JSON.parse(e.target.value))}
                       style={{ width: '100%', border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '10px 12px', fontSize: '14px', color: c.selectColor, background: c.selectBg, fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer' }}>
                       {dateOptions.map((d, i) => <option key={i} value={JSON.stringify(d)}>{formatDate(d)}</option>)}
@@ -561,7 +561,7 @@ export default function PackageDetailPage({ params }) {
                 {/* Options */}
                 {pkg.tour_options?.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Tour Option</label>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Tour Option</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {pkg.tour_options.map((opt, i) => (
                         <button key={i} onClick={() => setSelectedOption(opt)} style={{
