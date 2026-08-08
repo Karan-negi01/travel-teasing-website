@@ -18,7 +18,16 @@ const SUBTYPES = {
   CORPORATE: ['Team Outing', 'Corporate Retreat', 'MICE'],
 };
 
-const VIBES = ['Adventure', 'Moody', 'Cultural', 'Spiritual', 'Romantic', 'Honeymoon', 'Family', 'Wildlife', 'Beach', 'Mountain', 'Treks', 'Budget', 'Luxury', 'Offbeat'];
+const CATEGORIES = [
+  { key: 'treks',     label: '🏔️ Treks' },
+  { key: 'honeymoon', label: '💕 Honeymoon' },
+  { key: 'beaches',   label: '🏖️ Beaches' },
+  { key: 'wildlife',  label: '🦁 Wildlife' },
+  { key: 'heritage',  label: '🏛️ Heritage' },
+  { key: 'offbeat',   label: '🌿 Offbeat' },
+  { key: 'womens',    label: "👸 Women's Only" },
+  { key: 'weekend',   label: '🌅 Weekend Escapes' },
+];
 
 const INPUT = 'w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] focus:border-transparent';
 const LABEL = 'block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide';
@@ -115,7 +124,7 @@ export default function NewPackagePage() {
     region: '',
     duration_days: 1,
     duration_nights: 1,
-    vibes: [],
+    category_tag: '',
     price_per_person: '',
     original_price: '',
     departure_city: '',
@@ -150,7 +159,7 @@ export default function NewPackagePage() {
   function toggleVibe(v) {
     setForm(f => ({
       ...f,
-      vibes: f.vibes.includes(v) ? f.vibes.filter(x => x !== v) : [...f.vibes, v],
+      category_tag: f.category_tag === v ? '' : v,
     }));
   }
 
@@ -193,7 +202,7 @@ export default function NewPackagePage() {
       duration: duration,
       duration_days: form.duration_days,
       duration_nights: form.duration_nights,
-      vibe: form.vibes.join(', '),
+      vibe: form.category_tag,
       price_per_person: parseInt(form.price_per_person) || 0,
       total_price: parseInt(form.price_per_person) || 0,
       original_price: parseInt(form.original_price) || null,
@@ -445,16 +454,16 @@ export default function NewPackagePage() {
           )}
 
           <div>
-            <label className={LABEL}>Vibe / Tags</label>
+            <label className={LABEL}>Category <span className="text-red-500">*</span></label>
             <div className="flex flex-wrap gap-2 mt-1">
-              {VIBES.map(v => (
-                <button key={v} type="button" onClick={() => toggleVibe(v)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border-2 transition-all ${
-                    form.vibes.includes(v)
+              {CATEGORIES.map(({ key, label }) => (
+                <button key={key} type="button" onClick={() => toggleVibe(key)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold border-2 transition-all ${
+                    form.category_tag === key
                       ? 'bg-[#E8651A] border-[#E8651A] text-white'
-                      : 'bg-white border-gray-200 text-gray-500 hover:border-[#E8651A] hover:text-[#E8651A]'
+                      : 'bg-white border-gray-200 text-gray-600 hover:border-[#E8651A] hover:text-[#E8651A]'
                   }`}>
-                  {form.vibes.includes(v) && <Check size={10} className="inline mr-1" />}{v}
+                  {form.category_tag === key && <Check size={11} className="inline mr-1" />}{label}
                 </button>
               ))}
             </div>

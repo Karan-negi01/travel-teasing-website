@@ -8,10 +8,14 @@ import { useTheme, CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
 function getThemeKeyFromPackage(pkg) {
   if (!pkg) return 'default';
-  const v = (pkg.vibe || '').toLowerCase();
+  const v = (pkg.vibe || '').toLowerCase().trim();
   const c = (pkg.category || '').toLowerCase();
   const s = (pkg.subtype || '').toLowerCase();
   const t = (pkg.title || '').toLowerCase();
+  // Direct category key match (set from admin)
+  const KEYS = ['treks', 'honeymoon', 'beaches', 'wildlife', 'heritage', 'offbeat', 'womens', 'weekend'];
+  if (KEYS.includes(v)) return v;
+  // Fallback fuzzy detection
   if (v.includes('trek') || t.includes('trek')) return 'treks';
   if (s.includes('women') || t.includes("women's only")) return 'womens';
   if (c === 'weekend' || t.includes('weekend')) return 'weekend';
