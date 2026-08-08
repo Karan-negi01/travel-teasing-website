@@ -533,7 +533,7 @@ export default function PackageDetailPage({ params }) {
             <div style={{ border: `1px solid ${c.borderMid}`, borderRadius: '16px', overflow: 'hidden', background: c.cardBg }}>
               {/* Price */}
               <div style={{ padding: '24px', borderBottom: `1px solid ${c.border}` }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: c.textPrimary, marginBottom: '8px' }}>Book This Tour</p>
+                <p style={{ fontSize: '17px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: c.textPrimary, marginBottom: '8px' }}>Book This Tour</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '34px', fontWeight: 700, color: c.textPrimary, letterSpacing: '-0.5px' }}>
                     {displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}
