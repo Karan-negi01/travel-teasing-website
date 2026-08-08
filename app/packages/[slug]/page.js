@@ -494,7 +494,7 @@ export default function PackageDetailPage({ params }) {
             {/* FAQ */}
             <section ref={el => sectionRefs.current['faq'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
               <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                Frequently Asked Questions
+                Frequently Asked <span style={{ color: accent }}>Questions</span>
               </h2>
               {[
                 { q: 'What is included in the package price?', a: 'The package includes accommodation, transportation between destinations, breakfast daily, and all monument entry fees as mentioned in the inclusions section. Flights to the starting city are not included unless specified.' },
