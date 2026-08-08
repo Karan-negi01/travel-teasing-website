@@ -124,7 +124,7 @@ export default function PackageDetailPage({ params }) {
   const accent = catTheme.primary;
 
   const c = {
-    pageBg:      darkMode ? '#0d0d0d'                   : (theme?.bg || '#f8f8f6'),
+    pageBg:      darkMode ? '#0d0d0d'                   : '#ffffff',
     cardBg:      darkMode ? '#181818'                   : '#ffffff',
     textPrimary: darkMode ? '#ffffff'                   : '#111111',
     textSub:     darkMode ? 'rgba(255,255,255,0.6)'     : 'rgba(0,0,0,0.62)',
@@ -149,7 +149,7 @@ export default function PackageDetailPage({ params }) {
   };
 
   return (
-    <div style={{ background: c.pageBg, minHeight: '100vh', fontFamily: "'Poppins', sans-serif", color: c.textPrimary }}>
+    <div style={{ background: c.pageBg, backgroundColor: c.pageBg, minHeight: '100vh', fontFamily: "'Poppins', sans-serif", color: c.textPrimary }}>
 
       {/* ── CINEMATIC SLIDER HERO ── */}
       <div style={{ position: 'relative', width: '100%', height: '85vh', minHeight: '580px', maxHeight: '820px', overflow: 'hidden', background: '#0a0a0a' }}>
@@ -284,6 +284,15 @@ export default function PackageDetailPage({ params }) {
             from { opacity: 0; transform: translateY(24px); }
             to   { opacity: 1; transform: translateY(0); }
           }
+          @keyframes itineraryExpand {
+            from { opacity: 0; transform: translateY(-8px); max-height: 0; }
+            to   { opacity: 1; transform: translateY(0);  max-height: 600px; }
+          }
+          ::-webkit-scrollbar { width: 6px; height: 6px; }
+          ::-webkit-scrollbar-track { background: ${darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}; }
+          ::-webkit-scrollbar-thumb { background: ${accent}; border-radius: 999px; }
+          ::-webkit-scrollbar-thumb:hover { background: ${accent}cc; }
+          * { scrollbar-width: thin; scrollbar-color: ${accent} ${darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}; }
         `}</style>
       </div>
 
@@ -311,8 +320,8 @@ export default function PackageDetailPage({ params }) {
       </div>
 
       {/* ── CONTENT + SIDEBAR ── */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 48px 80px', background: c.pageBg }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '64px', alignItems: 'start' }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 48px 80px', background: c.pageBg, backgroundColor: c.pageBg }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: '64px', alignItems: 'start' }}>
 
           {/* LEFT */}
           <div style={{ animation: 'contentFadeUp 0.5s ease both' }}>
@@ -321,35 +330,16 @@ export default function PackageDetailPage({ params }) {
             <section ref={el => sectionRefs.current['about'] = el} className="scroll-mt-32">
 
               {/* Section heading */}
-              <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</p>
+              <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</h2>
 
               {/* Description */}
               <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, marginBottom: '40px' }}>{pkg.description}</p>
 
-              {/* Info row */}
-              {(() => {
-                const items = [
-                  { label: 'Duration', value: pkg.duration_nights ? `${pkg.duration_nights}N / ${pkg.duration_days}D` : `${pkg.duration_days} Days` },
-                  { label: 'Departs From', value: pkg.departure_city || pkg.location || '—' },
-                  ...(pkg.best_time_to_visit ? [{ label: 'Best Time', value: pkg.best_time_to_visit }] : []),
-                  { label: 'Trip Type', value: pkg.subtype || pkg.vibe || 'Private' },
-                ];
-                return (
-                  <div style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, marginBottom: '36px', border: `1px solid ${c.border}`, borderRadius: '14px', overflow: 'hidden' }}>
-                    {items.map(({ label, value }, idx) => (
-                      <div key={label} style={{ padding: '20px 24px', borderRight: idx < items.length - 1 ? `1px solid ${c.border}` : 'none', textAlign: 'center' }}>
-                        <div style={{ fontSize: '18px', fontWeight: 600, color: c.textLabel, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '9px' }}>{label}</div>
-                        <div style={{ fontSize: '18px', fontWeight: 600, color: c.textPrimary }}>{value}</div>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
 
               {/* Highlights */}
               {pkg.highlights?.length > 0 && (
                 <div>
-                  <p style={{ fontSize: '26px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: c.textPrimary, marginBottom: '20px' }}>Highlights</p>
+                  <h2 style={{ fontSize: '26px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: c.textPrimary, marginBottom: '20px' }}>Highlights</h2>
                   <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     {pkg.highlights.map((h, i) => (
                       <li key={i} style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
@@ -364,7 +354,7 @@ export default function PackageDetailPage({ params }) {
 
             {/* ITINERARY */}
             <section ref={el => sectionRefs.current['overview'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Tour Itinerary
               </h2>
 
@@ -385,7 +375,7 @@ export default function PackageDetailPage({ params }) {
                       </button>
 
                       {openDay === i && day.description && (
-                        <div style={{ padding: '0 18px 16px', borderTop: `1px solid ${c.border}` }}>
+                        <div style={{ padding: '0 18px 16px', borderTop: `1px solid ${c.border}`, animation: 'itineraryExpand 0.3s cubic-bezier(0.4,0,0.2,1)', overflow: 'hidden' }}>
                           {day.images?.filter(Boolean).length > 0 && (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', margin: '14px 0', borderRadius: '8px', overflow: 'hidden' }}>
                               {day.images.filter(Boolean).slice(0, 3).map((img, ii) => (
@@ -399,7 +389,7 @@ export default function PackageDetailPage({ params }) {
                             {day.description.split('.').filter(s => s.trim().length > 8).map((s, si) => (
                               <li key={si} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center' }}>
                                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
-                                <span style={{ fontSize: '18px', color: c.textMuted, lineHeight: 1.5 }}>{s.trim()}.</span>
+                                <span style={{ fontSize: '18px', color: c.textPrimary, lineHeight: 1.5 }}>{s.trim()}.</span>
                               </li>
                             ))}
                           </ul>
@@ -415,7 +405,7 @@ export default function PackageDetailPage({ params }) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
                 {pkg.inclusions?.length > 0 && (
                   <div>
-                    <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Included</p>
+                    <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Included</h2>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                       {pkg.inclusions.map((inc, i) => (
                         <li key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center' }}>
@@ -428,12 +418,12 @@ export default function PackageDetailPage({ params }) {
                 )}
                 {pkg.exclusions?.length > 0 && (
                   <div>
-                    <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Not Included</p>
+                    <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's Not Included</h2>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                       {pkg.exclusions.map((exc, i) => (
                         <li key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center' }}>
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}><circle cx="10" cy="10" r="10" fill={accent}/><path d="M6.5 6.5l7 7M13.5 6.5l-7 7" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
-                          <span style={{ fontSize: '18px', color: c.textMuted, lineHeight: 1.5 }}>{exc}</span>
+                          <span style={{ fontSize: '18px', color: c.textPrimary, lineHeight: 1.5 }}>{exc}</span>
                         </li>
                       ))}
                     </ul>
@@ -442,7 +432,7 @@ export default function PackageDetailPage({ params }) {
               </div>
               {pkg.things_to_carry?.length > 0 && (
                 <div style={{ marginTop: '40px' }}>
-                  <p style={{ fontSize: '26px', fontWeight: 800, color: c.textPrimary, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>Things to Carry</p>
+                  <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>Things to Carry</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {pkg.things_to_carry.map((item, i) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -457,7 +447,7 @@ export default function PackageDetailPage({ params }) {
 
             {/* COSTING */}
             <section ref={el => sectionRefs.current['costing'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Pricing
               </h2>
 
@@ -478,7 +468,7 @@ export default function PackageDetailPage({ params }) {
                         </div>
                       </div>
                       <div style={{ padding: '10px 22px 14px', borderTop: `1px solid ${i === 0 ? accent + '30' : c.border}` }}>
-                        <span style={{ fontSize: '14px', color: c.textLabel }}>* All prices are per person. GST 5% + TCS 2% applicable.</span>
+                        <span style={{ fontSize: '14px', color: c.textPrimary }}>* All prices are per person. GST 5% + TCS 2% applicable.</span>
                       </div>
                     </div>
                   );
@@ -488,12 +478,12 @@ export default function PackageDetailPage({ params }) {
               {/* Batches */}
               {dateOptions.length > 0 && (
                 <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '24px' }}>
-                  <p style={{ fontSize: '18px', fontWeight: 600, color: c.textLabel, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px' }}>Available Dates</p>
+                  <p style={{ fontSize: '18px', fontWeight: 600, color: c.textPrimary, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px' }}>Available Dates</p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {dateOptions.map((d, i) => (
                       <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: `1px solid ${c.border}`, borderRadius: '8px', background: c.surface }}>
                         <span style={{ fontSize: '14px', color: c.textSub }}>{formatDate(d)}</span>
-                        <span style={{ fontSize: '12px', color: c.textLabel }}>{pkg.duration_days} days</span>
+                        <span style={{ fontSize: '12px', color: c.textPrimary }}>{pkg.duration_days} days</span>
                       </div>
                     ))}
                   </div>
@@ -503,7 +493,7 @@ export default function PackageDetailPage({ params }) {
 
             {/* FAQ */}
             <section ref={el => sectionRefs.current['faq'] = el} className="scroll-mt-32" style={{ marginTop: '56px' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '28px', color: c.textPrimary, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Frequently Asked Questions
               </h2>
               {[
@@ -543,7 +533,7 @@ export default function PackageDetailPage({ params }) {
             <div style={{ border: `1px solid ${c.borderMid}`, borderRadius: '16px', overflow: 'hidden', background: c.cardBg }}>
               {/* Price */}
               <div style={{ padding: '24px', borderBottom: `1px solid ${c.border}` }}>
-                <p style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '8px' }}>Starting from</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: c.textPrimary, marginBottom: '8px' }}>Starting from</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '34px', fontWeight: 700, color: c.textPrimary, letterSpacing: '-0.5px' }}>
                     {displayPrice ? `₹${displayPrice.toLocaleString('en-IN')}` : 'On Request'}
@@ -551,7 +541,7 @@ export default function PackageDetailPage({ params }) {
                   {savings && <span style={{ fontSize: '14px', color: c.textFaint, textDecoration: 'line-through' }}>₹{originalPrice?.toLocaleString('en-IN')}</span>}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', color: c.textLabel }}>per person, taxes extra</span>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: c.textPrimary }}>per person, taxes extra</span>
                   {savings && <span style={{ fontSize: '11px', fontWeight: 600, color: '#4ade80', background: 'rgba(34,197,94,0.12)', padding: '2px 7px', borderRadius: '4px' }}>Save ₹{savings.toLocaleString('en-IN')}</span>}
                 </div>
               </div>
@@ -620,6 +610,30 @@ export default function PackageDetailPage({ params }) {
                 </div>
               </div>
             </div>
+
+            {/* Important Notes */}
+            {pkg.important_notes?.length > 0 && (
+              <div style={{
+                marginTop: '16px',
+                background: darkMode ? 'rgba(255,220,80,0.07)' : '#fffde7',
+                border: `1px solid ${darkMode ? 'rgba(255,220,80,0.2)' : '#f9e44a'}`,
+                borderLeft: `4px solid #f9e44a`,
+                borderRadius: '12px',
+                padding: '18px 20px',
+              }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: darkMode ? '#ffe066' : '#7a6200', marginBottom: '10px', letterSpacing: '0.01em' }}>
+                  Important Notes
+                </p>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                  {pkg.important_notes.map((note, i) => (
+                    <li key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                      <span style={{ color: '#f9e44a', marginTop: '3px', flexShrink: 0, fontSize: '10px' }}>●</span>
+                      <span style={{ fontSize: '12px', color: darkMode ? 'rgba(255,255,255,0.7)' : '#5a4a00', lineHeight: 1.6 }}>{note}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

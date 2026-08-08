@@ -42,6 +42,7 @@
 [data-mode="dark"] .bg-gray-100,
 [data-mode="dark"] .bg-gray-200       { background-color: #1a1a1a !important; }
 [data-mode="dark"] section            { background-color: #0d0d0d !important; }
+[data-mode="light"] section           { background-color: #ffffff !important; }
 
 /* Search bar override */
 [data-mode="dark"] .bg-white\/95      { background-color: rgba(20,20,20,0.95) !important; }
