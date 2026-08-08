@@ -117,6 +117,9 @@ export default function NewPackagePage() {
     duration_nights: 1,
     vibes: [],
     price_per_person: '',
+    original_price: '',
+    departure_city: '',
+    itinerary_pdf: '',
     tour_options: [],
     group_size_min: 8,
     group_size_max: 15,
@@ -128,6 +131,8 @@ export default function NewPackagePage() {
     inclusions: [''],
     exclusions: [''],
     highlights: [''],
+    things_to_carry: [''],
+    important_notes: [''],
     images: ['', '', '', '', ''],
     is_featured: false,
     is_active: true,
@@ -191,11 +196,14 @@ export default function NewPackagePage() {
       vibe: form.vibes.join(', '),
       price_per_person: parseInt(form.price_per_person) || 0,
       total_price: parseInt(form.price_per_person) || 0,
+      original_price: parseInt(form.original_price) || null,
+      departure_city: form.departure_city || null,
+      itinerary_pdf: form.itinerary_pdf || null,
       tour_options: form.tour_options.filter(o => o.label && o.price),
       group_size_min: form.group_size_min,
       group_size_max: form.group_size_max,
       cover_image: form.images.find(Boolean) || '',
-      images: form.images.filter(Boolean),
+      gallery_images: form.images.filter(Boolean),
       date_type: fitLike ? null : form.date_type,
       start_date: !fitLike && form.date_type === 'select_dates' ? form.start_date : null,
       end_date: !fitLike && form.date_type === 'select_dates' ? form.end_date : null,
@@ -204,6 +212,8 @@ export default function NewPackagePage() {
       highlights: form.highlights.filter(Boolean),
       inclusions: form.inclusions.filter(Boolean),
       exclusions: form.exclusions.filter(Boolean),
+      things_to_carry: form.things_to_carry.filter(Boolean),
+      important_notes: form.important_notes.filter(Boolean),
       itinerary: itinerary.map(d => ({
         day: d.day,
         title: d.title,
@@ -351,12 +361,36 @@ export default function NewPackagePage() {
             </div>
           </div>
 
-          <div>
-            <label className={LABEL}>Price Per Person (₹) *</label>
-            <input required type="number" min="0" value={form.price_per_person}
-              onChange={e => setField('price_per_person', e.target.value)}
-              placeholder="e.g. 18500"
-              className={INPUT} />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={LABEL}>Price Per Person (₹) *</label>
+              <input required type="number" min="0" value={form.price_per_person}
+                onChange={e => setField('price_per_person', e.target.value)}
+                placeholder="e.g. 169999"
+                className={INPUT} />
+            </div>
+            <div>
+              <label className={LABEL}>Original Price (₹) <span className="text-gray-400 font-normal">(for strikethrough)</span></label>
+              <input type="number" min="0" value={form.original_price}
+                onChange={e => setField('original_price', e.target.value)}
+                placeholder="e.g. 189999"
+                className={INPUT} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={LABEL}>Departure City</label>
+              <input value={form.departure_city} onChange={e => setField('departure_city', e.target.value)}
+                placeholder="e.g. Delhi, Mumbai"
+                className={INPUT} />
+            </div>
+            <div>
+              <label className={LABEL}>Itinerary PDF URL</label>
+              <input value={form.itinerary_pdf} onChange={e => setField('itinerary_pdf', e.target.value)}
+                placeholder="https://..."
+                className={INPUT} />
+            </div>
           </div>
 
           {/* Tour Options */}
@@ -569,6 +603,22 @@ export default function NewPackagePage() {
             items={form.exclusions}
             onChange={v => setField('exclusions', v)}
             placeholder="e.g. Personal travel insurance"
+          />
+
+          {/* Things to Carry */}
+          <DynamicList
+            label="Things to Carry"
+            items={form.things_to_carry}
+            onChange={v => setField('things_to_carry', v)}
+            placeholder="e.g. Warm jacket, sunscreen, comfortable shoes"
+          />
+
+          {/* Important Notes */}
+          <DynamicList
+            label="Important Notes"
+            items={form.important_notes}
+            onChange={v => setField('important_notes', v)}
+            placeholder="e.g. Yellow Fever vaccination mandatory for Kenya"
           />
         </div>
 

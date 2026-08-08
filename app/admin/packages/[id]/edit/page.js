@@ -20,6 +20,7 @@ export default function EditPackagePage({ params }) {
         p.inclusions = p.inclusions?.length ? p.inclusions : [''];
         p.exclusions = p.exclusions?.length ? p.exclusions : [''];
         p.things_to_carry = p.things_to_carry?.length ? p.things_to_carry : [''];
+        p.important_notes = p.important_notes?.length ? p.important_notes : [''];
         p.tour_options = p.tour_options?.length ? p.tour_options : [];
         setPkg(p);
       }
@@ -57,8 +58,11 @@ export default function EditPackagePage({ params }) {
           <div className="grid grid-cols-2 gap-4">
             <div><label className="text-sm font-medium text-gray-700 block mb-1">Title</label><input value={pkg.title || ''} onChange={e => setField('title', e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
             <div><label className="text-sm font-medium text-gray-700 block mb-1">Price/Person ₹</label><input type="number" value={pkg.price_per_person || 0} onChange={e => setField('price_per_person', parseInt(e.target.value))} className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
+            <div><label className="text-sm font-medium text-gray-700 block mb-1">Original Price ₹ <span className="text-gray-400 font-normal">(strikethrough)</span></label><input type="number" value={pkg.original_price || ''} onChange={e => setField('original_price', parseInt(e.target.value) || null)} placeholder="e.g. 189999" className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
             <div><label className="text-sm font-medium text-gray-700 block mb-1">Cover Image URL</label><input value={pkg.cover_image || ''} onChange={e => setField('cover_image', e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
+            <div><label className="text-sm font-medium text-gray-700 block mb-1">Departure City</label><input value={pkg.departure_city || ''} onChange={e => setField('departure_city', e.target.value)} placeholder="e.g. Delhi, Mumbai" className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
             <div><label className="text-sm font-medium text-gray-700 block mb-1">Best Time</label><input value={pkg.best_time_to_visit || ''} onChange={e => setField('best_time_to_visit', e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
+            <div><label className="text-sm font-medium text-gray-700 block mb-1">Itinerary PDF URL</label><input value={pkg.itinerary_pdf || ''} onChange={e => setField('itinerary_pdf', e.target.value)} placeholder="https://..." className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A]" /></div>
           </div>
           <div><label className="text-sm font-medium text-gray-700 block mb-1">Description</label><textarea rows={4} value={pkg.description || ''} onChange={e => setField('description', e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] resize-none" /></div>
           <div className="flex gap-4">
@@ -99,7 +103,7 @@ export default function EditPackagePage({ params }) {
           </button>
         </div>
 
-        {['highlights', 'inclusions', 'exclusions', 'things_to_carry'].map(key => (
+        {['highlights', 'inclusions', 'exclusions', 'things_to_carry', 'important_notes'].map(key => (
           <div key={key} className="bg-white rounded-xl p-6 shadow-sm space-y-3">
             <h2 className="font-bold text-[#1a1a2e] border-b pb-2 capitalize">{key.replace(/_/g, ' ')}</h2>
             {(pkg[key] || []).map((item, i) => (
