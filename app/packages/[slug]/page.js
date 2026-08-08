@@ -320,7 +320,7 @@ export default function PackageDetailPage({ params }) {
       </div>
 
       {/* ── CONTENT + SIDEBAR ── */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 24px 80px 48px', background: c.pageBg, backgroundColor: c.pageBg }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '48px 24px 80px 24px', background: c.pageBg, backgroundColor: c.pageBg }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 480px', gap: '64px', alignItems: 'start' }}>
 
           {/* LEFT */}
