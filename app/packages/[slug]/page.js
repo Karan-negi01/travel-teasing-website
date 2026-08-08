@@ -303,11 +303,11 @@ export default function PackageDetailPage({ params }) {
           {TABS.map(t => (
             <button key={t.id} onClick={() => scrollToSection(t.id)} style={{
               padding: '16px 28px',
-              fontSize: '13px',
+              fontSize: '15px',
               fontWeight: activeTab === t.id ? 700 : 500,
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
-              color: activeTab === t.id ? accent : c.tabsInactive,
+              color: activeTab === t.id ? accent : c.textPrimary,
               background: 'transparent',
               border: 'none',
               borderBottom: activeTab === t.id ? `2.5px solid ${accent}` : '2.5px solid transparent',
