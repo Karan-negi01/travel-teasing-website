@@ -496,6 +496,32 @@ export default function PackageDetailPage({ params }) {
                   </div>
                 </div>
               )}
+              {/* Important Notes */}
+              <div style={{
+                marginTop: '28px',
+                background: darkMode ? 'rgba(255,220,80,0.07)' : '#fffde7',
+                border: `1px solid ${darkMode ? 'rgba(255,220,80,0.2)' : '#f9e44a'}`,
+                borderLeft: '4px solid #f9e44a',
+                borderRadius: '12px',
+                padding: '20px 24px',
+              }}>
+                <p style={{ fontSize: '15px', fontWeight: 700, color: darkMode ? '#ffe066' : '#7a6200', marginBottom: '12px' }}>
+                  Important Notes
+                </p>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    'Reserve your seat now by paying a booking amount of ₹50,000 & pay the rest 30–35 days before the trip.',
+                    'We levy 5% GST on tour packages and 2% TCS as per the regulations of Indian Government and taxation system.',
+                    'Package prices are dynamic and subject to change. The price may update in case the confirmation is delayed and the source prices get updated.',
+                    ...(pkg.important_notes || []),
+                  ].map((note, i) => (
+                    <li key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                      <span style={{ color: '#f9e44a', flexShrink: 0, fontSize: '10px', marginTop: '5px' }}>●</span>
+                      <span style={{ fontSize: '14px', color: darkMode ? 'rgba(255,255,255,0.75)' : '#5a4a00', lineHeight: 1.7 }}>{note}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </section>
 
             {/* FAQ */}
