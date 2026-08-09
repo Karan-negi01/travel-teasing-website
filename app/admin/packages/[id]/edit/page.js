@@ -186,6 +186,7 @@ export default function EditPackagePage({ params }) {
       itinerary:          itinerary.map(d => ({ day: d.day, title: d.title, description: d.description, bullets: (d.bullets || []).filter(Boolean), meal_info: d.meal_info || '', images: d.images.filter(Boolean) })),
       is_featured:        form.is_featured,
       is_active:          form.is_active,
+      is_fit_group:       form.is_fit_group || false,
     };
     const res = await fetch(`/api/admin/packages/${params.id}`, {
       method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
@@ -382,6 +383,13 @@ export default function EditPackagePage({ params }) {
                 <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_active !== false ? 'translate-x-5' : 'translate-x-0.5'}`} />
               </div>
               <span className="text-sm text-gray-600">Active (visible on site)</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <div onClick={() => setField('is_fit_group', !form.is_fit_group)}
+                className={`w-10 h-5 rounded-full transition-colors relative ${form.is_fit_group ? 'bg-[#E8651A]' : 'bg-gray-200'}`}>
+                <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_fit_group ? 'translate-x-5' : 'translate-x-0.5'}`} />
+              </div>
+              <span className="text-sm text-gray-600">Available as FIT &amp; Group</span>
             </label>
           </div>
         </div>

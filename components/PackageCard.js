@@ -51,7 +51,8 @@ function getDestImage(pkg) {
 }
 
 export default function PackageCard({ pkg, fromCategory, dark }) {
-  const label = catLabels[pkg.category] || 'Group';
+  const label = pkg.is_fit_group ? 'FIT | Group' : (catLabels[pkg.category] || 'Group');
+  const isGroup = label === 'Group' || label === 'FIT | Group';
 
   const savings = pkg.original_price && pkg.price_per_person && pkg.original_price > pkg.price_per_person
     ? pkg.original_price - pkg.price_per_person : null;
@@ -102,7 +103,7 @@ export default function PackageCard({ pkg, fromCategory, dark }) {
               </span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
                 <Calendar size={11} color="rgba(255,255,255,0.35)" />
-                {dateStr || 'Request dates'}
+                {isGroup ? 'On Request' : (dateStr || 'Request dates')}
               </span>
             </div>
 
@@ -173,7 +174,12 @@ export default function PackageCard({ pkg, fromCategory, dark }) {
               <MapPin size={14} className="text-[#1a1a1a]" />
               {label}
             </span>
-            {label === 'FIT' ? (
+            {isGroup ? (
+              <span className="inline-flex items-center gap-1 text-[13px] font-medium text-[#1a1a1a]">
+                <Calendar size={14} className="text-[#1a1a1a]" />
+                On Request
+              </span>
+            ) : label === 'FIT' ? (
               <span className="inline-flex items-center gap-1 text-[13px] font-medium text-[#1a1a1a]">
                 <Calendar size={14} className="text-[#1a1a1a]" />
                 Request
