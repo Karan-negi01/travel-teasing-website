@@ -348,15 +348,25 @@ export default function PackageDetailPage({ params }) {
               {pkg.description && (() => {
                 const LIMIT = 320;
                 const isLong = pkg.description.length > LIMIT;
-                const shown = descExpanded || !isLong ? pkg.description : pkg.description.slice(0, LIMIT) + '…';
+                const shown = descExpanded || !isLong ? pkg.description : pkg.description.slice(0, LIMIT);
                 return (
-                  <div style={{ marginBottom: '32px' }}>
+                  <div style={{ marginBottom: '32px', position: 'relative' }}>
                     <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{shown}</p>
+                    {isLong && !descExpanded && (
+                      <div style={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+                        background: `linear-gradient(to bottom, transparent, ${c.pageBg})`,
+                        pointerEvents: 'none',
+                      }} />
+                    )}
                     {isLong && (
-                      <button onClick={() => setDescExpanded(e => !e)}
-                        style={{ marginTop: '12px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: 600, color: accent, display: 'flex', alignItems: 'center', gap: '6px', padding: 0 }}>
-                        {descExpanded ? 'Read Less ▲' : 'Read More ▼'}
-                      </button>
+                      <div style={{ marginTop: descExpanded ? '12px' : '0', display: 'flex', justifyContent: 'center' }}>
+                        <button onClick={() => setDescExpanded(e => !e)}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: 700, color: c.textPrimary, display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 20px', letterSpacing: '0.02em' }}>
+                          {descExpanded ? 'Read Less' : 'Read More'}
+                          <ChevronDown size={16} style={{ transform: descExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                        </button>
+                      </div>
                     )}
                   </div>
                 );
