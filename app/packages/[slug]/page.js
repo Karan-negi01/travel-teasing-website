@@ -47,6 +47,8 @@ export default function PackageDetailPage({ params }) {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [bookingMode, setBookingMode] = useState('fit'); // 'fit' | 'group'
+  const [fitCustomDate, setFitCustomDate] = useState('');
   const [openDay, setOpenDay] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
@@ -99,7 +101,10 @@ export default function PackageDetailPage({ params }) {
     return d.end_date ? `${fmt(d.start_date)} – ${fmt(d.end_date)}` : fmt(d.start_date);
   };
 
-  const waText = `Hi! I'm interested in ${pkg.title}${selectedOption ? ` (${selectedOption.label})` : ''}${selectedDate ? ` — ${formatDate(selectedDate)}` : ''}.`;
+  const waDateStr = pkg.is_fit_group
+    ? (bookingMode === 'fit' ? (fitCustomDate ? ` — FIT, date: ${fitCustomDate}` : ' — FIT') : (selectedDate ? ` — Group, ${formatDate(selectedDate)}` : ' — Group'))
+    : (selectedDate ? ` — ${formatDate(selectedDate)}` : '');
+  const waText = `Hi! I'm interested in ${pkg.title}${selectedOption ? ` (${selectedOption.label})` : ''}${waDateStr}.`;
   const titleWords = pkg.title.split(' ');
 
   // Build slides: slide 0 = package overview, slides 1-5 = highlights
@@ -653,16 +658,53 @@ export default function PackageDetailPage({ params }) {
               </div>
 
               <div style={{ padding: '20px 24px' }}>
-                {/* Date */}
-                {dateOptions.length > 0 && (
+                {/* Date — FIT & Group split */}
+                {pkg.is_fit_group ? (
                   <div style={{ marginBottom: '14px' }}>
-                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Date</label>
+                    {/* Tabs */}
+                    <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', background: c.surface, borderRadius: '10px', padding: '4px' }}>
+                      {['fit', 'group'].map(mode => (
+                        <button key={mode} onClick={() => setBookingMode(mode)} style={{
+                          flex: 1, padding: '8px', borderRadius: '7px', border: 'none', cursor: 'pointer',
+                          fontFamily: "'Poppins', sans-serif", fontSize: '13px', fontWeight: 600,
+                          background: bookingMode === mode ? accent : 'transparent',
+                          color: bookingMode === mode ? '#fff' : c.textSub,
+                          transition: 'all 0.15s',
+                        }}>
+                          {mode === 'fit' ? 'FIT' : 'Group'}
+                        </button>
+                      ))}
+                    </div>
+                    {bookingMode === 'fit' ? (
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Select Your Date</label>
+                        <input type="date" value={fitCustomDate} onChange={e => setFitCustomDate(e.target.value)}
+                          min={new Date().toISOString().split('T')[0]}
+                          style={{ width: '100%', border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '11px 14px', fontSize: '15px', color: fitCustomDate ? c.textPrimary : c.textFaint, background: c.selectBg, fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }} />
+                      </div>
+                    ) : (
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Available Batch</label>
+                        {dateOptions.length > 0 ? (
+                          <select value={JSON.stringify(selectedDate)} onChange={e => setSelectedDate(JSON.parse(e.target.value))}
+                            style={{ width: '100%', border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '12px 14px', fontSize: '15px', color: c.selectColor, background: c.selectBg, fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer' }}>
+                            {dateOptions.map((d, i) => <option key={i} value={JSON.stringify(d)}>{formatDate(d)}</option>)}
+                          </select>
+                        ) : (
+                          <div style={{ padding: '12px 14px', borderRadius: '8px', border: `1px solid ${c.borderMid}`, fontSize: '15px', color: c.textFaint, background: c.selectBg }}>On Request</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : dateOptions.length > 0 ? (
+                  <div style={{ marginBottom: '14px' }}>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.textLabel, marginBottom: '6px' }}>Select Date</label>
                     <select value={JSON.stringify(selectedDate)} onChange={e => setSelectedDate(JSON.parse(e.target.value))}
                       style={{ width: '100%', border: `1px solid ${c.borderMid}`, borderRadius: '8px', padding: '12px 14px', fontSize: '16px', color: c.selectColor, background: c.selectBg, fontFamily: "'Poppins', sans-serif", outline: 'none', cursor: 'pointer' }}>
                       {dateOptions.map((d, i) => <option key={i} value={JSON.stringify(d)}>{formatDate(d)}</option>)}
                     </select>
                   </div>
-                )}
+                ) : null}
 
                 {/* Options */}
                 {pkg.tour_options?.length > 0 && (
