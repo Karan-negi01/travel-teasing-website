@@ -583,7 +583,7 @@ export default function PackageDetailPage({ params }) {
                 borderRadius: '12px',
                 padding: '20px 24px',
               }}>
-                <p style={{ fontSize: '15px', fontWeight: 700, color: darkMode ? '#ffe066' : '#111111', marginBottom: '12px' }}>
+                <p style={{ fontSize: '26px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: c.textPrimary, marginBottom: '16px' }}>
                   Important Notes
                 </p>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
