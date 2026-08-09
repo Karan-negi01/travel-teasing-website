@@ -422,7 +422,7 @@ export default function PackageDetailPage({ params }) {
                         {openDay === i ? <ChevronUp size={15} color={accent} strokeWidth={2} /> : <ChevronDown size={15} color={c.textFaint} strokeWidth={2} />}
                       </button>
 
-                      {openDay === i && (day.description || day.bullets?.length > 0) && (
+                      {openDay === i && (day.description || day.bullets?.length > 0 || day.meal_info) && (
                         <div style={{ padding: '0 22px 20px', borderTop: `1px solid ${c.border}`, animation: 'itineraryExpand 0.3s cubic-bezier(0.4,0,0.2,1)', overflow: 'hidden' }}>
                           {/* Day images */}
                           {day.images?.filter(Boolean).length > 0 && (
@@ -434,20 +434,42 @@ export default function PackageDetailPage({ params }) {
                               ))}
                             </div>
                           )}
-                          {/* Paragraph overview */}
-                          {day.description && (
-                            <p style={{ fontSize: '16px', color: c.textSub, lineHeight: 1.8, margin: '16px 0 14px' }}>{day.description}</p>
+                          {/* New format: paragraph + bullets array */}
+                          {day.bullets?.filter(Boolean).length > 0 ? (
+                            <>
+                              {day.description && (
+                                <p style={{ fontSize: '16px', color: c.textSub, lineHeight: 1.8, margin: '16px 0 14px' }}>{day.description}</p>
+                              )}
+                              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {day.bullets.filter(Boolean).map((b, bi) => (
+                                  <li key={bi} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
+                                    <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{b}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            /* Old format fallback: split description by period into bullets */
+                            day.description && (
+                              <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {day.description.split('.').filter(s => s.trim().length > 8).map((s, si) => (
+                                  <li key={si} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
+                                    <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{s.trim()}.</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )
                           )}
-                          {/* Bullet points */}
-                          {day.bullets?.filter(Boolean).length > 0 && (
-                            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {day.bullets.filter(Boolean).map((b, bi) => (
-                                <li key={bi} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
-                                  <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{b}</span>
-                                </li>
-                              ))}
-                            </ul>
+                          {/* Meal info */}
+                          {day.meal_info && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '16px', paddingTop: '14px', borderTop: `1px solid ${c.border}` }}>
+                              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: accent, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <Clock size={14} color="#fff" strokeWidth={2} />
+                              </div>
+                              <span style={{ fontSize: '15px', fontWeight: 700, color: accent }}>{day.meal_info}</span>
+                            </div>
                           )}
                         </div>
                       )}

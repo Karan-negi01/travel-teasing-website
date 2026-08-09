@@ -149,7 +149,7 @@ export default function NewPackagePage() {
   });
 
   const [itinerary, setItinerary] = useState([
-    { day: 1, title: '', description: '', bullets: [''], images: ['', '', ''] },
+    { day: 1, title: '', description: '', bullets: [''], meal_info: '', images: ['', '', ''] },
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -170,7 +170,7 @@ export default function NewPackagePage() {
 
   // Itinerary helpers
   function addDay() {
-    setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', bullets: [''], images: ['', '', ''] }]);
+    setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', bullets: [''], meal_info: '', images: ['', '', ''] }]);
   }
   function removeDay(i) {
     setItinerary(d => d.filter((_, idx) => idx !== i).map((x, idx) => ({ ...x, day: idx + 1 })));
@@ -230,6 +230,7 @@ export default function NewPackagePage() {
         title: d.title,
         description: d.description,
         bullets: (d.bullets || []).filter(Boolean),
+        meal_info: d.meal_info || '',
         images: d.images.filter(Boolean),
       })),
       is_featured: form.is_featured,
@@ -707,6 +708,10 @@ export default function NewPackagePage() {
                       </button>
                     </div>
                   </div>
+                  {/* Meal info */}
+                  <input value={day.meal_info || ''} onChange={e => setDayField(i, 'meal_info', e.target.value)}
+                    placeholder="Meal info — e.g. Full Day Breakfast, Half Day No meals"
+                    className={INPUT} />
                   {/* Day images */}
                   <div>
                     <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Day Photos (3)</div>

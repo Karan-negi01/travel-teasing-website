@@ -127,9 +127,10 @@ export default function EditPackagePage({ params }) {
                 title: day.title || '',
                 description: day.description || '',
                 bullets: day.bullets?.length ? day.bullets : [''],
+                meal_info: day.meal_info || '',
                 images: [...(day.images || []), '', '', ''].slice(0, 3),
               }))
-            : [{ day: 1, title: '', description: '', bullets: [''], images: ['', '', ''] }]
+            : [{ day: 1, title: '', description: '', bullets: [''], meal_info: '', images: ['', '', ''] }]
         );
       }
       setLoading(false);
@@ -139,7 +140,7 @@ export default function EditPackagePage({ params }) {
   function setField(k, v) { setForm(f => ({ ...f, [k]: v })); }
   function toggleCategory(key) { setForm(f => ({ ...f, category_tag: f.category_tag === key ? '' : key })); }
   function updateImage(i, url) { setForm(f => ({ ...f, images: f.images.map((x, idx) => idx === i ? url : x) })); }
-  function addDay() { setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', bullets: [''], images: ['', '', ''] }]); }
+  function addDay() { setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', bullets: [''], meal_info: '', images: ['', '', ''] }]); }
   function removeDay(i) { setItinerary(d => d.filter((_, idx) => idx !== i).map((x, idx) => ({ ...x, day: idx + 1 }))); }
   function setDayField(i, k, v) { setItinerary(d => d.map((x, idx) => idx === i ? { ...x, [k]: v } : x)); }
   function setDayImage(dayIdx, imgIdx, url) {
@@ -181,7 +182,7 @@ export default function EditPackagePage({ params }) {
       exclusions:         form.exclusions.filter(Boolean),
       things_to_carry:    form.things_to_carry.filter(Boolean),
       important_notes:    form.important_notes.filter(Boolean),
-      itinerary:          itinerary.map(d => ({ day: d.day, title: d.title, description: d.description, bullets: (d.bullets || []).filter(Boolean), images: d.images.filter(Boolean) })),
+      itinerary:          itinerary.map(d => ({ day: d.day, title: d.title, description: d.description, bullets: (d.bullets || []).filter(Boolean), meal_info: d.meal_info || '', images: d.images.filter(Boolean) })),
       is_featured:        form.is_featured,
       is_active:          form.is_active,
     };
@@ -570,6 +571,10 @@ export default function EditPackagePage({ params }) {
                       </button>
                     </div>
                   </div>
+                  {/* Meal info */}
+                  <input value={day.meal_info || ''} onChange={e => setDayField(i, 'meal_info', e.target.value)}
+                    placeholder="Meal info — e.g. Full Day Breakfast, Half Day No meals"
+                    className={INPUT} />
                   <div>
                     <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Day Photos (3)</div>
                     <div className="grid grid-cols-3 gap-2">
