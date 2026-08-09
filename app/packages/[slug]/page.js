@@ -445,13 +445,13 @@ export default function PackageDetailPage({ params }) {
                           {day.bullets?.filter(Boolean).length > 0 ? (
                             <>
                               {day.description && (
-                                <p style={{ fontSize: '16px', color: c.textSub, lineHeight: 1.8, margin: '16px 0 14px' }}>{day.description}</p>
+                                <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: '16px 0 14px' }}>{day.description}</p>
                               )}
                               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {day.bullets.filter(Boolean).map((b, bi) => (
                                   <li key={bi} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
-                                    <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{b}</span>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '11px' }} />
+                                    <span style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9 }}>{b}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -462,8 +462,8 @@ export default function PackageDetailPage({ params }) {
                               <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {day.description.split('.').filter(s => s.trim().length > 8).map((s, si) => (
                                   <li key={si} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
-                                    <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{s.trim()}.</span>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '11px' }} />
+                                    <span style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9 }}>{s.trim()}.</span>
                                   </li>
                                 ))}
                               </ul>
