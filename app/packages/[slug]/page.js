@@ -594,7 +594,7 @@ export default function PackageDetailPage({ params }) {
                     ...(pkg.important_notes || []),
                   ].map((note, i) => (
                     <li key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <span style={{ color: darkMode ? '#fff' : '#111', flexShrink: 0, fontSize: '10px', marginTop: '5px' }}>●</span>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: darkMode ? '#fff' : '#111', flexShrink: 0, marginTop: '11px', display: 'inline-block' }} />
                       <span style={{ fontSize: '18px', color: darkMode ? 'rgba(255,255,255,0.75)' : '#111111', lineHeight: 1.9 }}>{note}</span>
                     </li>
                   ))}
