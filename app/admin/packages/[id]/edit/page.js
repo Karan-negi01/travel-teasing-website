@@ -156,6 +156,7 @@ export default function EditPackagePage({ params }) {
       title:              form.title,
       description:        form.description || '',
       location:           form.location    || '',
+      country:            form.country     || null,
       state:              form.state       || form.region || '',
       duration:           `${form.duration_nights}N/${form.duration_days}D`,
       duration_days:      form.duration_days,
@@ -239,9 +240,14 @@ export default function EditPackagePage({ params }) {
               </select>
             </div>
             <div>
-              <label className={LABEL}>Location / Country</label>
+              <label className={LABEL}>Location</label>
               <input value={form.location || ''} onChange={e => setField('location', e.target.value)}
-                placeholder="e.g. Jammu & Kashmir" className={INPUT} />
+                placeholder="e.g. Bali" className={INPUT} />
+            </div>
+            <div>
+              <label className={LABEL}>Country</label>
+              <input value={form.country || ''} onChange={e => setField('country', e.target.value)}
+                placeholder="e.g. Indonesia" className={INPUT} />
             </div>
           </div>
 

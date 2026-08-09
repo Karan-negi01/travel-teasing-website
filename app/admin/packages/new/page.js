@@ -121,6 +121,7 @@ export default function NewPackagePage() {
     title: '',
     destination_type: 'Domestic',
     location: '',
+    country: '',
     region: '',
     duration_days: 1,
     duration_nights: 1,
@@ -199,6 +200,7 @@ export default function NewPackagePage() {
       package_subtype: subtype,
       destination_type: form.destination_type,
       location: form.location,
+      country: form.country || null,
       state: form.region,
       duration: duration,
       duration_days: form.duration_days,
@@ -340,9 +342,15 @@ export default function NewPackagePage() {
               </select>
             </div>
             <div>
-              <label className={LABEL}>Location / Country</label>
+              <label className={LABEL}>Location</label>
               <input value={form.location} onChange={e => setField('location', e.target.value)}
-                placeholder={form.destination_type === 'Domestic' ? 'e.g. Jammu & Kashmir' : 'e.g. Indonesia'}
+                placeholder={form.destination_type === 'Domestic' ? 'e.g. Jammu & Kashmir' : 'e.g. Bali'}
+                className={INPUT} />
+            </div>
+            <div>
+              <label className={LABEL}>Country</label>
+              <input value={form.country} onChange={e => setField('country', e.target.value)}
+                placeholder={form.destination_type === 'Domestic' ? 'e.g. India' : 'e.g. Indonesia'}
                 className={INPUT} />
             </div>
           </div>
