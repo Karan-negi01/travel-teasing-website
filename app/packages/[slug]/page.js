@@ -344,15 +344,25 @@ export default function PackageDetailPage({ params }) {
               {/* Section heading */}
               <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</h2>
 
-              {/* Description with Read More */}
-              {pkg.description && (() => {
-                const isLong = pkg.description.length > 300;
+              {/* Description + about_sections with Read More */}
+              {(() => {
+                const hasSections = (pkg.about_sections || []).length > 0;
+                const isLong = (pkg.description?.length > 300) || hasSections;
                 return (
                   <div style={{ marginBottom: '32px' }}>
-                    {/* Text container — clipped when collapsed */}
+                    {/* Clipped container */}
                     <div style={{ position: 'relative', maxHeight: descExpanded || !isLong ? 'none' : '120px', overflow: 'hidden' }}>
-                      <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{pkg.description}</p>
-                      {/* Gradient overlay over text */}
+                      {pkg.description && (
+                        <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: '0 0 32px' }}>{pkg.description}</p>
+                      )}
+                      {/* Extra about sections — hidden until expanded */}
+                      {hasSections && (pkg.about_sections || []).map((sec, i) => (
+                        <div key={i} style={{ marginBottom: '32px' }}>
+                          {sec.heading && <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '12px' }}>{sec.heading}</h3>}
+                          <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{sec.content}</p>
+                        </div>
+                      ))}
+                      {/* Gradient overlay */}
                       {isLong && !descExpanded && (
                         <div style={{
                           position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
@@ -361,7 +371,7 @@ export default function PackageDetailPage({ params }) {
                         }} />
                       )}
                     </div>
-                    {/* Read More button — centered, below the text */}
+                    {/* Read More button */}
                     {isLong && (
                       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
                         <button onClick={() => setDescExpanded(e => !e)}
@@ -374,14 +384,6 @@ export default function PackageDetailPage({ params }) {
                   </div>
                 );
               })()}
-
-              {/* Extra about sections */}
-              {(pkg.about_sections || []).map((sec, i) => (
-                <div key={i} style={{ marginBottom: '32px' }}>
-                  {sec.heading && <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '12px' }}>{sec.heading}</h3>}
-                  <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{sec.content}</p>
-                </div>
-              ))}
 
 
               {/* Highlights */}
