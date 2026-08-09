@@ -422,10 +422,11 @@ export default function PackageDetailPage({ params }) {
                         {openDay === i ? <ChevronUp size={15} color={accent} strokeWidth={2} /> : <ChevronDown size={15} color={c.textFaint} strokeWidth={2} />}
                       </button>
 
-                      {openDay === i && day.description && (
-                        <div style={{ padding: '0 18px 16px', borderTop: `1px solid ${c.border}`, animation: 'itineraryExpand 0.3s cubic-bezier(0.4,0,0.2,1)', overflow: 'hidden' }}>
+                      {openDay === i && (day.description || day.bullets?.length > 0) && (
+                        <div style={{ padding: '0 22px 20px', borderTop: `1px solid ${c.border}`, animation: 'itineraryExpand 0.3s cubic-bezier(0.4,0,0.2,1)', overflow: 'hidden' }}>
+                          {/* Day images */}
                           {day.images?.filter(Boolean).length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', margin: '14px 0', borderRadius: '8px', overflow: 'hidden' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', margin: '16px 0', borderRadius: '8px', overflow: 'hidden' }}>
                               {day.images.filter(Boolean).slice(0, 3).map((img, ii) => (
                                 <div key={ii} style={{ position: 'relative', aspectRatio: '4/3' }}>
                                   <Image src={img} alt="" fill className="object-cover" sizes="150px" />
@@ -433,14 +434,21 @@ export default function PackageDetailPage({ params }) {
                               ))}
                             </div>
                           )}
-                          <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none' }}>
-                            {day.description.split('.').filter(s => s.trim().length > 8).map((s, si) => (
-                              <li key={si} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'flex-start' }}>
-                                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.dot, flexShrink: 0, marginTop: '8px' }} />
-                                <span style={{ fontSize: '18px', color: c.textPrimary, lineHeight: 1.5 }}>{s.trim()}.</span>
-                              </li>
-                            ))}
-                          </ul>
+                          {/* Paragraph overview */}
+                          {day.description && (
+                            <p style={{ fontSize: '16px', color: c.textSub, lineHeight: 1.8, margin: '16px 0 14px' }}>{day.description}</p>
+                          )}
+                          {/* Bullet points */}
+                          {day.bullets?.filter(Boolean).length > 0 && (
+                            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {day.bullets.filter(Boolean).map((b, bi) => (
+                                <li key={bi} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, flexShrink: 0, marginTop: '9px' }} />
+                                  <span style={{ fontSize: '16px', color: c.textPrimary, lineHeight: 1.6 }}>{b}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       )}
                   </div>

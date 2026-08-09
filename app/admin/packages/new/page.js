@@ -149,7 +149,7 @@ export default function NewPackagePage() {
   });
 
   const [itinerary, setItinerary] = useState([
-    { day: 1, title: '', description: '', images: ['', '', ''] },
+    { day: 1, title: '', description: '', bullets: [''], images: ['', '', ''] },
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -170,7 +170,7 @@ export default function NewPackagePage() {
 
   // Itinerary helpers
   function addDay() {
-    setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', images: ['', '', ''] }]);
+    setItinerary(d => [...d, { day: d.length + 1, title: '', description: '', bullets: [''], images: ['', '', ''] }]);
   }
   function removeDay(i) {
     setItinerary(d => d.filter((_, idx) => idx !== i).map((x, idx) => ({ ...x, day: idx + 1 })));
@@ -229,6 +229,7 @@ export default function NewPackagePage() {
         day: d.day,
         title: d.title,
         description: d.description,
+        bullets: (d.bullets || []).filter(Boolean),
         images: d.images.filter(Boolean),
       })),
       is_featured: form.is_featured,
@@ -680,8 +681,32 @@ export default function NewPackagePage() {
                     placeholder={`Day ${day.day} title — e.g. Arrival in Srinagar`}
                     className={INPUT} />
                   <textarea rows={3} value={day.description} onChange={e => setDayField(i, 'description', e.target.value)}
-                    placeholder="Describe what happens on this day..."
+                    placeholder="Overview paragraph — e.g. Start your day with breakfast before heading to..."
                     className={`${INPUT} resize-none`} />
+                  {/* Bullet points */}
+                  <div>
+                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Activity Bullet Points</div>
+                    <div className="space-y-1.5">
+                      {(day.bullets || ['']).map((b, bi) => (
+                        <div key={bi} className="flex gap-2">
+                          <input value={b}
+                            onChange={e => setDayField(i, 'bullets', (day.bullets || ['']).map((x, idx) => idx === bi ? e.target.value : x))}
+                            placeholder={`e.g. Breakfast at hotel`}
+                            className={INPUT} />
+                          <button type="button"
+                            onClick={() => setDayField(i, 'bullets', (day.bullets || ['']).filter((_, idx) => idx !== bi))}
+                            className="p-2 text-red-400 hover:bg-red-50 rounded-lg flex-shrink-0">
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      ))}
+                      <button type="button"
+                        onClick={() => setDayField(i, 'bullets', [...(day.bullets || ['']), ''])}
+                        className="text-[#E8651A] text-xs font-semibold flex items-center gap-1 hover:underline mt-1">
+                        <Plus size={12} /> Add Bullet
+                      </button>
+                    </div>
+                  </div>
                   {/* Day images */}
                   <div>
                     <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Day Photos (3)</div>
