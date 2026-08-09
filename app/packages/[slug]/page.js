@@ -648,29 +648,6 @@ export default function PackageDetailPage({ params }) {
               </div>
             </div>
 
-            {/* Important Notes */}
-            {pkg.important_notes?.length > 0 && (
-              <div style={{
-                marginTop: '16px',
-                background: darkMode ? 'rgba(255,220,80,0.07)' : '#fffde7',
-                border: `1px solid ${darkMode ? 'rgba(255,220,80,0.2)' : '#f9e44a'}`,
-                borderLeft: `4px solid #f9e44a`,
-                borderRadius: '12px',
-                padding: '18px 20px',
-              }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: darkMode ? '#ffe066' : '#7a6200', marginBottom: '10px', letterSpacing: '0.01em' }}>
-                  Important Notes
-                </p>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '7px' }}>
-                  {pkg.important_notes.map((note, i) => (
-                    <li key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                      <span style={{ color: '#f9e44a', marginTop: '3px', flexShrink: 0, fontSize: '10px' }}>●</span>
-                      <span style={{ fontSize: '12px', color: darkMode ? 'rgba(255,255,255,0.7)' : '#5a4a00', lineHeight: 1.6 }}>{note}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
       </div>
