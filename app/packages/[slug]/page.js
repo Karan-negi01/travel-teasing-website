@@ -424,7 +424,7 @@ export default function PackageDetailPage({ params }) {
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                           <span style={{ fontSize: '13px', fontWeight: 700, color: openDay === i ? accent : c.textFaint, letterSpacing: '0.08em', textTransform: 'uppercase', minWidth: '52px', flexShrink: 0 }}>DAY {i + 1}</span>
-                          <p style={{ fontSize: '20px', fontWeight: 600, color: openDay === i ? c.textPrimary : c.textSub, margin: 0, transition: 'color 0.2s', fontFamily: "'Poppins', sans-serif" }}>{day.title}</p>
+                          <p style={{ fontSize: '20px', fontWeight: 500, color: openDay === i ? c.textPrimary : c.textSub, margin: 0, transition: 'color 0.2s', fontFamily: "'Poppins', sans-serif" }}>{day.title}</p>
                         </div>
                         {openDay === i ? <ChevronUp size={15} color={accent} strokeWidth={2} /> : <ChevronDown size={15} color={c.textFaint} strokeWidth={2} />}
                       </button>
