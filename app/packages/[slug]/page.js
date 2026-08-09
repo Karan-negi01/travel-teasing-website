@@ -346,21 +346,24 @@ export default function PackageDetailPage({ params }) {
 
               {/* Description with Read More */}
               {pkg.description && (() => {
-                const LIMIT = 320;
-                const isLong = pkg.description.length > LIMIT;
-                const shown = descExpanded || !isLong ? pkg.description : pkg.description.slice(0, LIMIT);
+                const isLong = pkg.description.length > 300;
                 return (
-                  <div style={{ marginBottom: '32px', position: 'relative' }}>
-                    <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{shown}</p>
-                    {isLong && !descExpanded && (
-                      <div style={{
-                        position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
-                        background: `linear-gradient(to bottom, transparent, ${c.pageBg})`,
-                        pointerEvents: 'none',
-                      }} />
-                    )}
+                  <div style={{ marginBottom: '32px' }}>
+                    {/* Text container — clipped when collapsed */}
+                    <div style={{ position: 'relative', maxHeight: descExpanded || !isLong ? 'none' : '120px', overflow: 'hidden' }}>
+                      <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{pkg.description}</p>
+                      {/* Gradient overlay over text */}
+                      {isLong && !descExpanded && (
+                        <div style={{
+                          position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+                          background: `linear-gradient(to bottom, transparent, ${c.pageBg})`,
+                          pointerEvents: 'none',
+                        }} />
+                      )}
+                    </div>
+                    {/* Read More button — centered, below the text */}
                     {isLong && (
-                      <div style={{ marginTop: descExpanded ? '12px' : '0', display: 'flex', justifyContent: 'center' }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
                         <button onClick={() => setDescExpanded(e => !e)}
                           style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: 700, color: c.textPrimary, display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 20px', letterSpacing: '0.02em' }}>
                           {descExpanded ? 'Read Less' : 'Read More'}
