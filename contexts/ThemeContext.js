@@ -119,10 +119,8 @@ export function ThemeProvider({ children }) {
   const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
-    const savedCat = localStorage.getItem('tt-theme-category');
-    if (savedCat && CATEGORY_THEMES[savedCat]) setCategory(savedCat);
+    // Don't restore category theme across pages — only dark/light mode persists
     const savedMode = localStorage.getItem('tt-dark-mode');
-    // default dark unless explicitly set to 'light'
     setDarkMode(savedMode !== 'light');
   }, []);
 
@@ -145,7 +143,7 @@ export function ThemeProvider({ children }) {
     });
   };
 
-  const pageBg = darkMode ? '#0d0d0d' : theme.bg;
+  const pageBg = darkMode ? '#0d0d0d' : '#ffffff';
 
   return (
     <ThemeContext.Provider value={{ category, theme, applyTheme, CATEGORY_THEMES, darkMode, toggleDarkMode }}>
@@ -157,8 +155,9 @@ export function ThemeProvider({ children }) {
           --theme-pill: ${darkMode ? '#2a2a2a' : theme.pill};
           --theme-pill-text: ${darkMode ? theme.primary : theme.pillText};
         }
-        body {
+        html, body {
           background-color: ${pageBg} !important;
+          background: ${pageBg} !important;
           color: ${darkMode ? '#e5e7eb' : '#374151'} !important;
           transition: background-color 0.4s ease, color 0.4s ease;
         }

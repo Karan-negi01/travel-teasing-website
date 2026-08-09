@@ -382,7 +382,7 @@ function PackagesContent() {
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [sort, setSort] = useState('featured');
   const urlCategory = searchParams.get('category') || '';
-  const { theme, applyTheme } = useTheme();
+  const { theme, applyTheme, darkMode } = useTheme();
 
   useEffect(() => {
     if (urlCategory && CATEGORY_THEMES[urlCategory]) {
@@ -422,8 +422,25 @@ function PackagesContent() {
   const meta = CATEGORY_META[urlCategory];
   const catTheme = CATEGORY_THEMES[urlCategory] || CATEGORY_THEMES.default;
 
+  const c = {
+    pageBg:      darkMode ? '#0d0d0d'                 : '#ffffff',
+    cardBg:      darkMode ? '#181818'                 : '#f5f5f5',
+    textPrimary: darkMode ? '#ffffff'                 : '#111111',
+    textSub:     darkMode ? 'rgba(255,255,255,0.6)'   : 'rgba(0,0,0,0.62)',
+    textMuted:   darkMode ? 'rgba(255,255,255,0.4)'   : 'rgba(0,0,0,0.42)',
+    textLabel:   darkMode ? 'rgba(255,255,255,0.35)'  : 'rgba(0,0,0,0.38)',
+    border:      darkMode ? 'rgba(255,255,255,0.08)'  : 'rgba(0,0,0,0.1)',
+    surface:     darkMode ? 'rgba(255,255,255,0.04)'  : 'rgba(0,0,0,0.04)',
+    inputBg:     darkMode ? 'rgba(255,255,255,0.05)'  : 'rgba(0,0,0,0.05)',
+    inputBorder: darkMode ? 'rgba(255,255,255,0.1)'   : 'rgba(0,0,0,0.12)',
+    inputColor:  darkMode ? '#ffffff'                 : '#111111',
+    selectBg:    darkMode ? 'rgba(255,255,255,0.05)'  : 'rgba(0,0,0,0.05)',
+    emptyBg:     darkMode ? 'rgba(255,255,255,0.03)'  : 'rgba(0,0,0,0.03)',
+    emptyBorder: darkMode ? 'rgba(255,255,255,0.07)'  : 'rgba(0,0,0,0.08)',
+  };
+
   return (
-    <div style={{ background: '#0d0d0d', minHeight: '100vh' }}>
+    <div style={{ background: c.pageBg, minHeight: '100vh' }}>
 
       {/* ── HERO ── */}
       {meta ? (
@@ -496,14 +513,14 @@ function PackagesContent() {
       {meta && <DestinationCards destinations={meta.destinations} catTheme={catTheme} />}
 
       {/* ── PACKAGES SECTION ── */}
-      <div style={{ background: '#0d0d0d', padding: '72px 0 80px' }}>
+      <div style={{ background: c.pageBg, padding: '72px 0 80px' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 60px' }}>
 
           {/* Header row */}
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", margin: '0 0 8px' }}>Our picks</p>
-              <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 800, color: c.textPrimary, fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>
                 {meta ? `${meta.title} Packages` : 'All Packages'}
               </h2>
             </div>
@@ -511,16 +528,16 @@ function PackagesContent() {
             {/* Search + Sort */}
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <form onSubmit={e => { e.preventDefault(); setSearch(searchInput); }}
-                style={{ display: 'flex', alignItems: 'center', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                style={{ display: 'flex', alignItems: 'center', border: `1px solid ${c.inputBorder}`, borderRadius: '12px', background: c.inputBg, overflow: 'hidden' }}>
                 <input value={searchInput} onChange={e => setSearchInput(e.target.value)}
                   placeholder="Search destinations..."
-                  style={{ flex: 1, padding: '10px 16px', fontSize: '13px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif", color: '#fff', width: '220px' }} />
+                  style={{ flex: 1, padding: '10px 16px', fontSize: '13px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif", color: c.inputColor, width: '220px' }} />
                 <button type="submit" style={{ background: catTheme.primary, color: '#fff', border: 'none', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                   <Search size={14} />
                 </button>
               </form>
               <select value={sort} onChange={e => setSort(e.target.value)}
-                style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '10px 14px', fontSize: '13px', outline: 'none', color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.05)', fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
+                style={{ border: `1px solid ${c.inputBorder}`, borderRadius: '12px', padding: '10px 14px', fontSize: '13px', outline: 'none', color: c.textSub, background: c.selectBg, fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
                 <option value="featured">Popularity</option>
                 <option value="price-asc">Price: Low → High</option>
                 <option value="price-desc">Price: High → Low</option>
@@ -531,26 +548,26 @@ function PackagesContent() {
 
           {loading ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-              {[1,2,3,4,5,6].map(i => <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '20px', height: '340px', animation: 'pulse 1.5s ease infinite' }} />)}
+              {[1,2,3,4,5,6].map(i => <div key={i} style={{ background: c.surface, borderRadius: '20px', height: '340px', animation: 'pulse 1.5s ease infinite' }} />)}
             </div>
           ) : packages.length > 0 ? (
             <>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', marginBottom: '32px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>{packages.length} package{packages.length !== 1 ? 's' : ''} found</p>
+              <p style={{ fontSize: '12px', color: c.textLabel, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>{packages.length} package{packages.length !== 1 ? 's' : ''} found</p>
 
               {/* Featured first package — large horizontal card */}
               {urlCategory && (() => {
                 const fp = packages[0];
                 const fpImg = fp.cover_image || 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800';
                 return (
-                  <div style={{ display: 'flex', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#181818', minHeight: '340px', cursor: 'pointer' }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                  <div style={{ display: 'flex', borderRadius: '24px', overflow: 'hidden', border: `1px solid ${c.border}`, background: c.cardBg, minHeight: '340px', cursor: 'pointer' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = c.inputBorder}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = c.border}
                     onClick={() => window.location.href = `/packages/${fp.slug}${urlCategory ? `?from=${urlCategory}` : ''}`}>
                     {/* Left: image */}
                     <div style={{ flex: '0 0 48%', position: 'relative', overflow: 'hidden' }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={fpImg} alt={fp.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, transparent 60%, #181818 100%)' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, transparent 60%, ${c.cardBg} 100%)` }} />
                       <div style={{ position: 'absolute', top: '20px', left: '20px', background: `${catTheme.primary}22`, border: `1px solid ${catTheme.primary}55`, color: catTheme.primary, fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', padding: '5px 12px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", backdropFilter: 'blur(8px)' }}>
                         ✦ FEATURED
                       </div>
@@ -559,10 +576,10 @@ function PackagesContent() {
                     <div style={{ flex: 1, padding: '44px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
                       <div>
                         <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', color: catTheme.primary, textTransform: 'uppercase', fontFamily: "'Poppins', sans-serif", margin: '0 0 10px' }}>{meta?.title || ''}</p>
-                        <h3 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', margin: 0, lineHeight: 1.2, fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.5px' }}>{fp.title}</h3>
+                        <h3 style={{ fontSize: '28px', fontWeight: 800, color: c.textPrimary, margin: 0, lineHeight: 1.2, fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.5px' }}>{fp.title}</h3>
                       </div>
                       {fp.description && (
-                        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', lineHeight: 1.75, fontFamily: "'Poppins', sans-serif", margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        <p style={{ color: c.textSub, fontSize: '14px', lineHeight: 1.75, fontFamily: "'Poppins', sans-serif", margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                           {fp.description}
                         </p>
                       )}
@@ -573,8 +590,8 @@ function PackagesContent() {
                           [fp.location || fp.state || '—', 'location'],
                         ].map(([val, lbl]) => (
                           <div key={lbl}>
-                            <div style={{ fontSize: '17px', fontWeight: 700, color: '#fff', fontFamily: "'Poppins', sans-serif" }}>{val}</div>
-                            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: "'Poppins', sans-serif", marginTop: '3px' }}>{lbl}</div>
+                            <div style={{ fontSize: '17px', fontWeight: 700, color: c.textPrimary, fontFamily: "'Poppins', sans-serif" }}>{val}</div>
+                            <div style={{ fontSize: '10px', color: c.textMuted, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: "'Poppins', sans-serif", marginTop: '3px' }}>{lbl}</div>
                           </div>
                         ))}
                       </div>
@@ -584,7 +601,7 @@ function PackagesContent() {
                         </div>
                         <a href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + fp.title + '. Please share more details.')}
                           target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600, padding: '11px 20px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: `1px solid ${c.border}`, color: c.textSub, fontSize: '13px', fontWeight: 600, padding: '11px 20px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>
                           WhatsApp
                         </a>
                       </div>
@@ -598,17 +615,17 @@ function PackagesContent() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
                   {(urlCategory ? packages.slice(1) : packages).map(pkg => (
                     urlCategory
-                      ? <PackageCard key={pkg.id} pkg={pkg} fromCategory={urlCategory} dark />
-                      : <PackageCard key={pkg.id} pkg={pkg} />
+                      ? <PackageCard key={pkg.id} pkg={pkg} fromCategory={urlCategory} dark={darkMode} />
+                      : <PackageCard key={pkg.id} pkg={pkg} dark={darkMode} />
                   ))}
                 </div>
               )}
             </>
           ) : (
-            <div style={{ textAlign: 'center', padding: '80px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <div style={{ textAlign: 'center', padding: '80px 20px', background: c.emptyBg, borderRadius: '24px', border: `1px solid ${c.emptyBorder}` }}>
               <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: `${catTheme.primary}20`, border: `1px solid ${catTheme.primary}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>{catTheme.emoji}</div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
-              <p style={{ color: 'rgba(255,255,255,0.35)', marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
+              <p style={{ color: c.textMuted, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
               <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", boxShadow: `0 8px 28px ${catTheme.primary}50` }}>
                 <MessageCircle size={16} /> Chat on WhatsApp
@@ -624,6 +641,11 @@ function PackagesContent() {
         @keyframes heroFadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
         @keyframes heroZoom { from { transform:scale(1.06); } to { transform:scale(1); } }
         @keyframes scrollBounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+        ::-webkit-scrollbar-thumb { background: ${catTheme.primary}; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${catTheme.primary}cc; }
+        * { scrollbar-width: thin; scrollbar-color: ${catTheme.primary} rgba(255,255,255,0.04); }
       `}</style>
     </div>
   );
