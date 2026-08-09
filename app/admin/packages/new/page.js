@@ -188,7 +188,8 @@ export default function NewPackagePage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true); setError('');
-    const slug = form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const baseSlug = form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const slug = `${baseSlug}-${Date.now().toString(36)}`;
     const duration = `${form.duration_nights}N/${form.duration_days}D`;
     const category = type === 'GROUPS' ? 'group' : type === 'FIT' ? 'fit' : type === 'WEEKEND' ? 'weekend' : 'corporate';
 
