@@ -509,9 +509,6 @@ function PackagesContent() {
         </section>
       )}
 
-      {/* ── DESTINATIONS SCROLL ── */}
-      {meta && <DestinationCards destinations={meta.destinations} catTheme={catTheme} />}
-
       {/* ── PACKAGES SECTION ── */}
       <div style={{ background: c.pageBg, padding: '72px 0 80px' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 60px' }}>
