@@ -137,6 +137,7 @@ export default function NewPackagePage() {
     end_date: '',
     multi_dates: [{ start_date: '', end_date: '' }],
     about_trip: '',
+    about_sections: [],
     inclusions: [''],
     exclusions: [''],
     highlights: [''],
@@ -218,6 +219,7 @@ export default function NewPackagePage() {
       end_date: !fitLike && form.date_type === 'select_dates' ? form.end_date : null,
       multi_dates: form.date_type === 'multi_dates' ? form.multi_dates.filter(d => d.start_date && d.end_date) : null,
       description: form.about_trip,
+      about_sections: (form.about_sections || []).filter(s => s.content),
       highlights: form.highlights.filter(Boolean),
       inclusions: form.inclusions.filter(Boolean),
       exclusions: form.exclusions.filter(Boolean),
@@ -584,10 +586,36 @@ export default function NewPackagePage() {
 
           {/* About the trip */}
           <div>
-            <label className={LABEL}>About the Trip</label>
+            <label className={LABEL}>About the Trip <span className="text-gray-400 font-normal normal-case tracking-normal">(main description)</span></label>
             <textarea rows={4} value={form.about_trip} onChange={e => setField('about_trip', e.target.value)}
               placeholder="Write a compelling description about this trip — who it's for, what makes it special..."
               className={`${INPUT} resize-none`} />
+          </div>
+
+          {/* Extra About Sections */}
+          <div>
+            <label className={LABEL}>Additional Sections <span className="text-gray-400 font-normal normal-case tracking-normal">(optional — e.g. "About This Bali Tour", "Why Choose Us")</span></label>
+            <div className="space-y-3">
+              {(form.about_sections || []).map((sec, i) => (
+                <div key={i} className="border border-gray-200 rounded-xl p-4 space-y-2 relative">
+                  <button type="button" onClick={() => setField('about_sections', form.about_sections.filter((_, idx) => idx !== i))}
+                    className="absolute top-3 right-3 p-1 text-red-400 hover:bg-red-50 rounded-lg transition-colors">
+                    <Trash2 size={13} />
+                  </button>
+                  <input value={sec.heading} onChange={e => setField('about_sections', form.about_sections.map((s, idx) => idx === i ? { ...s, heading: e.target.value } : s))}
+                    placeholder="Section heading — e.g. About This Bali with Gili Islands Tour"
+                    className={INPUT} />
+                  <textarea rows={3} value={sec.content} onChange={e => setField('about_sections', form.about_sections.map((s, idx) => idx === i ? { ...s, content: e.target.value } : s))}
+                    placeholder="Section content…"
+                    className={`${INPUT} resize-none`} />
+                </div>
+              ))}
+              <button type="button"
+                onClick={() => setField('about_sections', [...(form.about_sections || []), { heading: '', content: '' }])}
+                className="text-[#E8651A] text-xs font-semibold flex items-center gap-1 hover:underline">
+                <Plus size={13} /> Add Section
+              </button>
+            </div>
           </div>
 
           {/* Highlights */}

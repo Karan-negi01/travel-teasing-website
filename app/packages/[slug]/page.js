@@ -50,6 +50,7 @@ export default function PackageDetailPage({ params }) {
   const [openDay, setOpenDay] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
+  const [descExpanded, setDescExpanded] = useState(false);
   const sectionRefs = useRef({});
 
   useEffect(() => {
@@ -343,8 +344,31 @@ export default function PackageDetailPage({ params }) {
               {/* Section heading */}
               <h2 style={{ fontSize: '26px', fontWeight: 700, color: c.textPrimary, marginBottom: '20px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>About the Trip</h2>
 
-              {/* Description */}
-              <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, marginBottom: '40px' }}>{pkg.description}</p>
+              {/* Description with Read More */}
+              {pkg.description && (() => {
+                const LIMIT = 320;
+                const isLong = pkg.description.length > LIMIT;
+                const shown = descExpanded || !isLong ? pkg.description : pkg.description.slice(0, LIMIT) + '…';
+                return (
+                  <div style={{ marginBottom: '32px' }}>
+                    <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{shown}</p>
+                    {isLong && (
+                      <button onClick={() => setDescExpanded(e => !e)}
+                        style={{ marginTop: '12px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: 600, color: accent, display: 'flex', alignItems: 'center', gap: '6px', padding: 0 }}>
+                        {descExpanded ? 'Read Less ▲' : 'Read More ▼'}
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
+
+              {/* Extra about sections */}
+              {(pkg.about_sections || []).map((sec, i) => (
+                <div key={i} style={{ marginBottom: '32px' }}>
+                  {sec.heading && <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '12px' }}>{sec.heading}</h3>}
+                  <p style={{ fontSize: '18px', color: c.textSub, lineHeight: 1.9, margin: 0 }}>{sec.content}</p>
+                </div>
+              ))}
 
 
               {/* Highlights */}
