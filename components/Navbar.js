@@ -399,6 +399,9 @@ function ExploreDropdown({ theme, pathname }) {
     { key: 'heritage',  label: 'Heritage',        tagline: "India's living history",           trips: '14+', img: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=85' },
     { key: 'womens',    label: "Women's Only",    tagline: 'Safe, curated trips for women',    trips: '8+',  img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800&q=85' },
     { key: 'weekend',   label: 'Weekend Escapes', tagline: 'Two days. Infinite memories.',     trips: '20+', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=85' },
+    { key: 'party',     label: 'Party Life',      tagline: 'Live loud. Travel louder.',        trips: '8+',  img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=85' },
+    { key: 'city',      label: 'City Tours',      tagline: 'Streets, stories, skylines.',      trips: '10+', img: 'https://images.unsplash.com/photo-1538485399081-7c8272461b8a?w=800&q=85' },
+    { key: 'adventure', label: 'Adventure',       tagline: 'Push limits. Chase thrills.',      trips: '12+', img: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=800&q=85' },
   ];
 
   const activeIdx = hoveredCat !== null ? hoveredCat : 0;
