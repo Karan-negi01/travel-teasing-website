@@ -469,25 +469,25 @@ function ExploreDropdown({ theme, pathname }) {
           transition: 'background 0.4s ease',
         }} />
 
-        <div style={{ display: 'flex', height: '400px' }}>
+        <div style={{ display: 'flex', height: '520px' }}>
 
           {/* ── LEFT: category list ── */}
           <div style={{
-            width: '320px', flexShrink: 0,
+            width: '380px', flexShrink: 0,
             display: 'flex', flexDirection: 'column',
-            padding: '18px 8px 16px',
+            padding: '20px 10px 18px',
             borderRight: '1px solid rgba(255,255,255,0.05)',
             background: 'rgba(255,255,255,0.01)',
           }}>
             <p style={{
-              fontSize: '9px', fontWeight: 700,
+              fontSize: '10px', fontWeight: 700,
               color: 'rgba(255,255,255,0.18)',
               fontFamily: "'Poppins', sans-serif",
               letterSpacing: '0.18em', textTransform: 'uppercase',
-              padding: '0 14px 12px', margin: 0,
+              padding: '0 16px 14px', margin: 0,
             }}>Browse Categories</p>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1px', overflowY: 'auto' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px', overflowY: 'auto' }}>
               {categories.map((cat, i) => {
                 const ct = CATEGORY_THEMES[cat.key];
                 const isHov = (hoveredCat === null ? i === 0 : hoveredCat === i);
@@ -496,7 +496,7 @@ function ExploreDropdown({ theme, pathname }) {
                     onClick={() => setOpen(false)}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '7px 14px', borderRadius: '10px',
+                      padding: '9px 16px', borderRadius: '10px',
                       textDecoration: 'none',
                       background: isHov ? `${ct.primary}12` : 'transparent',
                       transition: 'background 0.18s ease',
@@ -524,7 +524,7 @@ function ExploreDropdown({ theme, pathname }) {
                           letterSpacing: '0.05em',
                         }}>0{i + 1}</span>
                         <span style={{
-                          fontSize: '13px', fontWeight: 600,
+                          fontSize: '15px', fontWeight: 600,
                           color: isHov ? '#fff' : 'rgba(255,255,255,0.5)',
                           fontFamily: "'Poppins', sans-serif",
                           transition: 'color 0.18s ease',
@@ -533,7 +533,7 @@ function ExploreDropdown({ theme, pathname }) {
                       </div>
                       {/* Tagline only visible on hover */}
                       <span style={{
-                        fontSize: '10px',
+                        fontSize: '12px',
                         color: 'rgba(255,255,255,0.35)',
                         fontFamily: "'Poppins', sans-serif",
                         display: 'block', marginTop: '1px',
