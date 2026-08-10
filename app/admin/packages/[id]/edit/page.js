@@ -12,6 +12,9 @@ const CATEGORIES = [
   { key: 'offbeat',   label: '🌿 Offbeat' },
   { key: 'womens',    label: "👸 Women's Only" },
   { key: 'weekend',   label: '🌅 Weekend Escapes' },
+  { key: 'party',     label: '🎉 Party Life' },
+  { key: 'city',      label: '🏙️ City Tours' },
+  { key: 'adventure', label: '⚡ Adventure' },
 ];
 
 const INPUT = 'w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8651A] focus:border-transparent';
