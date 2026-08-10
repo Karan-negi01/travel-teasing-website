@@ -181,6 +181,60 @@ const CATEGORY_META = {
       { day: 'Sunday', title: 'Explore & Head Back', icon: '🌄', desc: 'Morning activity, local breakfast, last-minute exploring. Depart by afternoon. Back home Sunday night.' },
     ],
   },
+  party: {
+    title: 'Party Life', subtitle: 'Live loud. Travel louder.',
+    description: 'Beach clubs, rooftop bars, night markets, and unforgettable nights — handpicked destinations for the ultimate party traveler.',
+    img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600&q=80',
+    highlights: ['Beach Clubs', 'Rooftop Bars', 'Night Markets', 'Group Vibes'],
+    badge: 'PARTY',
+    destinations: [
+      { name: 'Bali',    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80' },
+      { name: 'Bangkok', img: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600&q=80' },
+      { name: 'Phuket',  img: 'https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=600&q=80' },
+      { name: 'Goa',     img: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80' },
+    ],
+    itinerary: [
+      { day: 'Day 1', title: 'Arrive & Explore', icon: '✈️', desc: 'Land, check in, and head straight to the famous night market or beach club to kickstart the trip.' },
+      { day: 'Day 2–4', title: 'Peak Party Days', icon: '🎉', desc: 'Beach clubs by day, rooftop bars and clubs by night. Each evening brings a new vibe and new memories.' },
+      { day: 'Last Day', title: 'Recover & Depart', icon: '🌅', desc: 'Lazy brunch, last dip in the pool, souvenir shopping and a flight back with stories for life.' },
+    ],
+  },
+  city: {
+    title: 'City Tours', subtitle: 'Streets, stories, skylines.',
+    description: 'Iconic skylines, buzzing street food scenes, world-class museums, and neighborhoods that tell a thousand stories — the best of city travel.',
+    img: 'https://images.unsplash.com/photo-1538485399081-7c8272461b8a?w=1600&q=80',
+    highlights: ['Guided City Walks', 'Local Food Trails', 'Shopping Districts', 'Cultural Landmarks'],
+    badge: 'CITY TOUR',
+    destinations: [
+      { name: 'Seoul',     img: 'https://images.unsplash.com/photo-1538485399081-7c8272461b8a?w=600&q=80' },
+      { name: 'Tokyo',     img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80' },
+      { name: 'Singapore', img: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80' },
+      { name: 'Dubai',     img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80' },
+    ],
+    itinerary: [
+      { day: 'Day 1', title: 'Arrive & First Impressions', icon: '🏙️', desc: 'Land and head straight into the city. Evening stroll through the most iconic neighborhood to soak it all in.' },
+      { day: 'Day 2–3', title: 'Landmarks & Local Life', icon: '🗺️', desc: 'Guided walks through historic districts, local food markets, museums, and viewpoints that define the city.' },
+      { day: 'Last Day', title: 'Shopping & Departure', icon: '🛍️', desc: 'Last-minute shopping in the best markets, a farewell meal at a local favorite, then depart with full bags and full hearts.' },
+    ],
+  },
+  adventure: {
+    title: 'Adventure', subtitle: 'Push limits. Chase thrills.',
+    description: 'Skydiving, scuba diving, bungee jumping, white water rafting — curated trips for those who believe the best views come after the hardest climbs.',
+    img: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=1600&q=80',
+    highlights: ['Skydiving & Bungee', 'Scuba & Snorkeling', 'White Water Rafting', 'Off-road Expeditions'],
+    badge: 'ADVENTURE',
+    destinations: [
+      { name: 'Rishikesh',  img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80' },
+      { name: 'Andaman',    img: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600&q=80' },
+      { name: 'Manali',     img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80' },
+      { name: 'Coorg',      img: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=600&q=80' },
+    ],
+    itinerary: [
+      { day: 'Day 1', title: 'Arrive & Gear Up', icon: '🎒', desc: 'Check in, safety briefing, meet your guides. Get your gear sorted and rest up for the big day ahead.' },
+      { day: 'Day 2–3', title: 'The Main Events', icon: '⚡', desc: 'Back-to-back adrenaline — rafting, jumping, diving, or climbing depending on the destination. Every activity is guided and safe.' },
+      { day: 'Last Day', title: 'Cool Down & Depart', icon: '🏅', desc: 'Breakfast with the group, certificate collection, group photo, and depart with your heart still racing.' },
+    ],
+  },
 };
 
 /* ─── Destination Cards ───────────────────────────────────────── */
@@ -371,6 +425,9 @@ const CATEGORY_QUERY_MAP = {
   heritage:  { search: 'heritage' },
   womens:    { subtype: "Women's Only Group" },
   weekend:   { category: 'weekend' },
+  party:     { vibe: 'party' },
+  city:      { vibe: 'city' },
+  adventure: { vibe: 'adventure' },
 };
 
 /* ─── Main packages content ───────────────────────────────────── */
