@@ -314,6 +314,8 @@ export default function HomepageClient() {
   // Theme context not needed on homepage — categories apply theme on their own pages
   const [packages, setPackages]         = useState([]);
   const [groupPackages, setGroupPackages] = useState([]);
+  const [fitPackages, setFitPackages]   = useState([]);
+  const [weekendPackages, setWeekendPackages] = useState([]);
   const [testimonials, setTestimonials]   = useState([]);
   const [blogs, setBlogs]               = useState([]);
   const [activeWorld, setActiveWorld]     = useState(7);
@@ -381,7 +383,22 @@ export default function HomepageClient() {
 
   useEffect(() => {
     fetch('/api/packages?featured=true').then(r => r.json()).then(d => setPackages(d.packages || []));
-    fetch('/api/packages?category=group').then(r => r.json()).then(d => setGroupPackages((d.packages || []).slice(0, 8)));
+    fetch('/api/packages?package_type=GROUPS').then(r => r.json()).then(d => {
+      fetch('/api/packages?fit_group=true').then(r => r.json()).then(d2 => {
+        const groupIds = new Set((d.packages || []).map(p => p.id));
+        const combined = [...(d.packages || []), ...(d2.packages || []).filter(p => !groupIds.has(p.id))];
+        setGroupPackages(combined.slice(0, 8));
+      });
+    });
+    fetch('/api/packages?package_type=FIT').then(r => r.json()).then(d => {
+      // FIT + is_fit_group packages both show here
+      return fetch('/api/packages?fit_group=true').then(r => r.json()).then(d2 => {
+        const fitIds = new Set((d.packages || []).map(p => p.id));
+        const combined = [...(d.packages || []), ...(d2.packages || []).filter(p => !fitIds.has(p.id))];
+        setFitPackages(combined.slice(0, 12));
+      });
+    });
+    fetch('/api/packages?category=weekend').then(r => r.json()).then(d => setWeekendPackages((d.packages || []).slice(0, 8)));
     fetch('/api/testimonials').then(r => r.json()).then(d => setTestimonials(d.testimonials || []));
     fetch('/api/blogs').then(r => r.json()).then(d => {
       const api = (d.blogs || []).slice(0, 6);
@@ -747,14 +764,6 @@ export default function HomepageClient() {
 
       {/* ── PERSONALISED TOUR PACKAGES (FIT) ────────────────────── */}
       {(() => {
-        const fitPackages = [
-          { id: 'fit-1', title: 'Kashmir Personalised Tour', location: 'Kashmir', state: 'Jammu & Kashmir', category: 'group', price_per_person: 18999, original_price: 24999, duration_days: 6, slug: 'packages?search=kashmir', cover_image: null },
-          { id: 'fit-2', title: 'Bali Customised Holiday', location: 'Bali', state: 'Indonesia', category: 'group', price_per_person: 34999, original_price: 44999, duration_days: 7, slug: 'packages?search=bali', cover_image: null },
-          { id: 'fit-3', title: 'Ladakh FIT Road Trip', location: 'Leh Ladakh', state: 'Ladakh', category: 'adventure', price_per_person: 22999, original_price: 28999, duration_days: 8, slug: 'packages?search=ladakh', cover_image: null },
-          { id: 'fit-4', title: 'Thailand Tailor-Made Tour', location: 'Bangkok & Phuket', state: 'Thailand', category: 'group', price_per_person: 29999, original_price: 38999, duration_days: 6, slug: 'packages?search=thailand', cover_image: null },
-          { id: 'fit-5', title: 'Rajasthan Royal Circuit', location: 'Jaipur · Jodhpur · Udaipur', state: 'Rajasthan', category: 'group', price_per_person: 15999, original_price: 21999, duration_days: 7, slug: 'packages?search=rajasthan', cover_image: null },
-          { id: 'fit-6', title: 'Maldives Couples Escape', location: 'Maldives', state: 'Maldives', category: 'group', price_per_person: 54999, original_price: 69999, duration_days: 5, slug: 'packages?search=maldives', cover_image: null },
-        ];
         const filteredFit = (() => {
           if (fitFilter === 'u50')    return fitPackages.filter(p => (p.price_per_person || 0) < 50000);
           if (fitFilter === '50-150') return fitPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
@@ -826,12 +835,11 @@ export default function HomepageClient() {
 
       {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
       {(() => {
-        const allWeekend = packages.slice(0, 8);
         const weekendPkgs = (() => {
-          if (weekendFilter === 'u50')    return allWeekend.filter(p => (p.price_per_person || 0) < 50000);
-          if (weekendFilter === '50-150') return allWeekend.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
-          if (weekendFilter === '150+')   return allWeekend.filter(p => (p.price_per_person || 0) >= 150000);
-          return allWeekend;
+          if (weekendFilter === 'u50')    return weekendPackages.filter(p => (p.price_per_person || 0) < 50000);
+          if (weekendFilter === '50-150') return weekendPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
+          if (weekendFilter === '150+')   return weekendPackages.filter(p => (p.price_per_person || 0) >= 150000);
+          return weekendPackages;
         })();
         const wTotalPages = Math.max(1, Math.ceil(weekendPkgs.length / CARDS_PER_PAGE));
         const wSafePage = Math.min(weekendPage, wTotalPages - 1);
