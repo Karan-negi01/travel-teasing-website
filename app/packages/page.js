@@ -235,6 +235,42 @@ const CATEGORY_META = {
       { day: 'Last Day', title: 'Cool Down & Depart', icon: '🏅', desc: 'Breakfast with the group, certificate collection, group photo, and depart with your heart still racing.' },
     ],
   },
+  fit: {
+    title: 'Personalised FIT Tours', subtitle: 'Your dates, your pace, your way.',
+    description: 'Fully Independent Travel — travel on your schedule with zero compromise. Perfect for couples, families, and solo travelers who want a curated experience without fixed group dates.',
+    img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=80',
+    highlights: ['Choose Your Dates', 'Private Transfers', 'Flexible Itinerary', 'Personal Guide'],
+    badge: 'FIT TOURS',
+    destinations: [
+      { name: 'Bali',        img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80' },
+      { name: 'Thailand',    img: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80' },
+      { name: 'Maldives',    img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80' },
+      { name: 'Europe',      img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80' },
+    ],
+    itinerary: [
+      { day: 'Step 1', title: 'Share Your Dream', icon: '✨', desc: 'Tell us your destination, dates, and travel style. Our experts craft a bespoke itinerary just for you.' },
+      { day: 'Step 2', title: 'We Plan Everything', icon: '📋', desc: 'Flights, hotels, transfers, experiences — all arranged perfectly so you only need to show up and enjoy.' },
+      { day: 'Step 3', title: 'Travel Your Way', icon: '🌍', desc: 'Go at your own pace with 24/7 support. Change plans mid-trip if you feel like it — total flexibility guaranteed.' },
+    ],
+  },
+  groups: {
+    title: 'Fixed Group Departures', subtitle: 'Set dates. Amazing people. Unforgettable journeys.',
+    description: 'Join a group of like-minded travelers on fixed departure dates. Everything is planned — just pack your bags and show up. Meet new friends, share experiences, create memories that last a lifetime.',
+    img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=80',
+    highlights: ['Fixed Departure Dates', 'Expert Group Leaders', 'All-Inclusive Packages', 'Meet New Friends'],
+    badge: 'GROUP TOURS',
+    destinations: [
+      { name: 'South Korea', img: 'https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&q=80' },
+      { name: 'Japan',       img: 'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80' },
+      { name: 'Europe',      img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80' },
+      { name: 'Dubai',       img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80' },
+    ],
+    itinerary: [
+      { day: 'Day 1', title: 'Group Meetup & Depart', icon: '✈️', desc: 'Meet your fellow travelers, get introduced to your group leader, and depart together for an epic journey.' },
+      { day: 'Days 2–N', title: 'Explore Together', icon: '🗺️', desc: 'Every day is packed with curated experiences — sightseeing, local food, cultural immersions, and group activities.' },
+      { day: 'Last Day', title: 'Farewell & Head Home', icon: '🤝', desc: 'Exchange contacts, share photos, say goodbye to new friends you made along the way. Until the next trip!' },
+    ],
+  },
 };
 
 /* ─── Destination Cards ───────────────────────────────────────── */
@@ -428,6 +464,8 @@ const CATEGORY_QUERY_MAP = {
   party:     { vibe: 'party' },
   city:      { vibe: 'city' },
   adventure: { vibe: 'adventure' },
+  fit:       { package_type: 'FIT' },
+  groups:    { package_type: 'GROUPS' },
 };
 
 /* ─── Main packages content ───────────────────────────────────── */
@@ -438,6 +476,7 @@ function PackagesContent() {
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [sort, setSort] = useState('featured');
+  const [subFilter, setSubFilter] = useState('all'); // 'all' | 'international' | 'domestic'
   const urlCategory = searchParams.get('category') || '';
   const { theme, applyTheme, darkMode } = useTheme();
 
@@ -463,10 +502,24 @@ function PackagesContent() {
     }
 
     if (search) params.set('search', search);
-    fetch(`/api/packages?${params}`)
-      .then(r => r.json())
-      .then(d => {
-        let pkgs = d.packages || [];
+
+    // For fit/groups: also fetch is_fit_group=true packages and merge
+    const isFitOrGroups = urlCategory === 'fit' || urlCategory === 'groups';
+    const fetches = [fetch(`/api/packages?${params}`).then(r => r.json())];
+    if (isFitOrGroups) {
+      const fitGroupParams = new URLSearchParams();
+      if (search) fitGroupParams.set('search', search);
+      fitGroupParams.set('fit_group', 'true');
+      fetches.push(fetch(`/api/packages?${fitGroupParams}`).then(r => r.json()));
+    }
+
+    Promise.all(fetches)
+      .then(([primary, secondary]) => {
+        let pkgs = primary.packages || [];
+        if (secondary) {
+          const ids = new Set(pkgs.map(p => p.id));
+          pkgs = [...pkgs, ...(secondary.packages || []).filter(p => !ids.has(p.id))];
+        }
         if (sort === 'price-asc') pkgs = [...pkgs].sort((a, b) => a.price_per_person - b.price_per_person);
         if (sort === 'price-desc') pkgs = [...pkgs].sort((a, b) => b.price_per_person - a.price_per_person);
         if (sort === 'duration') pkgs = [...pkgs].sort((a, b) => a.duration_days - b.duration_days);
@@ -501,7 +554,7 @@ function PackagesContent() {
 
       {/* ── HERO ── */}
       {meta ? (
-        <section style={{ position: 'relative', height: '100vh', minHeight: '600px', maxHeight: '820px', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
+        <section style={{ position: 'relative', height: '65vh', minHeight: '480px', maxHeight: '620px', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={meta.img} alt={meta.title}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -510,13 +563,7 @@ function PackagesContent() {
           {/* Color tint from left */}
           <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(120deg, ${catTheme.accent}55 0%, transparent 55%)` }} />
 
-          <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '0 60px 70px' }}>
-            {/* Badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px', background: `${catTheme.primary}22`, border: `1px solid ${catTheme.primary}66`, color: catTheme.primary, padding: '5px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', fontFamily: "'Poppins', sans-serif", backdropFilter: 'blur(8px)' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: catTheme.primary, display: 'inline-block' }} />
-              {meta.badge}
-            </div>
-
+          <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 24px 56px' }}>
             {/* Title */}
             <h1 style={{ fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 900, color: '#fff', fontFamily: "'Poppins', sans-serif", lineHeight: 1.0, marginBottom: '18px', letterSpacing: '-2px' }}>{meta.title}</h1>
             <p style={{ fontSize: 'clamp(15px, 1.8vw, 20px)', color: 'rgba(255,255,255,0.65)', fontFamily: "'Poppins', sans-serif", maxWidth: '600px', lineHeight: 1.65, marginBottom: '40px' }}>{meta.subtitle}</p>
@@ -567,125 +614,105 @@ function PackagesContent() {
       )}
 
       {/* ── PACKAGES SECTION ── */}
-      <div style={{ background: c.pageBg, padding: '72px 0 80px' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 60px' }}>
+      <div style={{ background: c.pageBg, padding: '48px 0 80px' }}>
+        <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 24px' }}>
 
-          {/* Header row */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: catTheme.primary, fontFamily: "'Poppins', sans-serif", margin: '0 0 8px' }}>Our picks</p>
-              <h2 style={{ fontSize: '32px', fontWeight: 800, color: c.textPrimary, fontFamily: "'Poppins', sans-serif", margin: 0, letterSpacing: '-0.5px' }}>
-                {meta ? `${meta.title} Packages` : 'All Packages'}
-              </h2>
-            </div>
+          {/* Tabs + Sort/Filter row */}
+          {(() => {
+            const intl = packages.filter(p => (p.state || '').toLowerCase() === 'international');
+            const dom  = packages.filter(p => (p.state || '').toLowerCase() !== 'international');
+            const tabs = [
+              { key: 'all',           label: 'All Packages',  count: packages.length },
+              { key: 'international', label: 'International', count: intl.length },
+              { key: 'domestic',      label: 'Domestic',      count: dom.length },
+            ];
+            const visible = subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages;
+            return (
+              <>
+                {/* Row 1: tabs left, sort+filters right */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${c.border}`, marginBottom: '0', flexWrap: 'wrap', gap: '12px' }}>
+                  {/* Underline tabs */}
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    {tabs.map(tab => {
+                      const active = subFilter === tab.key;
+                      return (
+                        <button key={tab.key} onClick={() => setSubFilter(tab.key)}
+                          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 20px', border: 'none', borderBottom: active ? `2px solid ${c.textPrimary}` : '2px solid transparent', cursor: 'pointer', fontFamily: "'Poppins', sans-serif", fontSize: '14px', fontWeight: active ? 700 : 500, background: 'transparent', color: active ? c.textPrimary : c.textMuted, marginBottom: '-1px', transition: 'all 0.18s ease', whiteSpace: 'nowrap' }}>
+                          {tab.label}
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: active ? c.textPrimary : c.textMuted }}>{loading ? '—' : tab.count}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {/* Sort + Filters */}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', paddingBottom: '10px' }}>
+                    <div style={{ position: 'relative' }}>
+                      <select value={sort} onChange={e => setSort(e.target.value)}
+                        style={{ appearance: 'none', border: `1px solid ${c.inputBorder}`, borderRadius: '999px', padding: '9px 36px 9px 16px', fontSize: '13px', fontWeight: 600, outline: 'none', color: c.textPrimary, background: c.pageBg, fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
+                        <option value="featured">Sort</option>
+                        <option value="price-asc">Price: Low → High</option>
+                        <option value="price-desc">Price: High → Low</option>
+                        <option value="duration">Duration</option>
+                      </select>
+                      <ChevronDown size={13} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: c.textPrimary }} />
+                    </div>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '7px', border: `1px solid ${c.inputBorder}`, borderRadius: '999px', padding: '9px 18px', fontSize: '13px', fontWeight: 600, background: c.pageBg, color: c.textPrimary, fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+                      Filters
+                    </button>
+                  </div>
+                </div>
 
-            {/* Search + Sort */}
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <form onSubmit={e => { e.preventDefault(); setSearch(searchInput); }}
-                style={{ display: 'flex', alignItems: 'center', border: `1px solid ${c.inputBorder}`, borderRadius: '12px', background: c.inputBg, overflow: 'hidden' }}>
-                <input value={searchInput} onChange={e => setSearchInput(e.target.value)}
-                  placeholder="Search destinations..."
-                  style={{ flex: 1, padding: '10px 16px', fontSize: '13px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif", color: c.inputColor, width: '220px' }} />
-                <button type="submit" style={{ background: catTheme.primary, color: '#fff', border: 'none', padding: '10px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                  <Search size={14} />
-                </button>
-              </form>
-              <select value={sort} onChange={e => setSort(e.target.value)}
-                style={{ border: `1px solid ${c.inputBorder}`, borderRadius: '12px', padding: '10px 14px', fontSize: '13px', outline: 'none', color: c.textSub, background: c.selectBg, fontFamily: "'Poppins', sans-serif", cursor: 'pointer' }}>
-                <option value="featured">Popularity</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-                <option value="duration">Duration</option>
-              </select>
-            </div>
-          </div>
+                {/* Row 2: full-width search */}
+                <form onSubmit={e => { e.preventDefault(); setSearch(searchInput); }}
+                  style={{ display: 'flex', alignItems: 'center', border: `1px solid ${c.inputBorder}`, borderRadius: '12px', background: c.inputBg, overflow: 'hidden', margin: '20px 0 16px' }}>
+                  <Search size={16} style={{ marginLeft: '16px', color: c.textMuted, flexShrink: 0 }} />
+                  <input value={searchInput} onChange={e => setSearchInput(e.target.value)}
+                    placeholder="Search destinations, activities, or experiences..."
+                    style={{ flex: 1, padding: '14px 16px', fontSize: '14px', outline: 'none', border: 'none', background: 'transparent', fontFamily: "'Poppins', sans-serif", color: c.inputColor }} />
+                  <button type="submit" style={{ background: c.textPrimary, color: darkMode ? '#000' : '#fff', border: 'none', padding: '12px 24px', margin: '6px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>
+                    Search
+                  </button>
+                </form>
+
+                {/* Row 3: count */}
+                {!loading && (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+                    <p style={{ fontSize: '20px', fontWeight: 800, color: c.textPrimary, fontFamily: "'Poppins', sans-serif", margin: 0 }}>
+                      {visible.length} trips found
+                    </p>
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           {loading ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
               {[1,2,3,4,5,6].map(i => <div key={i} style={{ background: c.surface, borderRadius: '20px', height: '340px', animation: 'pulse 1.5s ease infinite' }} />)}
             </div>
-          ) : packages.length > 0 ? (
-            <>
-              <p style={{ fontSize: '12px', color: c.textLabel, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>{packages.length} package{packages.length !== 1 ? 's' : ''} found</p>
-
-              {/* Featured first package — large horizontal card */}
-              {urlCategory && (() => {
-                const fp = packages[0];
-                const fpImg = fp.cover_image || 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800';
-                return (
-                  <div style={{ display: 'flex', borderRadius: '24px', overflow: 'hidden', border: `1px solid ${c.border}`, background: c.cardBg, minHeight: '340px', cursor: 'pointer' }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = c.inputBorder}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = c.border}
-                    onClick={() => window.location.href = `/packages/${fp.slug}${urlCategory ? `?from=${urlCategory}` : ''}`}>
-                    {/* Left: image */}
-                    <div style={{ flex: '0 0 48%', position: 'relative', overflow: 'hidden' }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={fpImg} alt={fp.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, transparent 60%, ${c.cardBg} 100%)` }} />
-                      <div style={{ position: 'absolute', top: '20px', left: '20px', background: `${catTheme.primary}22`, border: `1px solid ${catTheme.primary}55`, color: catTheme.primary, fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', padding: '5px 12px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", backdropFilter: 'blur(8px)' }}>
-                        ✦ FEATURED
-                      </div>
-                    </div>
-                    {/* Right: details */}
-                    <div style={{ flex: 1, padding: '44px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
-                      <div>
-                        <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', color: catTheme.primary, textTransform: 'uppercase', fontFamily: "'Poppins', sans-serif", margin: '0 0 10px' }}>{meta?.title || ''}</p>
-                        <h3 style={{ fontSize: '28px', fontWeight: 800, color: c.textPrimary, margin: 0, lineHeight: 1.2, fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.5px' }}>{fp.title}</h3>
-                      </div>
-                      {fp.description && (
-                        <p style={{ color: c.textSub, fontSize: '14px', lineHeight: 1.75, fontFamily: "'Poppins', sans-serif", margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                          {fp.description}
-                        </p>
-                      )}
-                      <div style={{ display: 'flex', gap: '28px' }}>
-                        {[
-                          ['₹' + (fp.price_per_person?.toLocaleString('en-IN') || '—'), 'per person'],
-                          [fp.duration_days ? `${fp.duration_nights || fp.duration_days - 1}N / ${fp.duration_days}D` : '—', 'duration'],
-                          [fp.location || fp.state || '—', 'location'],
-                        ].map(([val, lbl]) => (
-                          <div key={lbl}>
-                            <div style={{ fontSize: '17px', fontWeight: 700, color: c.textPrimary, fontFamily: "'Poppins', sans-serif" }}>{val}</div>
-                            <div style={{ fontSize: '10px', color: c.textMuted, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: "'Poppins', sans-serif", marginTop: '3px' }}>{lbl}</div>
-                          </div>
-                        ))}
-                      </div>
-                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: catTheme.primary, color: '#fff', fontSize: '13px', fontWeight: 700, padding: '11px 24px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif" }}>
-                          View Package →
-                        </div>
-                        <a href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + fp.title + '. Please share more details.')}
-                          target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: `1px solid ${c.border}`, color: c.textSub, fontSize: '13px', fontWeight: 600, padding: '11px 20px', borderRadius: '999px', fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>
-                          WhatsApp
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-
-              {/* Remaining packages grid */}
-              {(urlCategory ? packages.slice(1) : packages).length > 0 && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-                  {(urlCategory ? packages.slice(1) : packages).map(pkg => (
-                    urlCategory
-                      ? <PackageCard key={pkg.id} pkg={pkg} fromCategory={urlCategory} dark={darkMode} />
-                      : <PackageCard key={pkg.id} pkg={pkg} dark={darkMode} />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '80px 20px', background: c.emptyBg, borderRadius: '24px', border: `1px solid ${c.emptyBorder}` }}>
-              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: `${catTheme.primary}20`, border: `1px solid ${catTheme.primary}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>{catTheme.emoji}</div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
-              <p style={{ color: c.textMuted, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
-              <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", boxShadow: `0 8px 28px ${catTheme.primary}50` }}>
-                <MessageCircle size={16} /> Chat on WhatsApp
-              </a>
-            </div>
-          )}
+          ) : (() => {
+            const intl = packages.filter(p => (p.state || '').toLowerCase() === 'international');
+            const dom  = packages.filter(p => (p.state || '').toLowerCase() !== 'international');
+            const visible = subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages;
+            return visible.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+                {visible.map(pkg => (
+                  <PackageCard key={pkg.id} pkg={pkg} fromCategory={urlCategory || undefined} />
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '80px 20px', background: c.emptyBg, borderRadius: '24px', border: `1px solid ${c.emptyBorder}` }}>
+                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: `${catTheme.primary}20`, border: `1px solid ${catTheme.primary}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>{catTheme.emoji}</div>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
+                <p style={{ color: c.textMuted, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
+                <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", boxShadow: `0 8px 28px ${catTheme.primary}50` }}>
+                  <MessageCircle size={16} /> Chat on WhatsApp
+                </a>
+              </div>
+            );
+          })()}
         </div>
       </div>
 

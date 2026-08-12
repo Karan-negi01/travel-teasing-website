@@ -146,6 +146,30 @@ export const CATEGORY_THEMES = {
     gradient: 'linear-gradient(135deg, #fed7aa 0%, #ffedd5 60%, #ffffff 100%)',
     emoji: '⚡',
   },
+  fit: {
+    label: 'FIT Tours',
+    primary: '#06b6d4',
+    accent: '#0e7490',
+    bg: '#f0fdff',
+    soft: '#cffafe',
+    pill: '#a5f3fc',
+    pillText: '#0e7490',
+    logoFilter: 'hue-rotate(170deg) saturate(1.2)',
+    gradient: 'linear-gradient(135deg, #cffafe 0%, #e0f2fe 60%, #ffffff 100%)',
+    emoji: '✈️',
+  },
+  groups: {
+    label: 'Group Tours',
+    primary: '#8b5cf6',
+    accent: '#6d28d9',
+    bg: '#faf5ff',
+    soft: '#ede9fe',
+    pill: '#ddd6fe',
+    pillText: '#6d28d9',
+    logoFilter: 'hue-rotate(260deg) saturate(1.2)',
+    gradient: 'linear-gradient(135deg, #ede9fe 0%, #f5f3ff 60%, #ffffff 100%)',
+    emoji: '👥',
+  },
 };
 
 const ThemeContext = createContext(null);

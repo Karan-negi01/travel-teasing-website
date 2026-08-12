@@ -126,7 +126,7 @@ export default function Navbar() {
             <ExploreDropdown theme={theme} pathname={pathname} />
             {[
               { label: 'FIT',    href: '/packages?category=fit' },
-              { label: 'GROUPS', href: '/group-trips' },
+              { label: 'GROUPS', href: '/packages?category=groups' },
             ].map(({ label, href }) => (
               <Link key={label} href={href} style={{
                 fontSize: '14px', fontWeight: 500, padding: '6px 14px',
