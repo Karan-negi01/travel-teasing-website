@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import PackageCard from './PackageCard';
 import EnquiryModal from './EnquiryModal';
+import HeroCursorAnimation from './HeroCursorAnimation';
 import InstagramIcon from './InstagramIcon';
 import { CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
@@ -446,6 +447,9 @@ export default function HomepageClient() {
         {/* Gradient — lighter in center so video breathes */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-black/70" />
 
+        {/* Travel illustrations — cursor parallax */}
+        <HeroCursorAnimation />
+
         {/* ── PREMIUM MINIMAL ── */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6 gap-8">
 
@@ -826,107 +830,6 @@ export default function HomepageClient() {
               <div className="mt-8 flex justify-center">
                 <Link href="/packages?search=fit" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
                   View All FIT Packages <ArrowRight size={14} />
-                </Link>
-              </div>
-            </div>
-          </section>
-        );
-      })()}
-
-      {/* ── WEEKEND ESCAPES ─────────────────────────────────────────── */}
-      {(() => {
-        const weekendPkgs = (() => {
-          if (weekendFilter === 'u50')    return weekendPackages.filter(p => (p.price_per_person || 0) < 50000);
-          if (weekendFilter === '50-150') return weekendPackages.filter(p => { const pr = p.price_per_person || 0; return pr >= 50000 && pr < 150000; });
-          if (weekendFilter === '150+')   return weekendPackages.filter(p => (p.price_per_person || 0) >= 150000);
-          return weekendPackages;
-        })();
-        const wTotalPages = Math.max(1, Math.ceil(weekendPkgs.length / CARDS_PER_PAGE));
-        const wSafePage = Math.min(weekendPage, wTotalPages - 1);
-        return (
-          <section className="relative bg-white py-16 md:py-24">
-            <div className="mx-auto max-w-[1600px] px-4">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
-                  <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Weekend </span>
-                  <span>Escapes</span>
-                </h2>
-                <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">
-                  Short on time? These quick getaways pack in all the fun
-                </p>
-              </div>
-
-              {/* Filters + Prev/Next */}
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <div className="flex flex-row scrollbar-hide items-center gap-3 overflow-x-scroll md:gap-4">
-                  {priceFilters.filter(f => f.id !== 'upcoming').map(f => (
-                    <button key={f.id} onClick={() => { setWeekendFilter(f.id); setWeekendPage(0); }}
-                      className={`inline-flex whitespace-nowrap cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
-                        weekendFilter === f.id
-                          ? 'border-gray-800 bg-gray-800 text-white shadow-sm'
-                          : 'border-neutral-200 bg-white text-neutral-700 shadow-sm hover:border-neutral-300 hover:text-neutral-900'
-                      }`}>
-                      {f.label}{f.id === 'all' && <ChevronDown size={13} />}
-                    </button>
-                  ))}
-                </div>
-                {weekendPkgs.length > 0 && (
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <button onClick={() => goToWeekendPage(Math.max(0, wSafePage - 1))} disabled={wSafePage === 0}
-                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                      <ChevronLeft size={15} /> <span className="hidden sm:inline">Previous</span>
-                    </button>
-                    <button onClick={() => goToWeekendPage(Math.min(wTotalPages - 1, wSafePage + 1))} disabled={wSafePage === wTotalPages - 1}
-                      className="flex items-center gap-1.5 rounded-full px-2.5 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-neutral-200 bg-white">
-                      <span className="hidden sm:inline">Next</span> <ChevronRight size={15} />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6">
-                {weekendPkgs.length === 0 ? (
-                  <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-                    {[1,2,3,4].map(i => (
-                      <div key={i}>
-                        <div className="h-[220px] md:h-80 bg-gray-100 rounded-2xl animate-pulse" />
-                        <div className="py-2 space-y-3 mt-2">
-                          <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
-                          <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
-                          <div className="h-5 bg-gray-100 rounded animate-pulse w-2/5" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div ref={weekendViewportRef} className="overflow-x-hidden p-1">
-                    <div ref={weekendTrackRef} className="flex touch-pan-y gap-4 sm:gap-6"
-                      style={{ transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-                      {weekendPkgs.map(pkg => (
-                        <div key={pkg.id}
-                          className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)]">
-                          <PackageCard pkg={pkg} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Dots */}
-              {weekendPkgs.length > 0 && (
-                <div className="flex items-center gap-2 mt-8">
-                  {Array.from({ length: wTotalPages }).map((_, i) => (
-                    <button key={i} onClick={() => goToWeekendPage(i)}
-                      className={`rounded-full transition-all duration-300 ${i === wSafePage ? 'w-5 h-2.5 bg-[#1a1a1a]' : 'w-2.5 h-2.5 bg-gray-200 hover:bg-gray-300'}`} />
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-8 flex justify-center">
-                <Link href="/packages"
-                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
-                  View All Weekend Trips <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
