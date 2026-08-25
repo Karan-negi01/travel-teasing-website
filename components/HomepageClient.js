@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import PackageCard from './PackageCard';
 import EnquiryModal from './EnquiryModal';
-import HeroCursorAnimation from './HeroCursorAnimation';
 import InstagramIcon from './InstagramIcon';
 import { CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
@@ -446,9 +445,6 @@ export default function HomepageClient() {
 
         {/* Gradient — lighter in center so video breathes */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-black/70" />
-
-        {/* Travel illustrations — cursor parallax */}
-        <HeroCursorAnimation />
 
         {/* ── PREMIUM MINIMAL ── */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6 gap-8">
