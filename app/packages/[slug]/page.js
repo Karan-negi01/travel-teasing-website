@@ -172,20 +172,26 @@ export default function PackageDetailPage({ params }) {
       {/* ── CINEMATIC SLIDER HERO ── */}
       <div style={{ position: 'relative', width: '100%', height: '85vh', minHeight: '580px', maxHeight: '820px', overflow: 'hidden', background: '#0a0a0a' }}>
 
-        {/* Background images — card-expand animation */}
+        {/* Background images — wipe-from-right animation */}
         {slides.map((slide, i) => (
-          <div key={i} style={{
-            position: 'absolute', inset: 0, zIndex: i === activeSlide ? 1 : 0,
-            opacity: i === activeSlide ? 1 : 0,
-            transition: 'opacity 0.2s ease',
-          }}>
+          <div
+            key={i}
+            style={{
+              position: 'absolute', inset: 0,
+              zIndex: i === activeSlide ? 2 : 1,
+              opacity: i === activeSlide ? 1 : 0,
+              transition: i === activeSlide ? 'none' : 'opacity 0.4s ease 0.6s',
+            }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              key={i === activeSlide ? `active-${animKey}` : i}
+              key={`img-${i}-${i === activeSlide ? animKey : 'idle'}`}
               src={imgUrl(slide.image)} alt=""
               style={{
                 width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-                animation: i === activeSlide && animKey > 0 ? 'expandFromCard 0.75s cubic-bezier(0.22,1,0.36,1) forwards' : 'none',
+                animation: i === activeSlide
+                  ? (animKey === 0 ? 'none' : 'wipeFromRight 0.9s cubic-bezier(0.22,1,0.36,1) forwards')
+                  : 'none',
               }}
               loading={i === 0 ? 'eager' : 'lazy'}
             />
@@ -330,15 +336,9 @@ export default function PackageDetailPage({ params }) {
 
         {/* CSS animation keyframes */}
         <style>{`
-          @keyframes expandFromCard {
-            from {
-              clip-path: inset(62% 3% 4% 58% round 16px);
-              transform: scale(1.04);
-            }
-            to {
-              clip-path: inset(0% 0% 0% 0% round 0px);
-              transform: scale(1);
-            }
+          @keyframes wipeFromRight {
+            0%   { clip-path: inset(0 0 0 100%); transform: scale(1.06); }
+            100% { clip-path: inset(0 0 0 0%);   transform: scale(1); }
           }
           @keyframes fadeSlideUp {
             from { opacity: 0; transform: translateY(18px); }
