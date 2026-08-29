@@ -53,6 +53,7 @@ export default function PackageDetailPage({ params }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
+  const [animKey, setAnimKey] = useState(0);
   const sectionRefs = useRef({});
 
   useEffect(() => {
@@ -73,7 +74,10 @@ export default function PackageDetailPage({ params }) {
     const allImgs = [pkg.cover_image, ...(pkg.gallery_images || [])].filter(Boolean);
     const count = Math.min((pkg.highlights?.length || 0) + 1, allImgs.length + 1, 6);
     if (count < 2) return;
-    const timer = setInterval(() => setActiveSlide(s => (s + 1) % count), 4500);
+    const timer = setInterval(() => {
+      setActiveSlide(s => (s + 1) % count);
+      setAnimKey(k => k + 1);
+    }, 4500);
     return () => clearInterval(timer);
   }, [pkg]);
 
@@ -126,7 +130,11 @@ export default function PackageDetailPage({ params }) {
     }),
   ];
 
-  const goTo = (idx) => setActiveSlide(s => ((idx % slides.length) + slides.length) % slides.length);
+  const goTo = (idx) => {
+    const next = ((idx % slides.length) + slides.length) % slides.length;
+    setActiveSlide(next);
+    setAnimKey(k => k + 1);
+  };
   const active = slides[activeSlide] || slides[0];
   const imgUrl = (src, w = 1600) => src ? `${src}${src.includes('?') ? '&' : '?'}w=${w}&q=85&auto=format&fit=crop` : '';
   const resolvedThemeKey = (fromCategory && CATEGORY_THEMES[fromCategory]) ? fromCategory : getThemeKeyFromPackage(pkg);
@@ -164,16 +172,23 @@ export default function PackageDetailPage({ params }) {
       {/* ── CINEMATIC SLIDER HERO ── */}
       <div style={{ position: 'relative', width: '100%', height: '85vh', minHeight: '580px', maxHeight: '820px', overflow: 'hidden', background: '#0a0a0a' }}>
 
-        {/* Background images — crossfade */}
+        {/* Background images — card-expand animation */}
         {slides.map((slide, i) => (
           <div key={i} style={{
-            position: 'absolute', inset: 0, zIndex: 0,
-            transition: 'opacity 1.2s cubic-bezier(0.4,0,0.2,1), transform 1.6s cubic-bezier(0.4,0,0.2,1)',
+            position: 'absolute', inset: 0, zIndex: i === activeSlide ? 1 : 0,
             opacity: i === activeSlide ? 1 : 0,
-            transform: i === activeSlide ? 'scale(1)' : 'scale(1.06)',
+            transition: 'opacity 0.2s ease',
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgUrl(slide.image)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img
+              key={i === activeSlide ? `active-${animKey}` : i}
+              src={imgUrl(slide.image)} alt=""
+              style={{
+                width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+                animation: i === activeSlide && animKey > 0 ? 'expandFromCard 0.75s cubic-bezier(0.22,1,0.36,1) forwards' : 'none',
+              }}
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
           </div>
         ))}
 
@@ -232,42 +247,71 @@ export default function PackageDetailPage({ params }) {
           </button>
         </div>
 
-        {/* BOTTOM-RIGHT — Key Highlights cards */}
+        {/* BOTTOM-RIGHT — 3D Coverflow carousel */}
         <div style={{ position: 'absolute', bottom: '40px', right: '48px', zIndex: 2 }}>
-          <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', textAlign: 'right' }}>
+          <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '18px', textAlign: 'right' }}>
             Key Highlights
           </p>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
-            {slides.map((slide, i) => {
-              const isActive = i === activeSlide;
-              return (
-                <div key={i} onClick={() => goTo(i)} style={{
-                  width: isActive ? '160px' : '108px',
-                  height: isActive ? '200px' : '140px',
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  transition: 'all 0.6s cubic-bezier(0.34,1.2,0.64,1)',
-                  opacity: isActive ? 1 : 0.55,
-                  border: isActive ? '2px solid rgba(255,255,255,0.75)' : '1px solid rgba(255,255,255,0.15)',
-                  boxShadow: isActive ? '0 20px 40px rgba(0,0,0,0.55)' : '0 4px 16px rgba(0,0,0,0.3)',
-                }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={imgUrl(slide.image, 400)} alt={slide.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.6s ease' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)' }} />
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '12px 10px' }}>
-                    <p style={{ fontSize: '8px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: '3px' }}>
-                      {pkg.location}
-                    </p>
-                    <p style={{ fontSize: isActive ? '11px' : '10px', fontWeight: 700, color: '#fff', lineHeight: 1.25, transition: 'font-size 0.3s' }}>
-                      {slide.title.length > 28 ? slide.title.substring(0, 28) + '…' : slide.title}
-                    </p>
+          <div style={{ perspective: '900px', perspectiveOrigin: '50% 50%' }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'flex-end' }}>
+              {slides.map((slide, i) => {
+                const diff = i - activeSlide;
+                const isActive = diff === 0;
+                const absD = Math.abs(diff);
+
+                // 3D transform per position
+                const rotateY = diff * -22;
+                const scale = isActive ? 1 : absD === 1 ? 0.78 : 0.62;
+                const translateX = diff * -18;
+                const translateZ = isActive ? 40 : absD === 1 ? -30 : -70;
+                const opacity = isActive ? 1 : absD === 1 ? 0.65 : 0.35;
+                const zIndex = isActive ? 10 : absD === 1 ? 5 : 1;
+
+                return (
+                  <div
+                    key={i}
+                    onClick={() => goTo(i)}
+                    style={{
+                      width: '140px',
+                      height: '186px',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                      zIndex,
+                      transition: 'transform 0.55s cubic-bezier(0.34,1.1,0.64,1), opacity 0.55s ease, box-shadow 0.55s ease',
+                      transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                      opacity,
+                      border: isActive ? '2px solid rgba(255,255,255,0.8)' : '1px solid rgba(255,255,255,0.12)',
+                      boxShadow: isActive
+                        ? '0 28px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1)'
+                        : '0 8px 24px rgba(0,0,0,0.4)',
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imgUrl(slide.image, 400)}
+                      alt={slide.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }} />
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 12px' }}>
+                      <p style={{ fontSize: '8px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: '4px' }}>
+                        {pkg.location}
+                      </p>
+                      <p style={{ fontSize: '11px', fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>
+                        {slide.title.length > 26 ? slide.title.substring(0, 26) + '…' : slide.title}
+                      </p>
+                    </div>
+                    {/* Active indicator dot */}
+                    {isActive && (
+                      <div style={{ position: 'absolute', top: '12px', right: '12px', width: '8px', height: '8px', borderRadius: '50%', background: '#fff', boxShadow: '0 0 8px rgba(255,255,255,0.8)' }} />
+                    )}
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -286,6 +330,16 @@ export default function PackageDetailPage({ params }) {
 
         {/* CSS animation keyframes */}
         <style>{`
+          @keyframes expandFromCard {
+            from {
+              clip-path: inset(62% 3% 4% 58% round 16px);
+              transform: scale(1.04);
+            }
+            to {
+              clip-path: inset(0% 0% 0% 0% round 0px);
+              transform: scale(1);
+            }
+          }
           @keyframes fadeSlideUp {
             from { opacity: 0; transform: translateY(18px); }
             to   { opacity: 1; transform: translateY(0); }
