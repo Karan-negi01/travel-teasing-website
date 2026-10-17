@@ -11,11 +11,22 @@ export default function GoogleButton({ label = 'Continue with Google', onError }
   async function go() {
     setBusy(true);
     const next = safeRedirect('/dashboard');
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(next)}`, queryParams: { prompt: 'select_account' } },
+      options: { redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(next)}`, queryParams: { prompt: 'select_account' }, skipBrowserRedirect: true },
     });
-    if (error) { setBusy(false); onError?.(error.message.includes('provider') ? 'Google sign-in is not switched on yet.' : error.message); }
+    if (error || !data?.url) { setBusy(false); onError?.(error?.message || 'Could not start Google sign-in.'); return; }
+    // Pre-flight: if the provider is disabled, Supabase answers 400 instead of redirecting to Google.
+    try {
+      const res = await fetch(data.url, { redirect: 'manual' });
+      if (res.status === 400) {
+        const j = await res.json().catch(() => ({}));
+        setBusy(false);
+        onError?.(/provider/i.test(j.msg || j.error_description || '') ? 'Google sign-in is not switched on yet. Use email and password for now.' : (j.msg || 'Could not start Google sign-in.'));
+        return;
+      }
+    } catch { /* opaque or blocked — just continue to Google */ }
+    window.location.assign(data.url);
   }
   return (
     <button type="button" onClick={go} disabled={busy} className="auth-google w-full h-[54px] inline-flex items-center justify-center gap-3 text-[14px] font-medium transition-colors duration-150 disabled:opacity-60">
