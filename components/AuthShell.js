@@ -16,16 +16,17 @@ export default function AuthShell({ eyebrow, title, children, footer }) {
         </p>
       </aside>
 
-      <main className="auth-pane relative flex flex-col px-6 sm:px-12 lg:px-20 xl:px-28 pt-10 pb-14 min-h-screen">
-        <Link href="/" className="inline-block w-fit">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Travel Teasing" className="auth-logo h-14 w-auto" />
-        </Link>
-
-        <div className="flex-1 flex flex-col justify-center py-16">
+      <main className="auth-pane relative flex flex-col px-6 sm:px-12 lg:px-20 xl:px-28 py-10 min-h-screen">
+        <div className="flex-1 flex flex-col justify-center py-10">
           <div className="w-full max-w-[460px] mx-auto">
-            {eyebrow && <p className="auth-eyebrow text-[11px] uppercase mb-3" style={{ letterSpacing: '0.32em' }}>{eyebrow}</p>}
-            <h1 className="auth-title uppercase font-light leading-none mb-10" style={{ fontSize: 'clamp(26px, 2.5vw, 34px)', letterSpacing: '0.14em', whiteSpace: 'nowrap', fontFamily: "'Poppins', 'Inter', sans-serif" }}>{title}</h1>
+            <div className="text-center mb-10">
+              <Link href="/" className="inline-block mb-8">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="Travel Teasing" className="auth-logo h-16 w-auto mx-auto" />
+              </Link>
+              {eyebrow && <p className="auth-eyebrow text-[11px] uppercase mb-3" style={{ letterSpacing: '0.32em' }}>{eyebrow}</p>}
+              <h1 className="auth-title uppercase font-light leading-none" style={{ fontSize: 'clamp(26px, 2.5vw, 34px)', letterSpacing: '0.14em', whiteSpace: 'nowrap', fontFamily: "'Poppins', 'Inter', sans-serif" }}>{title}</h1>
+            </div>
             {children}
             {footer && <div className="auth-sub text-[14.5px] text-center mt-10">{footer}</div>}
           </div>
