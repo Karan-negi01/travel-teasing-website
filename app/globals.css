@@ -263,3 +263,7 @@
 @keyframes ttFadeUp    { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .tt-fade-up { animation: ttFadeUp .5s cubic-bezier(.22,1,.36,1) both; }
 @media (prefers-reduced-motion: reduce) { .tt-fade-up, [style*="ttLogoFloat"], [style*="ttLogoIn"] { animation: none !important; } }
+
+/* ── Auth pages ── */
+[data-mode="dark"] .auth-glow { display: none; }
+[data-mode="dark"] .auth-input { background: rgba(255,255,255,.06) !important; color: #f3f4f6 !important; }
