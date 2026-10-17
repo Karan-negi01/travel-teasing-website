@@ -2,18 +2,18 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, Phone, Mail, Lock, Eye, EyeOff, MapPin, ArrowRight, ArrowLeft, AlertCircle, Check } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import AuthShell, { authInput, authLabel, authButton, authButtonStyle, authChip, preserveRedirect, safeRedirect } from '@/components/AuthShell';
+import AuthShell, { authInput, authLabel, authLabelStyle, authButton, authButtonStyle, authGhost, authChip, authChipStyle, authLink, preserveRedirect, safeRedirect } from '@/components/AuthShell';
 
 const TRIP_STYLES = ['Chill', 'Adventure', 'Cultural', 'Spiritual', 'Party', 'Photography', 'Trekking', 'Luxury'];
 const STEPS = ['Account', 'About you', 'Travel style'];
 
-function Field({ id, label, icon: Icon, children }) {
+function Field({ id, label, children }) {
   return (
     <div>
-      <label htmlFor={id} className={authLabel}>{label}</label>
-      <div className="relative"><Icon size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />{children}</div>
+      <label htmlFor={id} className={authLabel} style={authLabelStyle}>{label}</label>
+      {children}
     </div>
   );
 }
@@ -54,80 +54,70 @@ export default function SignupPage() {
 
   return (
     <AuthShell
-      title={step === 1 ? 'Create your account' : step === 2 ? 'A bit about you' : 'How do you travel?'}
-      subtitle={step === 1 ? 'Book trips, build your gallery and find your travel crew.' : step === 2 ? 'Trip hosts see this when you ask to join. It also powers women-only and age rules.' : 'Optional, but it helps hosts and us suggest the right trips.'}
-      footer={<p>Already have an account? <Link href={loginHref} className="font-semibold text-[#1f77a3] hover:underline">Log in</Link></p>}
+      eyebrow={`Step ${step} of 3 — ${STEPS[step - 1]}`}
+      title={step === 1 ? 'Create account' : step === 2 ? 'About you' : 'Travel style'}
+      footer={<p>Already have an account? <Link href={loginHref} className={authLink}>Sign in</Link></p>}
     >
-      {/* Steps */}
-      <ol className="flex items-center gap-2 mb-7">
-        {STEPS.map((label, idx) => {
-          const n = idx + 1; const done = step > n; const active = step === n;
-          return (
-            <li key={label} className="flex items-center gap-2">
-              <span className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition ${done ? 'bg-[#1f77a3] text-white' : active ? 'bg-[#1a1a2e] text-white' : 'bg-gray-100 text-gray-400'}`}>{done ? <Check size={12} /> : n}</span>
-              <span className={`text-xs font-semibold ${active ? 'text-[#1a1a2e]' : 'text-gray-400'}`}>{label}</span>
-              {idx < STEPS.length - 1 && <span className={`w-6 h-px ${done ? 'bg-[#1f77a3]' : 'bg-gray-200'}`} />}
-            </li>
-          );
-        })}
-      </ol>
+      {/* thin progress line */}
+      <div className="auth-track h-px w-full mb-10 relative"><div className="auth-track-fill absolute left-0 top-0 h-px transition-all duration-500" style={{ width: `${(step / 3) * 100}%` }} /></div>
 
       {step === 1 && (
-        <form onSubmit={e => { e.preventDefault(); next(); }} className="space-y-4" noValidate>
-          <Field id="su-name" label="Full name" icon={User}><input id="su-name" autoComplete="name" value={form.full_name} onChange={e => set('full_name', e.target.value)} className={authInput} placeholder="As on your ID" /></Field>
-          <Field id="su-phone" label="Mobile number" icon={Phone}><input id="su-phone" type="tel" inputMode="numeric" autoComplete="tel" value={form.phone} onChange={e => set('phone', e.target.value)} className={authInput} placeholder="10-digit number, for trip updates" /></Field>
-          <Field id="su-email" label="Email" icon={Mail}><input id="su-email" type="email" autoComplete="email" value={form.email} onChange={e => set('email', e.target.value)} className={authInput} placeholder="you@example.com" /></Field>
-          <Field id="su-password" label="Password" icon={Lock}>
-            <input id="su-password" type={show ? 'text' : 'password'} autoComplete="new-password" value={form.password} onChange={e => set('password', e.target.value)} className={`${authInput} pr-12`} placeholder="At least 8 characters" />
-            <button type="button" onClick={() => setShow(s => !s)} aria-label={show ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100">{show ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+        <form onSubmit={e => { e.preventDefault(); next(); }} className="space-y-6" noValidate>
+          <Field id="su-name" label="Full name"><input id="su-name" autoComplete="name" value={form.full_name} onChange={e => set('full_name', e.target.value)} className={authInput} /></Field>
+          <Field id="su-phone" label="Mobile number"><input id="su-phone" type="tel" inputMode="numeric" autoComplete="tel" value={form.phone} onChange={e => set('phone', e.target.value)} className={authInput} /></Field>
+          <Field id="su-email" label="Email"><input id="su-email" type="email" autoComplete="email" value={form.email} onChange={e => set('email', e.target.value)} className={authInput} /></Field>
+          <Field id="su-password" label="Password">
+            <div className="relative">
+              <input id="su-password" type={show ? 'text' : 'password'} autoComplete="new-password" value={form.password} onChange={e => set('password', e.target.value)} className={`${authInput} pr-12`} />
+              <button type="button" onClick={() => setShow(s => !s)} aria-label={show ? 'Hide password' : 'Show password'} className="auth-sub absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:opacity-70">{show ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+            </div>
           </Field>
-          {error && <p className="flex items-start gap-2 text-sm text-red-700 bg-red-50 rounded-xl px-4 py-3"><AlertCircle size={16} className="mt-0.5 flex-shrink-0" /> {error}</p>}
-          <button type="submit" className={authButton} style={authButtonStyle}>Continue <ArrowRight size={17} /></button>
-          <p className="text-[11px] text-gray-400 text-center">By continuing you agree to travel responsibly and be nice to strangers.</p>
+          {error && <p className="auth-error text-[13px]">{error}</p>}
+          <button type="submit" className={authButton} style={authButtonStyle}>Continue</button>
         </form>
       )}
 
       {step === 2 && (
-        <form onSubmit={e => { e.preventDefault(); next(); }} className="space-y-5" noValidate>
-          <Field id="su-city" label="City" icon={MapPin}><input id="su-city" autoComplete="address-level2" value={form.city} onChange={e => set('city', e.target.value)} className={authInput} placeholder="Where do you usually start from?" /></Field>
+        <form onSubmit={e => { e.preventDefault(); next(); }} className="space-y-6" noValidate>
+          <Field id="su-city" label="City"><input id="su-city" autoComplete="address-level2" value={form.city} onChange={e => set('city', e.target.value)} className={authInput} /></Field>
           <div>
-            <p className={authLabel}>Gender</p>
-            <div className="grid grid-cols-3 gap-2">{['Male', 'Female', 'Other'].map(g => <button key={g} type="button" onClick={() => set('gender', g)} className={authChip(form.gender === g)}>{g}</button>)}</div>
-            <p className="text-[11px] text-gray-400 mt-2">Needed for women-only or men-only trips. You can change it later in settings.</p>
+            <p className={authLabel} style={authLabelStyle}>Gender</p>
+            <div className="grid grid-cols-3 gap-2">{['Male', 'Female', 'Other'].map(g => <button key={g} type="button" onClick={() => set('gender', g)} className={authChip(form.gender === g)} style={authChipStyle}>{g}</button>)}</div>
+            <p className="auth-sub text-[12px] mt-3">Used for women-only or men-only trips. You can change it later.</p>
           </div>
           <div className="flex gap-3">
-            <button type="button" onClick={() => setStep(1)} className="inline-flex items-center justify-center gap-1.5 px-5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:border-gray-400"><ArrowLeft size={15} /> Back</button>
-            <button type="submit" className={authButton} style={authButtonStyle}>Continue <ArrowRight size={17} /></button>
+            <button type="button" onClick={() => setStep(1)} className={authGhost} style={authButtonStyle}>Back</button>
+            <button type="submit" className={authButton} style={authButtonStyle}>Continue</button>
           </div>
         </form>
       )}
 
       {step === 3 && (
-        <div className="space-y-5">
+        <div className="space-y-7">
           <div>
-            <p className={authLabel}>Trip style</p>
-            <div className="flex flex-wrap gap-2">{TRIP_STYLES.map(s => <button key={s} type="button" onClick={() => toggleStyle(s)} className={`${authChip(form.trip_style.includes(s))} !px-3 !py-1.5 !rounded-full !text-xs`}>{s}</button>)}</div>
+            <p className={authLabel} style={authLabelStyle}>Trip style</p>
+            <div className="flex flex-wrap gap-2">{TRIP_STYLES.map(s => <button key={s} type="button" onClick={() => toggleStyle(s)} className={`${authChip(form.trip_style.includes(s))} !h-[38px] !px-3.5 !text-[11px]`} style={authChipStyle}>{s}</button>)}</div>
           </div>
           <div>
-            <p className={authLabel}>Budget</p>
-            <div className="grid grid-cols-3 gap-2">{['Budget', 'Mid-range', 'Premium'].map(b => <button key={b} type="button" onClick={() => set('budget_preference', b)} className={`${authChip(form.budget_preference === b)} !text-xs`}>{b}</button>)}</div>
+            <p className={authLabel} style={authLabelStyle}>Budget</p>
+            <div className="grid grid-cols-3 gap-2">{['Budget', 'Mid-range', 'Premium'].map(b => <button key={b} type="button" onClick={() => set('budget_preference', b)} className={`${authChip(form.budget_preference === b)} !text-[11px]`} style={authChipStyle}>{b}</button>)}</div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             <div>
-              <p className={authLabel}>Sleep</p>
-              <div className="grid grid-cols-2 gap-2">{['Early Bird', 'Night Owl'].map(s => <button key={s} type="button" onClick={() => set('sleep_schedule', s)} className={`${authChip(form.sleep_schedule === s)} !text-xs !px-2`}>{s}</button>)}</div>
+              <p className={authLabel} style={authLabelStyle}>Sleep</p>
+              <div className="grid grid-cols-1 gap-2">{['Early bird', 'Night owl'].map(s => <button key={s} type="button" onClick={() => set('sleep_schedule', s)} className={`${authChip(form.sleep_schedule === s)} !text-[11px]`} style={authChipStyle}>{s}</button>)}</div>
             </div>
             <div>
-              <p className={authLabel}>Stay</p>
-              <div className="grid grid-cols-1 gap-2">{['Backpacker', 'Homestay', 'Hotels only'].map(c => <button key={c} type="button" onClick={() => set('comfort_level', c)} className={`${authChip(form.comfort_level === c)} !text-xs !py-1.5`}>{c}</button>)}</div>
+              <p className={authLabel} style={authLabelStyle}>Stay</p>
+              <div className="grid grid-cols-1 gap-2">{['Backpacker', 'Homestay', 'Hotels only'].map(c => <button key={c} type="button" onClick={() => set('comfort_level', c)} className={`${authChip(form.comfort_level === c)} !text-[11px]`} style={authChipStyle}>{c}</button>)}</div>
             </div>
           </div>
-          {error && <p className="flex items-start gap-2 text-sm text-red-700 bg-red-50 rounded-xl px-4 py-3"><AlertCircle size={16} className="mt-0.5 flex-shrink-0" /> {error}</p>}
+          {error && <p className="auth-error text-[13px]">{error}</p>}
           <div className="flex gap-3">
-            <button type="button" onClick={() => setStep(2)} className="inline-flex items-center justify-center gap-1.5 px-5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:border-gray-400"><ArrowLeft size={15} /> Back</button>
-            <button type="button" onClick={handleSubmit} disabled={loading} className={authButton} style={authButtonStyle}>{loading ? 'Creating your account…' : <>Create account <ArrowRight size={17} /></>}</button>
+            <button type="button" onClick={() => setStep(2)} className={authGhost} style={authButtonStyle}>Back</button>
+            <button type="button" onClick={handleSubmit} disabled={loading} className={authButton} style={authButtonStyle}>{loading ? 'Creating' : 'Create account'}</button>
           </div>
-          <button type="button" onClick={handleSubmit} disabled={loading} className="w-full text-center text-xs text-gray-400 hover:text-gray-700">Skip this step and create my account</button>
+          <button type="button" onClick={handleSubmit} disabled={loading} className="auth-sub w-full text-center text-[11px] uppercase hover:opacity-70" style={{ letterSpacing: '0.18em' }}>Skip and create account</button>
         </div>
       )}
     </AuthShell>
