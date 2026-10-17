@@ -50,7 +50,7 @@ export default function LoginPage() {
           </div>
         </div>
         {error && <p className="flex items-start gap-2 text-sm text-red-700 bg-red-50 rounded-xl px-4 py-3"><AlertCircle size={16} className="mt-0.5 flex-shrink-0" /> {error}</p>}
-        <button type="submit" disabled={loading || !form.email || !form.password} className={authButton} style={authButtonStyle}>
+        <button type="submit" disabled={loading} className={authButton} style={authButtonStyle}>
           {loading ? 'Signing in…' : <>Sign in <ArrowRight size={17} /></>}
         </button>
       </form>

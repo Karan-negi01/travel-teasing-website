@@ -265,5 +265,42 @@
 @media (prefers-reduced-motion: reduce) { .tt-fade-up, [style*="ttLogoFloat"], [style*="ttLogoIn"] { animation: none !important; } }
 
 /* ── Auth pages ── */
-[data-mode="dark"] .auth-glow { display: none; }
-[data-mode="dark"] .auth-input { background: rgba(255,255,255,.06) !important; color: #f3f4f6 !important; }
+@keyframes authKenBurns { from { transform: scale(1.04); } to { transform: scale(1.14); } }
+@keyframes authFloat    { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes authShine    { from { transform: translateX(-130%) skewX(-18deg); } to { transform: translateX(230%) skewX(-18deg); } }
+.auth-grain { opacity: .07; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); mix-blend-mode: overlay; }
+
+.auth-pane { background: #f6f9fb; }
+.auth-glow { position: absolute; border-radius: 9999px; pointer-events: none; filter: blur(10px); }
+.auth-glow-a { width: 480px; height: 480px; top: -200px; right: -160px; background: radial-gradient(circle, rgba(91,193,213,.35) 0%, rgba(91,193,213,0) 70%); }
+.auth-glow-b { width: 420px; height: 420px; bottom: -220px; left: -160px; background: radial-gradient(circle, rgba(232,101,26,.16) 0%, rgba(232,101,26,0) 70%); }
+.auth-card { background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 30px 80px -30px rgba(26,26,46,.28), 0 8px 24px -12px rgba(26,26,46,.12); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.auth-title { color: #1a1a2e; }
+.auth-sub, .auth-label { color: #5d6673; }
+.auth-divider { border-color: rgba(26,26,46,.08); }
+.auth-input { background: #ffffff; border: 1px solid #e3e9ee; color: #1a1a2e; box-shadow: 0 1px 2px rgba(26,26,46,.04); }
+.auth-input::placeholder { color: #9aa3ae; }
+.auth-input:hover { border-color: #cfdbe3; }
+.auth-input:focus { border-color: #5bc1d5; box-shadow: 0 0 0 4px rgba(91,193,213,.18), 0 1px 2px rgba(26,26,46,.04); }
+.auth-btn { box-shadow: 0 14px 30px -12px rgba(31,119,163,.65), 0 1px 0 rgba(255,255,255,.25) inset; }
+.auth-btn:hover { transform: translateY(-1px); box-shadow: 0 18px 36px -12px rgba(31,119,163,.75), 0 1px 0 rgba(255,255,255,.25) inset; }
+.auth-btn::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; left: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); transform: translateX(-130%) skewX(-18deg); }
+.auth-btn:hover::after { animation: authShine .9s ease; }
+.auth-btn:disabled { opacity: .75; transform: none; }
+.auth-chip { background: #fff; border: 1px solid #e3e9ee; color: #4b5563; }
+.auth-chip:hover { border-color: #9fd3df; }
+.auth-chip.is-on { background: #1a1a2e; border-color: #1a1a2e; color: #fff; box-shadow: 0 8px 18px -10px rgba(26,26,46,.6); }
+
+[data-mode="dark"] .auth-pane { background: #0d0f16; }
+[data-mode="dark"] .auth-glow-a { background: radial-gradient(circle, rgba(91,193,213,.18) 0%, rgba(91,193,213,0) 70%); }
+[data-mode="dark"] .auth-glow-b { background: radial-gradient(circle, rgba(232,101,26,.10) 0%, rgba(232,101,26,0) 70%); }
+[data-mode="dark"] .auth-card { background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.09); box-shadow: 0 30px 80px -30px rgba(0,0,0,.8); }
+[data-mode="dark"] .auth-title { color: #f5f6f8; }
+[data-mode="dark"] .auth-sub, [data-mode="dark"] .auth-label { color: #a2abb8; }
+[data-mode="dark"] .auth-divider { border-color: rgba(255,255,255,.08); }
+[data-mode="dark"] .auth-input { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); color: #f3f4f6; box-shadow: none; }
+[data-mode="dark"] .auth-input::placeholder { color: #6b7280; }
+[data-mode="dark"] .auth-input:focus { border-color: #5bc1d5; box-shadow: 0 0 0 4px rgba(91,193,213,.15); }
+[data-mode="dark"] .auth-chip { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); color: #cbd5e1; }
+[data-mode="dark"] .auth-chip.is-on { background: #5bc1d5; border-color: #5bc1d5; color: #0d0f16; }
+[data-mode="dark"] .auth-logo { filter: brightness(0) invert(1); }
