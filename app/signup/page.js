@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import GoogleButton, { OrDivider } from '@/components/GoogleButton';
 import AuthShell, { authInput, authLabel, authLabelStyle, authButton, authButtonStyle, authGhost, authChip, authChipStyle, authLink, preserveRedirect, safeRedirect } from '@/components/AuthShell';
 
 const TRIP_STYLES = ['Chill', 'Adventure', 'Cultural', 'Spiritual', 'Party', 'Photography', 'Trekking', 'Luxury'];
@@ -61,6 +62,12 @@ export default function SignupPage() {
       {/* thin progress line */}
       <div className="auth-track h-px w-full mb-10 relative"><div className="auth-track-fill absolute left-0 top-0 h-px transition-all duration-500" style={{ width: `${(step / 3) * 100}%` }} /></div>
 
+      {step === 1 && (
+        <>
+          <GoogleButton label="Sign up with Google" onError={setError} />
+          <OrDivider />
+        </>
+      )}
       {step === 1 && (
         <form onSubmit={e => { e.preventDefault(); next(); }} className="space-y-6" noValidate>
           <Field id="su-name" label="Full name"><input id="su-name" autoComplete="name" value={form.full_name} onChange={e => set('full_name', e.target.value)} className={authInput} /></Field>

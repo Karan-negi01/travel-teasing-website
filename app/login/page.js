@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import GoogleButton, { OrDivider } from '@/components/GoogleButton';
 import AuthShell, { authInput, authLabel, authLabelStyle, authButton, authButtonStyle, authLink, preserveRedirect, safeRedirect } from '@/components/AuthShell';
 
 export default function LoginPage() {
@@ -31,6 +32,8 @@ export default function LoginPage() {
       title="Sign in"
       footer={<p>New to Travel Teasing? <Link href={signupHref} className={authLink}>Create an account</Link></p>}
     >
+      <GoogleButton onError={setError} />
+      <OrDivider />
       <form onSubmit={handleSubmit} className="space-y-6" noValidate>
         <div>
           <label htmlFor="login-email" className={authLabel} style={authLabelStyle}>Email</label>

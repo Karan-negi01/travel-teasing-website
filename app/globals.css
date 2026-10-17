@@ -305,3 +305,9 @@
 [data-mode="dark"] .auth-chip.is-on { background: #5bc1d5; border-color: #5bc1d5; color: #0f1014; }
 [data-mode="dark"] .auth-track { background: #2c2f38; }
 [data-mode="dark"] .auth-track-fill { background: #5bc1d5; }
+.auth-google { background: transparent; border: 1px solid #1a1a2e; color: #1a1a2e; border-radius: 0; }
+.auth-google:hover { background: #ffffff; }
+.auth-rule { background: #e4e4df; }
+[data-mode="dark"] .auth-google { border-color: #3a3e4a; color: #f3f4f6; }
+[data-mode="dark"] .auth-google:hover { background: #15161c; border-color: #5bc1d5; }
+[data-mode="dark"] .auth-rule { background: #2c2f38; }
