@@ -24,7 +24,8 @@ export default function SignupPage() {
     if (!data.success) { setError(data.error); setLoading(false); return; }
     const { error: signInError } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
     if (signInError) { router.push('/login'); return; }
-    router.push('/dashboard');
+    const redirect = new URLSearchParams(window.location.search).get('redirect');
+    router.push(redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/dashboard');
   }
 
   return (

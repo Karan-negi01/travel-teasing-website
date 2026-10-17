@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import FloatingWhatsApp from './FloatingWhatsApp';
 import AnnouncementBar from './AnnouncementBar';
+import SiteLoader from './SiteLoader';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 // Pages where hero fills full viewport — navbar floats over them transparently
@@ -19,6 +20,7 @@ export default function ConditionalLayout({ children }) {
 
   return (
     <ThemeProvider>
+      <SiteLoader />
       {/* Fixed top: navbar */}
       <div className="fixed top-0 left-0 right-0 z-50">
         <Navbar />

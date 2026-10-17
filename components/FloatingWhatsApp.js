@@ -4,7 +4,7 @@ export default function FloatingWhatsApp() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <a
-        href="https://wa.me/916396464369?text=Hi! I'm interested in your travel packages."
+        href="https://wa.me/918510988703?text=Hi! I'm interested in your travel packages."
         target="_blank"
         rel="noopener noreferrer"
         className="relative flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-xl hover:bg-[#1ebe5d] transition-colors"

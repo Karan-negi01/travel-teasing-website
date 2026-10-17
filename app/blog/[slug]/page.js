@@ -65,7 +65,7 @@ export default function BlogPostPage({ params }) {
           <div className="mt-12 p-6 bg-[#fff8f3] rounded-2xl">
             <p className="font-bold text-[#1a1a2e] mb-2">Ready to plan your trip?</p>
             <p className="text-gray-500 text-sm mb-4">Talk to our travel experts and get a customized itinerary.</p>
-            <a href="https://wa.me/916396464369?text=Hi! I read your article and want to plan a similar trip." target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">WhatsApp Us Now</a>
+            <a href="https://wa.me/918510988703?text=Hi! I read your article and want to plan a similar trip." target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">WhatsApp Us Now</a>
           </div>
         </div>
 

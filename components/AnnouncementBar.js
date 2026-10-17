@@ -23,7 +23,7 @@ export default function AnnouncementBar({ onDismiss }) {
       <span>
         🏔️ New Batch: Spiti Valley July 2025 — Limited Seats |{' '}
         <a
-          href="https://wa.me/916396464369?text=Hi, I'm interested in the Spiti Valley July batch"
+          href="https://wa.me/918510988703?text=Hi, I'm interested in the Spiti Valley July batch"
           target="_blank"
           rel="noopener noreferrer"
           className="underline font-semibold text-[#5bc1d5] hover:text-[#5bc1d5]/80"

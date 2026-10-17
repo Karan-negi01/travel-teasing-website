@@ -54,7 +54,7 @@ export async function POST(request) {
   const body = await request.json();
   if (!body.destination) return NextResponse.json({ error: 'Destination is required' }, { status: 400 });
 
-  const { error: insertError } = await supabaseAdmin.from('user_trips').insert({
+  const { data: created, error: insertError } = await supabaseAdmin.from('user_trips').insert({
     user_id: user.id,
     package_id: body.package_id || null,
     destination: body.destination,
@@ -66,10 +66,11 @@ export async function POST(request) {
     cover_photo: body.cover_photo || null,
     caption: body.caption || null,
     booked_through_platform: body.booked_through_platform || false,
-  });
+    is_public: body.is_public === undefined ? true : !!body.is_public,
+  }).select('*').single();
 
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
 
   const newBadges = await checkAndAwardBadges(user.id);
-  return NextResponse.json({ success: true, new_badges: newBadges });
+  return NextResponse.json({ success: true, trip: created, new_badges: newBadges });
 }

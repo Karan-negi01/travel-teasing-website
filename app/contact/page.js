@@ -41,7 +41,7 @@ export default function ContactPage() {
             <h2 className="text-xl font-bold text-[#1a1a2e]">We're Here For You</h2>
             <p className="text-gray-500 text-sm leading-relaxed">Whether you have a specific destination in mind or just want to explore options, our travel experts are ready to help craft the perfect trip for you.</p>
             <div className="space-y-4">
-              <a href="https://wa.me/916396464369" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
+              <a href="https://wa.me/918510988703" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors">
                   <MessageCircle size={18} className="text-green-600" />
                 </div>

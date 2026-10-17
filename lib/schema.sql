@@ -66,6 +66,8 @@ create table if not exists user_trips (
   cover_photo text,
   caption text,
   booked_through_platform boolean default false,
+  is_public boolean default true,
+  community_trip_id uuid,
   created_at timestamptz default now()
 );
 
@@ -103,42 +105,6 @@ create table if not exists enquiries (
   group_size int,
   budget_per_person int,
   status text default 'new',
-  created_at timestamptz default now()
-);
-
--- GROUP TRIPS
-create table if not exists group_trips (
-  id uuid default gen_random_uuid() primary key,
-  package_id uuid references packages(id) on delete cascade,
-  package_title text,
-  package_slug text,
-  creator_name text not null,
-  creator_phone text not null,
-  creator_email text,
-  creator_user_id uuid references user_profiles(id) on delete set null,
-  departure_city text,
-  trip_dates_from date,
-  trip_dates_to date,
-  total_spots int not null,
-  filled_spots int default 1,
-  price_per_person int not null,
-  total_price int not null,
-  vibe_tags text[],
-  status text default 'open',
-  is_active boolean default true,
-  created_at timestamptz default now()
-);
-
--- GROUP TRIP JOIN REQUESTS
-create table if not exists group_trip_requests (
-  id uuid default gen_random_uuid() primary key,
-  group_trip_id uuid references group_trips(id) on delete cascade,
-  user_id uuid references user_profiles(id) on delete set null,
-  name text not null,
-  phone text not null,
-  email text,
-  message text,
-  status text default 'pending',
   created_at timestamptz default now()
 );
 
@@ -192,5 +158,50 @@ create table if not exists company_transactions (
   category text not null default 'other',
   transaction_date date not null default current_date,
   notes text,
+  created_at timestamptz default now()
+);
+
+-- COMMUNITY TRIPS (user-created trips on FIT packages) — see lib/migrations/2026-10-17-community-trips.sql
+create table if not exists community_trips (
+  id uuid default gen_random_uuid() primary key,
+  share_code text unique not null,
+  package_id uuid not null references packages(id) on delete cascade,
+  creator_id uuid not null references user_profiles(id) on delete cascade,
+  title text,
+  note text,
+  start_date date not null,
+  end_date date,
+  departure_city text,
+  total_spots int not null check (total_spots >= 2),
+  vibe_tags text[] default '{}',
+  gender_rule text not null default 'any' check (gender_rule in ('any','female','male')),
+  age_min int,
+  age_max int,
+  price_per_person int,
+  status text not null default 'open' check (status in ('open','full','confirmed','completed','cancelled')),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists community_trip_members (
+  id uuid default gen_random_uuid() primary key,
+  trip_id uuid not null references community_trips(id) on delete cascade,
+  user_id uuid not null references user_profiles(id) on delete cascade,
+  role text not null default 'member' check (role in ('creator','member')),
+  status text not null default 'requested' check (status in ('requested','approved','rejected','removed','left')),
+  payment_status text not null default 'pending' check (payment_status in ('pending','paid','refunded')),
+  message text,
+  created_at timestamptz default now(),
+  decided_at timestamptz,
+  unique(trip_id, user_id)
+);
+
+-- PERSONAL GALLERY photos (albums are user_trips rows; user_trips.is_public controls visibility)
+create table if not exists user_trip_photos (
+  id uuid default gen_random_uuid() primary key,
+  trip_id uuid not null references user_trips(id) on delete cascade,
+  url text not null,
+  caption text,
+  sort_order int default 0,
   created_at timestamptz default now()
 );

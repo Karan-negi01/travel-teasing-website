@@ -119,7 +119,7 @@ export default function PackageCard({ pkg, fromCategory, dark }) {
                 )}
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <a href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + pkg.title + '. Please share more details.')}
+                <a href={'https://wa.me/918510988703?text=' + encodeURIComponent('Hi! I\'m interested in ' + pkg.title + '. Please share more details.')}
                   target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
                   style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color 0.2s' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)">
@@ -212,7 +212,7 @@ export default function PackageCard({ pkg, fromCategory, dark }) {
 
             <div className="flex flex-row items-center gap-1.5">
               <a
-                href={'https://wa.me/916396464369?text=' + encodeURIComponent('Hi! I\'m interested in ' + pkg.title + '. Please share more details.')}
+                href={'https://wa.me/918510988703?text=' + encodeURIComponent('Hi! I\'m interested in ' + pkg.title + '. Please share more details.')}
                 target="_blank" rel="noopener noreferrer"
                 className="cursor-pointer rounded-full border-[2px] border-gray-300 p-2 flex items-center justify-center transition-all duration-500 hover:border-gray-500"
                 aria-label="WhatsApp">

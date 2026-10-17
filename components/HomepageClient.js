@@ -8,6 +8,8 @@ import {
   MessageCircle, Play, MapPin, Search, Volume2, VolumeX
 } from 'lucide-react';
 import PackageCard from './PackageCard';
+import CommunityTripCard from './CommunityTripCard';
+import { CT } from '@/lib/communityTrips';
 import EnquiryModal from './EnquiryModal';
 import InstagramIcon from './InstagramIcon';
 import { CATEGORY_THEMES } from '@/contexts/ThemeContext';
@@ -203,7 +205,7 @@ const staticTestimonials = [
 const footerLinks = {
   Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/group-trips'], ['Blog', '/blog'], ['About Us', '/about']],
   'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
-  Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/916396464369'], ['FAQ', '/#faq']],
+  Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/918510988703'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
 };
 
@@ -316,6 +318,7 @@ export default function HomepageClient() {
   const [groupPackages, setGroupPackages] = useState([]);
   const [fitPackages, setFitPackages]   = useState([]);
   const [weekendPackages, setWeekendPackages] = useState([]);
+  const [communityTrips, setCommunityTrips] = useState([]);
   const [testimonials, setTestimonials]   = useState([]);
   const [blogs, setBlogs]               = useState([]);
   const [activeWorld, setActiveWorld]     = useState(7);
@@ -398,6 +401,7 @@ export default function HomepageClient() {
         setFitPackages(combined.slice(0, 12));
       });
     });
+    fetch('/api/community-trips?status=open&limit=8').then(r => r.json()).then(d => setCommunityTrips(d.trips || [])).catch(() => {});
     fetch('/api/packages?category=weekend').then(r => r.json()).then(d => setWeekendPackages((d.packages || []).slice(0, 8)));
     fetch('/api/testimonials').then(r => r.json()).then(d => setTestimonials(d.testimonials || []));
     fetch('/api/blogs').then(r => r.json()).then(d => {
@@ -623,7 +627,7 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── BANNER 1 — Community Trips ── */}
+      {/* ── BANNER 1 — Fixed Departures ── */}
       <PromoBanner b={banners[0]} />
 
       {/* ── EXPLORE DESTINATIONS (World + Domestic combined) ──────── */}
@@ -833,10 +837,42 @@ export default function HomepageClient() {
         );
       })()}
 
+      {/* ── COMMUNITY TRIPS — trips created by travellers on FIT packages ── */}
+      <section className="relative py-16 md:py-24 px-4 bg-white">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">
+              <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>{CT.label.split(' ')[0]} </span>
+              <span>{CT.label.split(' ').slice(1).join(' ')}</span>
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">{CT.tagline}</p>
+          </div>
+          {communityTrips.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-gray-200 bg-[#fafafa] p-10 text-center max-w-3xl mx-auto">
+              <div className="text-4xl mb-3">🧭</div>
+              <p className="text-lg font-semibold text-[#1a1a2e]">Be the first to start a trip</p>
+              <p className="text-sm text-gray-500 mt-1 max-w-md mx-auto">Pick any FIT package, set your group size, vibe and rules, then share the link. Travellers request to join and you approve your crew.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+              {communityTrips.slice(0, 4).map(t => <CommunityTripCard key={t.id} trip={t} />)}
+            </div>
+          )}
+          <div className="mt-8 flex justify-center gap-3 flex-wrap">
+            <Link href={CT.base} className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
+              View all {CT.label.toLowerCase()} <ArrowRight size={14} />
+            </Link>
+            <Link href={`${CT.base}/new`} className="inline-flex items-center gap-2 rounded-full bg-[#1a1a1a] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[#333]">
+              Create a trip
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── BANNER 2 — Weekend Escapes ── */}
       <PromoBanner b={banners[1]} />
 
-      {/* ── UPCOMING COMMUNITY TRIPS ─────────────────────────────── */}
+      {/* ── UPCOMING FIXED DEPARTURES — Travel Teasing's own Group departures ── */}
       {(() => {
         const allCommunity = groupPackages;
         const filteredCommunity = (() => {
@@ -1179,7 +1215,7 @@ export default function HomepageClient() {
                 className="flex-1 bg-[#5bc1d5] text-white py-3 px-6 rounded-full font-semibold text-sm hover:bg-[#4ab0c4] transition-colors shadow-lg shadow-[#5bc1d5]/20">
                 Plan Your Trip
               </button>
-              <a href="https://wa.me/916396464369?text=Hi! I want to plan a trip." target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/918510988703?text=Hi! I want to plan a trip." target="_blank" rel="noopener noreferrer"
                 className="flex-1 border border-white/20 text-white py-3 px-6 rounded-full font-semibold text-sm text-center hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
                 <MessageCircle size={15} /> WhatsApp Us
               </a>
@@ -1201,7 +1237,7 @@ export default function HomepageClient() {
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">
                   <InstagramIcon size={13} />
                 </a>
-                <a href="https://wa.me/916396464369" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/918510988703" target="_blank" rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#f2f2f2]/60 hover:text-[#5bc1d5] hover:bg-white/15 transition-all">
                   <MessageCircle size={13} />
                 </a>

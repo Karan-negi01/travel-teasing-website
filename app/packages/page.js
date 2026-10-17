@@ -433,7 +433,7 @@ function ItineraryTeaser({ itinerary, catTheme }) {
             <p style={{ fontSize: '20px', fontWeight: 800, color: '#fff', fontFamily: "'Poppins', sans-serif", margin: '0 0 6px', letterSpacing: '-0.3px' }}>Want a custom itinerary?</p>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: "'Poppins', sans-serif", margin: 0 }}>Tell us your dates, group size and budget — we'll craft it for you.</p>
           </div>
-          <a href="https://wa.me/916396464369?text=Hi! I want a custom itinerary." target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/918510988703?text=Hi! I want a custom itinerary." target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", whiteSpace: 'nowrap', boxShadow: `0 8px 28px ${catTheme.primary}50`, transition: 'transform 0.15s ease' }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
@@ -706,7 +706,7 @@ function PackagesContent() {
                 <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: `${catTheme.primary}20`, border: `1px solid ${catTheme.primary}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>{catTheme.emoji}</div>
                 <h3 style={{ fontSize: '20px', fontWeight: 700, color: c.textPrimary, marginBottom: '8px', fontFamily: "'Poppins', sans-serif" }}>Packages coming soon</h3>
                 <p style={{ color: c.textMuted, marginBottom: '32px', fontFamily: "'Poppins', sans-serif", fontSize: '14px', maxWidth: '320px', margin: '0 auto 32px', lineHeight: 1.7 }}>We're handpicking the best trips. Drop us a message for a custom package!</p>
-                <a href="https://wa.me/916396464369?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/918510988703?text=Hi! I need a custom travel package." target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: catTheme.primary, color: '#fff', padding: '13px 28px', borderRadius: '999px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', fontFamily: "'Poppins', sans-serif", boxShadow: `0 8px 28px ${catTheme.primary}50` }}>
                   <MessageCircle size={16} /> Chat on WhatsApp
                 </a>

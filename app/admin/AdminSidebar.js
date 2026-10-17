@@ -1,12 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, MessageSquare, Users, Star, BookOpen, Image, CreditCard, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, Package, MessageSquare, Users, Star, BookOpen, Image, CreditCard, ExternalLink, Compass } from 'lucide-react';
 
 const navItems = [
   { href: '/admin',              label: 'Dashboard',    icon: LayoutDashboard },
   { href: '/admin/packages',     label: 'Packages',     icon: Package },
   { href: '/admin/enquiries',    label: 'Enquiries',    icon: MessageSquare },
+  { href: '/admin/community-trips', label: 'Community Trips', icon: Compass },
   { href: '/admin/transactions', label: 'Transactions', icon: CreditCard },
   { href: '/admin/users',        label: 'Users',        icon: Users },
   { href: '/admin/testimonials', label: 'Testimonials', icon: Star },

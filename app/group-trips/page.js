@@ -45,8 +45,8 @@ function GroupTripsContent() {
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 container-max">
           <p className="text-white/60 text-sm mb-2">Home / Group Trips</p>
-          <h1 className="text-3xl md:text-5xl font-bold text-white">Community Group Trips</h1>
-          <p className="text-white/80 mt-2">Curated group trips for every kind of traveler</p>
+          <h1 className="text-3xl md:text-5xl font-bold text-white">Group Departures</h1>
+          <p className="text-white/80 mt-2">Travel Teasing&apos;s own fixed departures, led by a trip captain</p>
         </div>
       </section>
 
@@ -90,7 +90,7 @@ function GroupTripsContent() {
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🌍</div>
             <h3 className="text-xl font-bold text-[#1a1a2e] mb-2">No group trips available yet</h3>
-            <p className="text-gray-500 mb-6">Check back soon — new trips are added regularly.</p>
+            <p className="text-gray-500 mb-6">Check back soon — new departures are added regularly.</p>
             <Link href="/packages" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#333] transition-all">
               Browse All Packages
             </Link>

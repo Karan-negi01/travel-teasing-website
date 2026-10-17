@@ -59,7 +59,7 @@ export default function SacredPlacesPage() {
             <div className="text-4xl mb-4">🛕</div>
             <h3 className="text-xl font-bold text-[#1a1a2e] mb-3">Planning a Large Yatra Group?</h3>
             <p className="text-gray-500 mb-5">Contact us for special group arrangements — dedicated transport, accommodation blocks, and special darshan facilitation for groups of 25+.</p>
-            <a href="https://wa.me/916396464369?text=Hi! I'm planning a large yatra group and need special arrangements." target="_blank" rel="noopener noreferrer" className="btn-primary">WhatsApp for Group Yatra</a>
+            <a href="https://wa.me/918510988703?text=Hi! I'm planning a large yatra group and need special arrangements." target="_blank" rel="noopener noreferrer" className="btn-primary">WhatsApp for Group Yatra</a>
           </div>
         </div>
       </section>

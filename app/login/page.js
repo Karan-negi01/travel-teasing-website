@@ -16,7 +16,8 @@ export default function LoginPage() {
     setLoading(true); setError('');
     const { error: err } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
     if (err) { setError(err.message); setLoading(false); return; }
-    router.push('/dashboard');
+    const redirect = new URLSearchParams(window.location.search).get('redirect');
+    router.push(redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/dashboard');
   }
 
   return (
