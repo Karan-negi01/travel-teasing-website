@@ -67,7 +67,7 @@ export default function Navbar() {
             : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.86)',
           backdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
-          borderBottom: transparent || menuOpen ? '1px solid transparent' : '1px solid rgba(255,255,255,0.08)',
+          borderBottom: 'none',
           transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
           fontFamily: "'Poppins', sans-serif",
         }}>
