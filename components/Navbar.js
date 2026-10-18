@@ -30,7 +30,7 @@ export default function Navbar() {
   const [user, setUser]                 = useState(null);
   const pathname                        = usePathname();
   const { theme, category, applyTheme, darkMode, toggleDarkMode } = useTheme();
-  const isHeroPage = ['/', '/packages', '/about'].includes(pathname);
+  const isHeroPage = ['/', '/packages', '/about', '/community-trips'].includes(pathname) || (pathname?.startsWith('/community-trips/') && pathname !== '/community-trips/new') || pathname?.startsWith('/profile/');
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -56,31 +56,19 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── FLOATING PILL NAVBAR ── */}
-      <div style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-        display: 'flex', justifyContent: 'center',
-        padding: menuOpen ? '16px 24px' : (scrolled ? '10px 24px' : '16px 24px'),
-        transition: 'padding 0.4s ease',
-        pointerEvents: 'none',
-      }}>
-        <nav style={{
+      {/* ── FULL-WIDTH NAVBAR ── */}
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
+        <nav className="px-4 sm:px-8" style={{
           pointerEvents: 'auto',
           display: 'flex', alignItems: 'center',
-          gap: '0',
-          height: '62px',
+          width: '100%', height: scrolled && !menuOpen ? '64px' : '76px',
           background: menuOpen
-            ? 'rgba(10,10,10,0.92)'
-            : 'rgba(10,10,10,0.78)',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: '999px',
-          padding: '0 6px 0 16px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+            ? 'rgba(10,10,10,0.95)'
+            : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.85)',
+          backdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
+          borderBottom: transparent || menuOpen ? '1px solid transparent' : '1px solid rgba(255,255,255,0.08)',
           transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
-          overflow: 'visible',
-          minWidth: 0,
         }}>
 
           {/* ── LOGO ── */}
@@ -93,7 +81,7 @@ export default function Navbar() {
               src="/logo.png"
               alt="Travel Teasing"
               style={{
-                height: '50px',
+                height: '52px',
                 width: 'auto',
                 filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`,
                 transition: 'filter 0.5s ease',
@@ -118,7 +106,7 @@ export default function Navbar() {
           </Link>
 
           {/* Divider */}
-          <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.12)', margin: '0 14px', flexShrink: 0 }} />
+          <div className="hidden lg:block" style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.12)', margin: '0 22px 0 18px', flexShrink: 0 }} />
 
           {/* ── DESKTOP QUICK LINKS ── */}
           <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '2px' }}>
@@ -146,11 +134,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Divider */}
-          <div className="hidden lg:block" style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.12)', margin: '0 14px', flexShrink: 0 }} />
-
           {/* ── RIGHT ACTIONS ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginLeft: 'auto' }}>
             {/* Dark / Light toggle */}
             <button
               onClick={toggleDarkMode}

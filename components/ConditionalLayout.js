@@ -10,7 +10,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 // Pages where hero fills full viewport — navbar floats over them transparently
 const HERO_PAGES = ['/', '/packages', '/about'];
 const AUTH_PAGES = ['/login', '/signup', '/auth/callback'];
-const isHeroPath = (path) => HERO_PAGES.includes(path) || path?.startsWith('/packages/');
+const isHeroPath = (path) => HERO_PAGES.includes(path) || path?.startsWith('/packages/') || path === '/community-trips' || (path?.startsWith('/community-trips/') && path !== '/community-trips/new') || path?.startsWith('/profile/');
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -33,7 +33,7 @@ export default function ConditionalLayout({ children }) {
         Hero pages (/, /packages, etc.) have a full-screen first section
         so they don't need the spacer — the navbar floats transparently over the hero.
       */}
-      {!isHero && <div className="h-[100px]" />}
+      {!isHero && <div className="h-[76px]" />}
 
       {/* pb-16 on mobile to avoid content hiding behind bottom nav */}
       <main className="flex-1 pb-16 md:pb-0">{children}</main>
