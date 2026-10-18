@@ -90,7 +90,6 @@ export default function Navbar() {
               { label: 'FIT',       href: '/packages?category=fit' },
               { label: 'Groups',    href: '/packages?category=groups' },
               { label: 'Community', href: '/community-trips' },
-              { label: 'Blog',      href: '/blog' },
             ].map(({ label, href }) => (
               <Link key={label} href={href} className={`tt-nav-link${pathname === href.split('?')[0] && (href.includes('?') ? false : true) ? ' is-active' : ''}`}>{label}</Link>
             ))}
