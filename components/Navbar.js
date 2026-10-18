@@ -84,7 +84,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── CENTER LINKS (desktop) ── */}
-          <div className="hidden lg:flex" style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, transform: 'translateX(-50%)', alignItems: 'center', gap: '34px' }}>
+          <div className="hidden lg:flex" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 'clamp(14px, 2.2vw, 34px)', padding: '0 20px', minWidth: 0 }}>
             <ExploreDropdown theme={theme} pathname={pathname} />
             {[
               { label: 'FIT',       href: '/packages?category=fit' },
@@ -282,12 +282,6 @@ export default function Navbar() {
       </nav>
 
       <style>{`
-        .tt-nav-link { position: relative; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none; padding: 6px 0; white-space: nowrap; transition: color 0.2s ease; }
-        .tt-nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--theme-primary, #5bc1d5); transform: scaleX(0); transform-origin: left; transition: transform 0.25s ease; }
-        .tt-nav-link:hover, .tt-nav-link.is-active { color: #fff; }
-        .tt-nav-link:hover::after, .tt-nav-link.is-active::after { transform: scaleX(1); }
-        .tt-nav-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; border: none; background: transparent; color: rgba(255,255,255,0.78); cursor: pointer; transition: background 0.2s, color 0.2s; }
-        .tt-nav-icon:hover { background: rgba(255,255,255,0.1); color: #fff; }
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
           to   { opacity: 1; transform: translateY(0); }
