@@ -2,7 +2,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Globe, Lock, Upload, Trash2, Star, X, Camera, ArrowRight, Pencil, AlertCircle } from 'lucide-react';
+import { Plus, Globe, Lock, Upload, Trash2, Star, X, Camera, ArrowRight, Pencil, AlertCircle, LogOut } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import { useSession, loginHref } from '@/lib/useSession';
 import { CT, TRIP_STATUS } from '@/lib/communityTrips';
 import CommunityTripCard from '@/components/CommunityTripCard';
@@ -214,6 +215,7 @@ function DashboardContent() {
             <div className="flex gap-2 flex-wrap">
               <Link href={`${CT.base}/new`} className={pillCls(true)}><Plus size={15} /> Create a trip</Link>
               <button onClick={() => setNewAlbum(true)} className={pillCls(false)}><Camera size={15} /> New album</button>
+              <button onClick={async () => { await supabase.auth.signOut(); router.push('/'); }} className={pillCls(false)} title="Log out"><LogOut size={15} /> Log out</button>
             </div>
           </div>
 

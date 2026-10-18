@@ -58,142 +58,79 @@ export default function Navbar() {
     <>
       {/* ── FULL-WIDTH NAVBAR ── */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
-        <nav className="px-4 sm:px-8" style={{
-          pointerEvents: 'auto',
-          display: 'flex', alignItems: 'center',
+        <nav className="px-5 sm:px-8 lg:px-10" style={{
+          pointerEvents: 'auto', position: 'relative',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           width: '100%', height: scrolled && !menuOpen ? '64px' : '76px',
           background: menuOpen
             ? 'rgba(10,10,10,0.95)'
-            : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.85)',
+            : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.86)',
           backdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
           borderBottom: transparent || menuOpen ? '1px solid transparent' : '1px solid rgba(255,255,255,0.08)',
           transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
+          fontFamily: "'Poppins', sans-serif",
         }}>
 
           {/* ── LOGO ── */}
-          <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{
-            display: 'flex', alignItems: 'center',
-            textDecoration: 'none', flexShrink: 0, marginRight: '4px',
-          }}>
+          <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.png"
-              alt="Travel Teasing"
-              style={{
-                height: '52px',
-                width: 'auto',
-                filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`,
-                transition: 'filter 0.5s ease',
-                objectFit: 'contain',
-              }}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextSibling.style.display = 'flex';
-              }}
-            />
-            {/* Fallback text logo */}
-            <span style={{
-              display: 'none', alignItems: 'center', gap: '6px',
-              fontSize: '14px', fontWeight: 700,
-              fontFamily: "'Poppins', sans-serif",
-              letterSpacing: '-0.2px', color: '#fff',
-              whiteSpace: 'nowrap',
-            }}>
-              <span style={{ fontSize: '18px' }}>{theme.emoji}</span>
-              Travel Teasing
+            <img src="/logo.png" alt="Travel Teasing"
+              style={{ height: '46px', width: 'auto', objectFit: 'contain', filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`, transition: 'filter 0.5s ease' }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
+            <span style={{ display: 'none', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px', color: '#fff', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '18px' }}>{theme.emoji}</span> Travel Teasing
             </span>
           </Link>
 
-          {/* Divider */}
-          <div className="hidden lg:block" style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.12)', margin: '0 22px 0 18px', flexShrink: 0 }} />
-
-          {/* ── DESKTOP QUICK LINKS ── */}
-          <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '2px' }}>
-            {/* EXPLORE with category dropdown */}
+          {/* ── CENTER LINKS (desktop) ── */}
+          <div className="hidden lg:flex" style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, transform: 'translateX(-50%)', alignItems: 'center', gap: '34px' }}>
             <ExploreDropdown theme={theme} pathname={pathname} />
             {[
-              { label: 'FIT',    href: '/packages?category=fit' },
-              { label: 'GROUPS', href: '/packages?category=groups' },
+              { label: 'FIT',       href: '/packages?category=fit' },
+              { label: 'Groups',    href: '/packages?category=groups' },
+              { label: 'Community', href: '/community-trips' },
+              { label: 'Blog',      href: '/blog' },
             ].map(({ label, href }) => (
-              <Link key={label} href={href} style={{
-                fontSize: '14px', fontWeight: 500, padding: '6px 14px',
-                borderRadius: '999px', textDecoration: 'none',
-                fontFamily: "'Poppins', sans-serif",
-                color: pathname === href ? '#fff' : 'rgba(255,255,255,0.52)',
-                background: pathname === href ? 'rgba(255,255,255,0.1)' : 'transparent',
-                transition: 'all 0.15s', whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-              onMouseLeave={e => {
-                const active = pathname === href;
-                e.currentTarget.style.color = active ? '#fff' : 'rgba(255,255,255,0.52)';
-                e.currentTarget.style.background = active ? 'rgba(255,255,255,0.1)' : 'transparent';
-              }}
-              >{label}</Link>
+              <Link key={label} href={href} className={`tt-nav-link${pathname === href.split('?')[0] && (href.includes('?') ? false : true) ? ' is-active' : ''}`}>{label}</Link>
             ))}
           </div>
 
           {/* ── RIGHT ACTIONS ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginLeft: 'auto' }}>
-            {/* Dark / Light toggle */}
-            <button
-              onClick={toggleDarkMode}
-              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '36px', height: '36px', borderRadius: '50%',
-                background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                cursor: 'pointer', transition: 'all 0.2s ease',
-                color: darkMode ? '#fbbf24' : '#e5e7eb',
-                flexShrink: 0,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.15)'; }}
-            >
-              {darkMode ? <Sun size={15} strokeWidth={2} /> : <Moon size={15} strokeWidth={2} />}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+            <button onClick={toggleDarkMode} title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'} className="tt-nav-icon" aria-label="Toggle theme">
+              {darkMode ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
             </button>
-            {!menuOpen && !user && (
-              <Link href="/group-trips" className="hidden lg:flex" style={{
-                fontSize: '14px', fontWeight: 600, color: theme.primary,
-                textDecoration: 'none', padding: '7px 16px', borderRadius: '999px',
-                border: `1px solid ${theme.primary}55`,
-                background: `${theme.primary}18`,
-                fontFamily: "'Poppins', sans-serif",
-                whiteSpace: 'nowrap', transition: 'all 0.15s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = `${theme.primary}30`; }}
-              onMouseLeave={e => { e.currentTarget.style.background = `${theme.primary}18`; }}
-              >Upcoming Trips</Link>
+
+            {user ? (
+              <Link href="/dashboard" title="Your dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '4px 6px 4px 4px', marginLeft: '4px' }}>
+                <span style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.35)', background: 'rgba(255,255,255,0.08)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600, overflow: 'hidden' }}>
+                  {user.user_metadata?.avatar_url
+                    // eslint-disable-next-line @next/next/no-img-element
+                    ? <img src={user.user_metadata.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : (user.user_metadata?.full_name || user.email || 'T').trim().charAt(0).toUpperCase()}
+                </span>
+                <span className="hidden xl:inline" style={{ fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>Dashboard</span>
+              </Link>
+            ) : (
+              <Link href="/login" className="hidden sm:inline-flex tt-nav-link" style={{ padding: '8px 12px', marginLeft: '4px' }}>Log in</Link>
             )}
 
-            {/* Menu button */}
-            <button
-              onClick={() => setMenuOpen(o => !o)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '7px',
-                background: menuOpen ? '#fff' : theme.primary,
-                border: 'none', borderRadius: '999px',
-                padding: '8px 16px', cursor: 'pointer',
-                color: menuOpen ? '#1a1a1a' : '#fff',
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: '14px', fontWeight: 700,
-                transition: 'all 0.25s', whiteSpace: 'nowrap',
-                letterSpacing: '0.01em',
-              }}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? (
-                <><X size={13} strokeWidth={2.5} /> Close</>
-              ) : (
-                <>
-                  <span style={{ display: 'flex', flexDirection: 'column', gap: '3.5px' }}>
-                    <span style={{ display: 'block', width: '13px', height: '1.5px', background: 'currentColor', borderRadius: '2px' }} />
-                    <span style={{ display: 'block', width: '9px', height: '1.5px', background: 'currentColor', borderRadius: '2px' }} />
-                  </span>
-                  Menu
-                </>
+            <Link href="/group-trips" className="hidden md:inline-flex" style={{
+              alignItems: 'center', gap: '8px', marginLeft: '8px',
+              background: '#fff', color: '#0d0d0d', fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+              padding: '11px 20px', borderRadius: '999px', textDecoration: 'none', whiteSpace: 'nowrap', transition: 'transform 0.2s, background 0.2s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+            >Upcoming Trips</Link>
+
+            <button onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu" className="tt-nav-icon" style={{ marginLeft: '6px', border: '1px solid rgba(255,255,255,0.16)', width: '42px', height: '42px', background: menuOpen ? '#fff' : 'transparent', color: menuOpen ? '#0d0d0d' : '#fff' }}>
+              {menuOpen ? <X size={16} strokeWidth={2} /> : (
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-end' }}>
+                  <span style={{ display: 'block', width: '18px', height: '1.5px', background: 'currentColor' }} />
+                  <span style={{ display: 'block', width: '12px', height: '1.5px', background: 'currentColor' }} />
+                </span>
               )}
             </button>
           </div>
@@ -345,6 +282,12 @@ export default function Navbar() {
       </nav>
 
       <style>{`
+        .tt-nav-link { position: relative; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none; padding: 6px 0; white-space: nowrap; transition: color 0.2s ease; }
+        .tt-nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--theme-primary, #5bc1d5); transform: scaleX(0); transform-origin: left; transition: transform 0.25s ease; }
+        .tt-nav-link:hover, .tt-nav-link.is-active { color: #fff; }
+        .tt-nav-link:hover::after, .tt-nav-link.is-active::after { transform: scaleX(1); }
+        .tt-nav-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; border: none; background: transparent; color: rgba(255,255,255,0.78); cursor: pointer; transition: background 0.2s, color 0.2s; }
+        .tt-nav-icon:hover { background: rgba(255,255,255,0.1); color: #fff; }
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -399,21 +342,9 @@ function ExploreDropdown({ theme, pathname }) {
       onMouseLeave={handleLeave}>
 
       {/* Trigger button */}
-      <button style={{
-        fontSize: '14px', fontWeight: 500, padding: '6px 14px',
-        borderRadius: '999px', border: 'none', cursor: 'pointer',
-        fontFamily: "'Poppins', sans-serif",
-        color: open ? '#fff' : 'rgba(255,255,255,0.52)',
-        background: open ? 'rgba(255,255,255,0.1)' : 'transparent',
-        transition: 'all 0.15s', whiteSpace: 'nowrap',
-        display: 'flex', alignItems: 'center', gap: '5px',
-      }}>
-        EXPLORE
-        <span style={{
-          display: 'inline-block', fontSize: '8px', opacity: 0.45,
-          transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.2s ease', marginTop: '1px',
-        }}>▾</span>
+      <button className={`tt-nav-link${open ? ' is-active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+        Explore
+        <span style={{ display: 'inline-block', fontSize: '8px', opacity: 0.6, transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', marginTop: '1px' }}>▾</span>
       </button>
 
       {/* Invisible bridge — keeps hover alive between button and panel */}
@@ -421,9 +352,9 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '62px', left: '50%',
+          position: 'fixed', top: '60px', left: '50%',
           transform: 'translateX(-50%)',
-          width: '800px', height: '14px',
+          width: '800px', height: '24px',
           pointerEvents: open ? 'auto' : 'none',
           zIndex: 201,
         }} />
@@ -433,7 +364,7 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '76px', left: '50%',
+          position: 'fixed', top: '84px', left: '50%',
           width: '800px',
           background: '#0c0c0c',
           border: '1px solid rgba(255,255,255,0.07)',
