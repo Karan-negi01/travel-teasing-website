@@ -46,7 +46,7 @@ const destImages = [
   ['russia|northern lights',            'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80'],
 ];
 
-function getDestImage(pkg) {
+export function getDestImage(pkg) {
   // keyword mapping takes priority — DB cover_image only if no match (avoids broken DB URLs)
   const text = `${pkg.title || ''} ${pkg.location || ''} ${pkg.state || ''}`.toLowerCase();
   for (const [keys, url] of destImages) {

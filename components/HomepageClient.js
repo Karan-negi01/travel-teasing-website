@@ -848,10 +848,10 @@ export default function HomepageClient() {
             <p className="mt-3 text-sm md:text-base text-gray-800 tracking-wide">{CT.tagline}</p>
           </div>
           {communityTrips.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-gray-200 bg-[#fafafa] p-10 text-center max-w-3xl mx-auto">
-              <div className="text-4xl mb-3">🧭</div>
-              <p className="text-lg font-semibold text-[#1a1a2e]">Be the first to start a trip</p>
-              <p className="text-sm text-gray-500 mt-1 max-w-md mx-auto">Pick any FIT package, set your group size, vibe and rules, then share the link. Travellers request to join and you approve your crew.</p>
+            <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center max-w-3xl mx-auto">
+              <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-3">Be the first</p>
+              <p className="text-xl font-semibold text-gray-800">No trips are forming right now</p>
+              <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">Pick any FIT package, set your group size, vibe and rules, then share the link. Travellers request to join and you approve your crew.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
@@ -862,8 +862,8 @@ export default function HomepageClient() {
             <Link href={CT.base} className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
               View all {CT.label.toLowerCase()} <ArrowRight size={14} />
             </Link>
-            <Link href={`${CT.base}/new`} className="inline-flex items-center gap-2 rounded-full bg-[#1a1a1a] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[#333]">
-              Create a trip
+            <Link href={`${CT.base}/new`} className="inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-800 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition">
+              Create a trip <ArrowRight size={14} />
             </Link>
           </div>
         </div>

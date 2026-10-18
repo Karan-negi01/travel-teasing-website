@@ -1,22 +1,26 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Plus, Search, Compass, Users, ShieldCheck, X } from 'lucide-react';
+import { Search, Plus, ArrowRight, X } from 'lucide-react';
 import CommunityTripCard from '@/components/CommunityTripCard';
-import { CT, VIBES, GENDER_RULES } from '@/lib/communityTrips';
+import { PageHero, Pill, Button, SectionTitle, Eyebrow, Card, inputStyle, usePalette, Spinner } from '@/components/ui';
+import { CT, VIBES, GENDER_RULES, approvedCount } from '@/lib/communityTrips';
 import { useSession, loginHref } from '@/lib/useSession';
 
+const HERO = 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1800&q=85';
 const STEPS = [
-  { icon: Compass,     title: 'Pick an FIT package',   text: 'Any personalised package can become a trip. Dates are yours to choose.' },
-  { icon: ShieldCheck, title: 'Set your rules',        text: 'Group size, vibe, women-only or mixed, age range. Your trip, your call.' },
-  { icon: Users,       title: 'Approve your crew',     text: 'Travellers request to join. You see their profile and past trips before saying yes.' },
+  ['01', 'Pick an FIT package', 'Any personalised package can become a trip. The dates are yours to choose.'],
+  ['02', 'Set your rules', 'Group size, vibe, women-only or mixed, age range. Your trip, your call.'],
+  ['03', 'Approve your crew', 'Travellers request to join. You see their profile and past trips before saying yes.'],
+  ['04', 'Pay when it is full', 'Travel Teasing confirms the price for your group size and collects payment on WhatsApp.'],
 ];
 
 function ListingContent() {
   const sp = useSearchParams();
   const pkgSlug = sp.get('package') || '';
   const { user } = useSession();
+  const p = usePalette();
   const [trips, setTrips] = useState(null);
   const [q, setQ] = useState('');
   const [vibe, setVibe] = useState('');
@@ -30,117 +34,116 @@ function ListingContent() {
     fetch(`/api/community-trips?${params}`).then(r => r.json()).then(d => setTrips(d.trips || [])).catch(() => setTrips([]));
   }, [status, pkgSlug]);
 
-  const filtered = (trips || []).filter(t => {
+  const filtered = useMemo(() => (trips || []).filter(t => {
     const hay = `${t.title || ''} ${t.packages?.title || ''} ${t.packages?.location || ''} ${t.packages?.state || ''} ${t.departure_city || ''}`.toLowerCase();
     if (q && !hay.includes(q.toLowerCase())) return false;
     if (vibe && !(t.vibe_tags || []).includes(vibe)) return false;
     if (gender && t.gender_rule !== gender) return false;
     return true;
-  });
+  }), [trips, q, vibe, gender]);
+
+  const stats = useMemo(() => {
+    const list = trips || [];
+    return [
+      { value: `${list.length}`, label: status === 'open' ? 'Open trips' : 'Trips' },
+      { value: `${list.reduce((n, t) => n + approvedCount(t), 0)}`, label: 'Travellers' },
+      { value: `${new Set(list.map(t => t.packages?.location).filter(Boolean)).size}`, label: 'Destinations' },
+    ];
+  }, [trips, status]);
 
   const createHref = user ? `${CT.base}/new${pkgSlug ? `?package=${encodeURIComponent(pkgSlug)}` : ''}` : loginHref(`${CT.base}/new`);
 
   return (
-    <div className="bg-[#fafafa] min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg,#1a1a2e 0%,#12343f 55%,#1f77a3 140%)' }}>
-        <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full opacity-20" style={{ background: 'radial-gradient(circle,#5bc1d5,transparent 70%)' }} />
-        <div className="container-max relative py-14 md:py-20">
-          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5] mb-3">Travel together</p>
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-2xl" style={{ fontFamily: "'Playfair Display', serif" }}>{CT.label}</h1>
-          <p className="text-white/75 mt-3 max-w-xl text-sm md:text-base">{CT.tagline}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link href={createHref} className="btn-primary text-sm"><Plus size={16} /> Create a trip</Link>
-            <a href="#how" className="btn-white text-sm">How it works</a>
-          </div>
-        </div>
-      </section>
+    <div style={{ background: p.pageBg, minHeight: '100vh', fontFamily: p.font }}>
+      <PageHero
+        image={HERO}
+        eyebrow="Travel together"
+        title={CT.label}
+        subtitle={CT.tagline}
+        stats={stats}
+        chips={['FIT packages only', 'You approve who joins', 'Pay only when the group is full']}
+        right={<Button href={createHref} variant="primary" size="lg" style={{ background: '#fff', color: '#0d0d0d', borderColor: '#fff' }}><Plus size={16} /> Create a trip</Button>}
+      />
 
-      <div className="container-max py-10">
-        {pkgSlug && (
-          <div className="mb-6 flex items-center gap-3 text-sm bg-white border border-gray-100 rounded-full px-4 py-2 w-fit">
-            <span className="text-gray-600">Showing trips on <b className="text-[#1a1a2e]">{pkgSlug.replace(/-/g, ' ')}</b></span>
-            <Link href={CT.base} className="text-gray-400 hover:text-gray-700" aria-label="Clear package filter"><X size={14} /></Link>
-          </div>
-        )}
+      <section className="bg-white">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-10">
+          {pkgSlug && (
+            <div className="mb-5 flex items-center gap-3 text-sm">
+              <span className="text-gray-500">Showing trips on</span>
+              <Pill active>{pkgSlug.replace(/-/g, ' ')} <Link href={CT.base} aria-label="Clear" className="ml-1 opacity-70 hover:opacity-100"><X size={13} /></Link></Pill>
+            </div>
+          )}
 
-        {/* Filters */}
-        <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input id="ct-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search destination, package or city"
-              className="w-full bg-white border border-gray-200 rounded-full pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#5bc1d5]" />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <select id="ct-status" value={status} onChange={e => setStatus(e.target.value)} className="bg-white border border-gray-200 rounded-full px-4 py-2.5 text-sm outline-none">
-              <option value="open">Open for requests</option>
-              <option value="full,confirmed">Full / confirmed</option>
-              <option value="open,full,confirmed">All upcoming</option>
-            </select>
-            <select id="ct-gender" value={gender} onChange={e => setGender(e.target.value)} className="bg-white border border-gray-200 rounded-full px-4 py-2.5 text-sm outline-none">
+          {/* Tabs + sort row, like the category pages */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-gray-100 pb-5">
+            <div className="flex gap-6 overflow-x-auto scrollbar-hide">
+              {[['open', 'Open for requests'], ['full,confirmed', 'Full & confirmed'], ['open,full,confirmed', 'All upcoming']].map(([id, label]) => (
+                <button key={id} onClick={() => setStatus(id)} className={`whitespace-nowrap pb-1 text-sm font-medium transition border-b-2 ${status === id ? 'border-[#5bc1d5] text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-900'}`}>
+                  {label}{status === id && trips && <span className="ml-1.5 text-xs text-gray-400">{filtered.length}</span>}
+                </button>
+              ))}
+            </div>
+            <select id="ct-gender" value={gender} onChange={e => setGender(e.target.value)} style={{ ...inputStyle(p), width: 'auto', padding: '9px 36px 9px 14px', fontSize: 13, borderRadius: 999 }}>
               <option value="">Any group type</option>
               {GENDER_RULES.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
             </select>
           </div>
-        </div>
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 mb-8">
-          {['', ...VIBES].map(v => (
-            <button key={v || 'all'} onClick={() => setVibe(v)}
-              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold border transition ${vibe === v ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}>
-              {v || 'All vibes'}
-            </button>
-          ))}
-        </div>
 
-        {/* Grid */}
-        {trips === null ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(i => <div key={i} className="bg-white rounded-2xl h-[380px] animate-pulse border border-gray-100" />)}
+          {/* Search bar */}
+          <div className="mt-5 flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4" style={{ height: 52 }}>
+            <Search size={16} className="text-gray-400 flex-shrink-0" />
+            <input id="ct-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search destinations, packages or departure city" className="flex-1 bg-transparent outline-none text-sm text-gray-900 placeholder:text-gray-400" style={{ border: 'none', boxShadow: 'none' }} />
+            {q && <button onClick={() => setQ('')} className="text-gray-400 hover:text-gray-700" aria-label="Clear search"><X size={15} /></button>}
           </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-gray-200">
-            <div className="text-5xl mb-4">🧭</div>
-            <h3 className="text-xl font-bold text-[#1a1a2e] mb-2">{trips.length === 0 ? 'No trips are forming yet' : 'Nothing matches those filters'}</h3>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto text-sm">{trips.length === 0 ? 'Be the first. Pick an FIT package, set your rules, and share the link with friends or let other travellers find you.' : 'Try clearing a filter or two.'}</p>
-            <Link href={createHref} className="btn-primary text-sm"><Plus size={16} /> Create a trip</Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((t, i) => <div key={t.id} className="tt-fade-up" style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}><CommunityTripCard trip={t} /></div>)}
-          </div>
-        )}
 
-        {/* How it works */}
-        <section id="how" className="mt-20">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-semibold text-gray-800" style={{ fontFamily: "'Playfair Display', serif" }}>How it works</h2>
-            <p className="text-gray-500 text-sm mt-2">Only FIT packages can be turned into trips. Fixed group departures stay with our trip captains.</p>
+          {/* Vibe pills */}
+          <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+            {['', ...VIBES].map(v => <Pill key={v || 'all'} small active={vibe === v} onClick={() => setVibe(v)}>{v || 'All vibes'}</Pill>)}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((s, i) => (
-              <div key={s.title} className="bg-white rounded-2xl border border-gray-100 p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: 'linear-gradient(135deg,#5bc1d5,#1f77a3)' }}>{i + 1}</span>
-                  <s.icon size={18} className="text-[#1f77a3]" />
-                </div>
-                <h3 className="font-bold text-[#1a1a2e] mb-1">{s.title}</h3>
-                <p className="text-sm text-gray-500">{s.text}</p>
+
+          <p className="mt-8 mb-5 text-base font-semibold text-gray-800">{trips === null ? 'Loading trips…' : `${filtered.length} trip${filtered.length === 1 ? '' : 's'} found`}</p>
+
+          {trips === null ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map(i => <div key={i}><div className="h-72 bg-gray-100 rounded-2xl animate-pulse" /><div className="py-3 space-y-3"><div className="h-4 bg-gray-100 rounded w-3/4 animate-pulse" /><div className="h-3 bg-gray-100 rounded w-1/2 animate-pulse" /></div></div>)}
+            </div>
+          ) : filtered.length === 0 ? (
+            <Card pad={48} style={{ textAlign: 'center' }}>
+              <Eyebrow color="#5bc1d5" style={{ marginBottom: 12 }}>{trips.length === 0 ? 'Be the first' : 'No match'}</Eyebrow>
+              <p style={{ fontSize: 22, fontWeight: 600, color: p.text, margin: 0 }}>{trips.length === 0 ? 'No trips are forming yet' : 'Nothing matches those filters'}</p>
+              <p style={{ fontSize: 14, color: p.muted, maxWidth: 440, margin: '10px auto 24px' }}>{trips.length === 0 ? 'Pick an FIT package, set your rules, and share the link with friends or let other travellers find you.' : 'Try clearing a filter or two.'}</p>
+              {trips.length === 0 ? <Button href={createHref}><Plus size={15} /> Create a trip</Button> : <Button variant="outline" onClick={() => { setQ(''); setVibe(''); setGender(''); }}>Clear filters</Button>}
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+              {filtered.map(t => <CommunityTripCard key={t.id} trip={t} />)}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="bg-[#fafafa]">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-16 md:py-24">
+          <SectionTitle italic="How it" rest="works" sub="Only FIT packages can be turned into trips. Fixed group departures stay with our trip captains." />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+            {STEPS.map(([n, t, d]) => (
+              <div key={n} className="border-t border-gray-200 pt-6">
+                <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5]">{n}</p>
+                <h3 className="text-lg font-semibold text-gray-900 mt-3" style={{ fontSize: 18 }}>{t}</h3>
+                <p className="text-sm text-gray-500 mt-2 leading-relaxed">{d}</p>
               </div>
             ))}
           </div>
-          <div className="mt-6 bg-[#e0f4f8] rounded-2xl p-5 text-sm text-[#1f3f4a]">
-            <b>Payment.</b> Once the group is full, Travel Teasing contacts every member on WhatsApp to collect payment. The creator can remove anyone who does not pay, and the spot opens up again.
+          <div className="mt-12 flex justify-center">
+            <Link href={createHref} className="inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-800 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition">Start your trip <ArrowRight size={14} /></Link>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
 
 export default function CommunityTripsPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-4 border-[#5bc1d5] border-t-transparent rounded-full" /></div>}>
-      <ListingContent />
-    </Suspense>
-  );
+  return <Suspense fallback={<Spinner />}><ListingContent /></Suspense>;
 }
