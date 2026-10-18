@@ -61,10 +61,10 @@ export default function Navbar() {
         <nav className="px-5 sm:px-8 lg:px-10" style={{
           pointerEvents: 'auto', position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          width: '100%', height: scrolled && !menuOpen ? '64px' : '76px',
+          width: '100%', height: scrolled && !menuOpen ? '70px' : '88px',
           background: menuOpen
             ? 'rgba(10,10,10,0.95)'
-            : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.86)',
+            : transparent ? 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)' : 'rgba(10,10,10,0.9)',
           backdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: transparent ? 'none' : 'blur(20px) saturate(180%)',
           borderBottom: 'none',
@@ -76,7 +76,7 @@ export default function Navbar() {
           <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="Travel Teasing"
-              style={{ height: '46px', width: 'auto', objectFit: 'contain', filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`, transition: 'filter 0.5s ease' }}
+              style={{ height: scrolled && !menuOpen ? '50px' : '60px', width: 'auto', objectFit: 'contain', filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`, transition: 'filter 0.5s ease, height 0.4s cubic-bezier(0.4,0,0.2,1)' }}
               onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
             <span style={{ display: 'none', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px', color: '#fff', whiteSpace: 'nowrap' }}>
               <span style={{ fontSize: '18px' }}>{theme.emoji}</span> Travel Teasing
@@ -84,7 +84,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── CENTER LINKS (desktop) ── */}
-          <div className="hidden lg:flex" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 'clamp(14px, 2.2vw, 34px)', padding: '0 20px', minWidth: 0 }}>
+          <div className="hidden lg:flex" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 'clamp(18px, 2.6vw, 40px)', padding: '0 20px', minWidth: 0 }}>
             <ExploreDropdown theme={theme} pathname={pathname} />
             {[
               { label: 'FIT',       href: '/packages?category=fit' },
@@ -97,34 +97,38 @@ export default function Navbar() {
 
           {/* ── RIGHT ACTIONS ── */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-            <button onClick={toggleDarkMode} title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'} className="tt-nav-icon" aria-label="Toggle theme">
+            <button onClick={toggleDarkMode} title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'} className="tt-nav-icon" aria-label="Toggle theme" style={{ border: '1px solid rgba(255,255,255,0.14)', width: '42px', height: '42px' }}>
               {darkMode ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
             </button>
 
             {user ? (
               <Link href="/dashboard" title="Your dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '4px 6px 4px 4px', marginLeft: '4px' }}>
-                <span style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.35)', background: 'rgba(255,255,255,0.08)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600, overflow: 'hidden' }}>
+                <span style={{ width: '40px', height: '40px', borderRadius: '50%', border: `2px solid ${theme.primary}`, boxShadow: `0 0 0 3px ${theme.primary}33`, background: 'rgba(255,255,255,0.08)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, overflow: 'hidden' }}>
                   {user.user_metadata?.avatar_url
                     // eslint-disable-next-line @next/next/no-img-element
                     ? <img src={user.user_metadata.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     : (user.user_metadata?.full_name || user.email || 'T').trim().charAt(0).toUpperCase()}
                 </span>
-                <span className="hidden xl:inline" style={{ fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>Dashboard</span>
+                <span className="hidden xl:inline" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff' }}>Dashboard</span>
               </Link>
             ) : (
-              <Link href="/login" className="hidden sm:inline-flex tt-nav-link" style={{ padding: '8px 12px', marginLeft: '4px' }}>Log in</Link>
+              <Link href="/login" className="hidden sm:inline-flex" style={{ alignItems: 'center', marginLeft: '6px', padding: '11px 20px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.28)', color: '#fff', fontSize: '12px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none', whiteSpace: 'nowrap', transition: 'background 0.2s, border-color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; }}
+              >Log in</Link>
             )}
 
             <Link href="/group-trips" className="hidden md:inline-flex" style={{
-              alignItems: 'center', gap: '8px', marginLeft: '8px',
-              background: '#fff', color: '#0d0d0d', fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
-              padding: '11px 20px', borderRadius: '999px', textDecoration: 'none', whiteSpace: 'nowrap', transition: 'transform 0.2s, background 0.2s',
+              alignItems: 'center', gap: '10px', marginLeft: '8px',
+              background: theme.primary, color: '#0d0d0d', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+              padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', whiteSpace: 'nowrap',
+              boxShadow: `0 10px 30px -10px ${theme.primary}aa`, transition: 'transform 0.2s, box-shadow 0.2s, filter 0.2s',
             }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-            >Upcoming Trips</Link>
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.filter = 'brightness(1.08)'; e.currentTarget.style.boxShadow = `0 14px 34px -10px ${theme.primary}cc`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.filter = 'none'; e.currentTarget.style.boxShadow = `0 10px 30px -10px ${theme.primary}aa`; }}
+            >Upcoming Trips <ArrowUpRight size={14} strokeWidth={2.5} /></Link>
 
-            <button onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu" className="tt-nav-icon" style={{ marginLeft: '6px', border: '1px solid rgba(255,255,255,0.16)', width: '42px', height: '42px', background: menuOpen ? '#fff' : 'transparent', color: menuOpen ? '#0d0d0d' : '#fff' }}>
+            <button onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu" className="tt-nav-icon" style={{ marginLeft: '6px', border: '1px solid rgba(255,255,255,0.2)', width: '46px', height: '46px', background: menuOpen ? '#fff' : 'rgba(255,255,255,0.06)', color: menuOpen ? '#0d0d0d' : '#fff' }}>
               {menuOpen ? <X size={16} strokeWidth={2} /> : (
                 <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-end' }}>
                   <span style={{ display: 'block', width: '18px', height: '1.5px', background: 'currentColor' }} />
@@ -337,7 +341,7 @@ function ExploreDropdown({ theme, pathname }) {
       {/* Trigger button */}
       <button className={`tt-nav-link${open ? ' is-active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
         Explore
-        <span style={{ display: 'inline-block', fontSize: '8px', opacity: 0.6, transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', marginTop: '1px' }}>▾</span>
+        <span style={{ display: 'inline-block', fontSize: '9px', color: theme.primary, transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', marginTop: '1px' }}>▾</span>
       </button>
 
       {/* Invisible bridge — keeps hover alive between button and panel */}
@@ -345,7 +349,7 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '60px', left: '50%',
+          position: 'fixed', top: '70px', left: '50%',
           transform: 'translateX(-50%)',
           width: '800px', height: '24px',
           pointerEvents: open ? 'auto' : 'none',
@@ -357,7 +361,7 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '84px', left: '50%',
+          position: 'fixed', top: '96px', left: '50%',
           width: '800px',
           background: '#0c0c0c',
           border: '1px solid rgba(255,255,255,0.07)',

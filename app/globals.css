@@ -313,8 +313,8 @@
 [data-mode="dark"] .auth-rule { background: #2c2f38; }
 
 /* ── Navbar ── */
-.tt-nav-link { position: relative; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none; padding: 6px 0; white-space: nowrap; transition: color 0.2s ease; }
-.tt-nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--theme-primary, #5bc1d5); transform: scaleX(0); transform-origin: left; transition: transform 0.25s ease; }
+.tt-nav-link { position: relative; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.78); text-decoration: none; padding: 8px 0; white-space: nowrap; transition: color 0.2s ease; }
+.tt-nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: var(--theme-primary, #5bc1d5); transform: scaleX(0); transform-origin: left; transition: transform 0.25s ease; box-shadow: 0 0 12px var(--theme-primary, #5bc1d5); }
 .tt-nav-link:hover, .tt-nav-link.is-active { color: #fff; }
 .tt-nav-link:hover::after, .tt-nav-link.is-active::after { transform: scaleX(1); }
 .tt-nav-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; border: none; background: transparent; color: rgba(255,255,255,0.78); cursor: pointer; transition: background 0.2s, color 0.2s; }
