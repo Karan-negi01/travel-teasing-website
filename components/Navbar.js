@@ -11,6 +11,7 @@ const menuItems = [
   { label: 'Best Sellers',  sub: 'Our top picks',             href: '/packages?sort=popular',       img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80' },
   { label: 'Domestic',      sub: 'Incredible India',          href: '/packages?type=domestic',      img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80' },
   { label: 'International', sub: 'Beyond borders',            href: '/packages?type=international', img: 'https://images.unsplash.com/photo-1537519646099-335112f03225?w=800&q=80' },
+  { label: 'Community Trips', sub: 'Hosted by travellers',    href: '/community-trips',             img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1200&q=80' },
   { label: 'About Us',      sub: 'Our story since 2019',      href: '/about',                       img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800&q=80' },
   { label: 'Blog',          sub: 'Travel stories & tips',     href: '/blog',                        img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=800&q=80' },
 ];
@@ -125,124 +126,95 @@ export default function Navbar() {
 
       {/* ── FULL SCREEN OVERLAY MENU ── */}
       <div style={{
-        position: 'fixed', inset: 0, zIndex: 999,
-        background: '#0d0d0d',
-        display: 'flex',
+        position: 'fixed', inset: 0, zIndex: 999, background: '#0a0a0a',
+        display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)',
         pointerEvents: menuOpen ? 'auto' : 'none',
         opacity: menuOpen ? 1 : 0,
         transition: 'opacity 0.45s cubic-bezier(0.4,0,0.2,1)',
-      }}>
-        {/* Left: Nav items */}
-        <div style={{
-          flex: 1, display: 'flex', flexDirection: 'column',
-          justifyContent: 'center', padding: '80px 60px',
-        }}>
-          <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '40px', fontFamily: "'Poppins', sans-serif" }}>
-            Navigation
-          </p>
+        fontFamily: "'Poppins', sans-serif",
+      }} className="lg:!grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {menuItems.map((item, i) => (
-              <Link key={item.href} href={item.href}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '14px 20px 14px 0', textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.06)',
-                  transition: 'padding 0.2s ease',
-                  animation: menuOpen ? `fadeInUp 0.5s ${i * 0.07}s both` : 'none',
-                }}
-                onMouseEnter={e => { setHoveredIdx(i); e.currentTarget.style.paddingLeft = '12px'; }}
-                onMouseLeave={e => { e.currentTarget.style.paddingLeft = '0'; }}
-              >
-                <div>
-                  <span style={{
-                    display: 'block',
-                    fontSize: 'clamp(28px, 4vw, 48px)',
-                    fontWeight: 700, letterSpacing: '-1px',
-                    fontFamily: "'Poppins', sans-serif",
-                    color: hoveredIdx === i ? '#fff' : 'rgba(255,255,255,0.38)',
-                    transition: 'color 0.2s ease',
-                    lineHeight: 1.15,
-                  }}>
-                    {item.label}
-                  </span>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', fontFamily: "'Poppins', sans-serif", display: hoveredIdx === i ? 'block' : 'none', marginTop: '2px' }}>
-                    {item.sub}
-                  </span>
-                </div>
-                <ArrowUpRight size={20} style={{ color: hoveredIdx === i ? theme.primary : 'transparent', transition: 'color 0.2s', flexShrink: 0 }} />
-              </Link>
-            ))}
-          </div>
+        {/* Left: index */}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflowY: 'auto', padding: '96px 0 0' }}>
+          <div className="px-6 sm:px-10 lg:px-14" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '18px', animation: menuOpen ? 'fadeInUp 0.5s 0.05s both' : 'none' }}>Menu</p>
 
-          {/* Category pills inside the full menu */}
-          <div style={{ marginTop: '32px', animation: menuOpen ? 'fadeInUp 0.5s 0.35s both' : 'none' }}>
-            <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: '14px', fontFamily: "'Poppins', sans-serif" }}>
-              Explore by Category
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {Object.entries(CATEGORY_THEMES).filter(([k]) => k !== 'default').map(([key, catTheme]) => {
-                const isActive = category === key;
+            <div>
+              {menuItems.map((item, i) => {
+                const on = hoveredIdx === i;
                 return (
-                  <Link key={key} href={`/packages?category=${key}`}
-                    onClick={() => { applyTheme(key); setMenuOpen(false); }}
+                  <Link key={item.href} href={item.href}
+                    onMouseEnter={() => setHoveredIdx(i)}
                     style={{
-                      display: 'flex', alignItems: 'center', gap: '6px',
-                      padding: '6px 14px', borderRadius: '999px', textDecoration: 'none',
-                      border: `1px solid ${isActive ? catTheme.primary : 'rgba(255,255,255,0.12)'}`,
-                      background: isActive ? `${catTheme.primary}20` : 'transparent',
-                      transition: 'all 0.18s',
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: '12px', fontWeight: 500,
-                      color: isActive ? catTheme.primary : 'rgba(255,255,255,0.5)',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = catTheme.primary; e.currentTarget.style.color = catTheme.primary; }}
-                    onMouseLeave={e => {
-                      if (!isActive) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }
-                    }}
-                  >
-                    <span>{catTheme.emoji}</span> {catTheme.label}
+                      display: 'grid', gridTemplateColumns: '36px 1fr auto', alignItems: 'baseline', gap: '18px',
+                      padding: '11px 0', textDecoration: 'none',
+                      borderTop: '1px solid rgba(255,255,255,0.08)',
+                      animation: menuOpen ? `fadeInUp 0.55s ${0.1 + i * 0.06}s both` : 'none',
+                    }}>
+                    <span style={{ fontSize: '11px', letterSpacing: '0.2em', color: on ? theme.primary : 'rgba(255,255,255,0.3)', transition: 'color 0.25s' }}>0{i + 1}</span>
+                    <span style={{
+                      fontFamily: "'Playfair Display', serif", fontWeight: 400, letterSpacing: '-0.01em', lineHeight: 1.05,
+                      fontSize: 'clamp(28px, 3.4vw, 50px)', whiteSpace: 'nowrap',
+                      color: on ? '#fff' : 'rgba(255,255,255,0.5)',
+                      transform: on ? 'translateX(10px)' : 'translateX(0)',
+                      transition: 'color 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)',
+                      display: 'inline-block',
+                    }}>{item.label}</span>
+                    <span className="hidden sm:inline-flex" style={{ alignItems: 'center', gap: '10px', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: on ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.25)', transition: 'color 0.25s', whiteSpace: 'nowrap' }}>
+                      {item.sub} <ArrowUpRight size={14} style={{ color: on ? theme.primary : 'transparent', transition: 'color 0.25s' }} />
+                    </span>
                   </Link>
                 );
               })}
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }} />
+            </div>
+
+            {/* Categories */}
+            <div style={{ marginTop: '26px', animation: menuOpen ? 'fadeInUp 0.5s 0.5s both' : 'none' }}>
+              <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '14px' }}>Explore by category</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 22px' }}>
+                {Object.entries(CATEGORY_THEMES).filter(([k]) => k !== 'default').map(([key, catTheme]) => {
+                  const isActive = category === key;
+                  return (
+                    <Link key={key} href={`/packages?category=${key}`} onClick={() => { applyTheme(key); setMenuOpen(false); }}
+                      style={{ fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none', padding: '6px 0', color: isActive ? catTheme.primary : 'rgba(255,255,255,0.55)', transition: 'color 0.2s' }}
+                      onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = isActive ? catTheme.primary : 'rgba(255,255,255,0.55)'; }}
+                    >{catTheme.label}</Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* Bottom links */}
-          <div style={{ display: 'flex', gap: '24px', marginTop: '32px', animation: menuOpen ? 'fadeInUp 0.5s 0.5s both' : 'none' }}>
-            {user ? (
-              <Link href="/dashboard" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Dashboard</Link>
-            ) : (
-              <Link href="/login" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Login</Link>
-            )}
-            <Link href="/contact" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Contact</Link>
-            <button onClick={toggleDarkMode} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: "'Poppins', sans-serif", display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              {darkMode ? <Sun size={13} /> : <Moon size={13} />} {darkMode ? 'Light mode' : 'Dark mode'}
-            </button>
-            <Link href="/packages?category=groups" style={{ fontSize: '13px', color: theme.primary, fontWeight: 600, textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Upcoming Trips →</Link>
+          {/* Bottom bar */}
+          <div className="px-6 sm:px-10 lg:px-14" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '18px', paddingBottom: '18px', marginTop: '28px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '14px 28px', animation: menuOpen ? 'fadeInUp 0.5s 0.6s both' : 'none' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '22px', alignItems: 'center' }}>
+              {user
+                ? <Link href="/dashboard" className="tt-nav-link">Dashboard</Link>
+                : <Link href="/login" className="tt-nav-link">Log in</Link>}
+              <Link href="/contact" className="tt-nav-link">Contact</Link>
+              <Link href="/packages?category=groups" className="tt-nav-link" style={{ color: theme.primary }}>Upcoming trips</Link>
+              <button onClick={toggleDarkMode} className="tt-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                {darkMode ? <Sun size={13} /> : <Moon size={13} />} {darkMode ? 'Light mode' : 'Dark mode'}
+              </button>
+            </div>
+            <a href="https://wa.me/918510988703" target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}>+91 85109 88703</a>
           </div>
         </div>
 
-        {/* Right: Featured destination image */}
-        <div className="hidden lg:block" style={{ width: '38%', position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+        {/* Right: image panel */}
+        <div className="hidden lg:block" style={{ position: 'relative', overflow: 'hidden' }}>
           {menuItems.map((item, i) => (
-            <div key={i} style={{
-              position: 'absolute', inset: 0,
-              opacity: hoveredIdx === i ? 1 : 0,
-              transition: 'opacity 0.55s cubic-bezier(0.4,0,0.2,1)',
-            }}>
+            <div key={i} style={{ position: 'absolute', inset: 0, opacity: hoveredIdx === i ? 1 : 0, transition: 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.75)' }} />
+              <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.72)', animation: menuOpen && hoveredIdx === i ? 'authKenBurns 14s ease-out both' : 'none' }} />
             </div>
           ))}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #0d0d0d 0%, transparent 30%)' }} />
-          <div style={{ position: 'absolute', bottom: '40px', left: '40px' }}>
-            <p style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: '6px', fontFamily: "'Poppins', sans-serif" }}>
-              {menuItems[hoveredIdx]?.sub}
-            </p>
-            <p style={{ fontSize: '20px', fontWeight: 700, color: '#fff', fontFamily: "'Poppins', sans-serif", lineHeight: 1.2 }}>
-              {menuItems[hoveredIdx]?.label}
-            </p>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0) 28%), linear-gradient(0deg, rgba(10,10,10,.85) 0%, rgba(10,10,10,0) 45%)' }} />
+          <div style={{ position: 'absolute', left: '56px', bottom: '56px', right: '56px' }}>
+            <p style={{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', marginBottom: '10px' }}>0{hoveredIdx + 1} — {menuItems[hoveredIdx]?.sub}</p>
+            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 2.6vw, 40px)', fontWeight: 400, color: '#fff', lineHeight: 1.1, margin: 0 }}>{menuItems[hoveredIdx]?.label}</p>
           </div>
         </div>
       </div>
