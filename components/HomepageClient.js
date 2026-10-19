@@ -438,83 +438,76 @@ export default function HomepageClient() {
   return (
     <div className="flex flex-col">
 
-      {/* ── HERO — full screen ── */}
-      <div className="relative w-full h-screen overflow-hidden">
+      {/* ── HERO — editorial, full screen ── */}
+      <div className="relative w-full min-h-screen overflow-hidden" style={{ background: '#0a0a0a' }}>
         <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover"
+          style={{ animation: 'authKenBurns 22s ease-in-out infinite alternate' }}
           poster="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=1920&q=80">
           <source src="https://assets.mixkit.co/videos/4078/4078-720.mp4" type="video/mp4" />
           <source src="https://assets.mixkit.co/videos/4081/4081-720.mp4" type="video/mp4" />
           <source src="https://assets.mixkit.co/videos/4074/4074-720.mp4" type="video/mp4" />
         </video>
+        {/* Cinematic grade: darker top for the navbar, deep bottom-left for the type */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.35) 65%, rgba(0,0,0,.88) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 70% at 15% 80%, rgba(0,0,0,.6) 0%, rgba(0,0,0,0) 60%)' }} />
 
-        {/* Gradient — lighter in center so video breathes */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-black/70" />
+        <div className="relative z-10 min-h-screen flex flex-col justify-end">
+          <div className="max-w-[1600px] w-full mx-auto px-6 sm:px-10 lg:px-14 pb-10 sm:pb-14">
+            {/* Eyebrow */}
+            <p className="tt-fade-up text-[11px] font-semibold uppercase mb-6 flex items-center gap-3" style={{ letterSpacing: '0.28em', color: 'rgba(255,255,255,.7)', fontFamily: "'Poppins', sans-serif", animationDelay: '80ms' }}>
+              <span className="inline-block w-8 h-px" style={{ background: '#5bc1d5' }} /> Since 2019 · India &amp; beyond
+            </p>
 
-        {/* ── PREMIUM MINIMAL ── */}
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6 gap-8">
-
-          {/* Heading block */}
-          <div className="flex flex-col items-center gap-3">
-
-            {/* Main heading — outline + filled contrast */}
-            <h1 className="leading-[0.9] tracking-[-2px]"
-              style={{ fontSize: 'clamp(68px, 11vw, 140px)' }}>
-              {/* "Travel" — outline style */}
-              <span style={{
-                WebkitTextStroke: '2px rgba(255,255,255,0.85)',
-                color: 'transparent',
-                fontWeight: 900,
-              }}>Travel</span>
-              {' '}
-              {/* "Teasing" — solid white, heavier */}
-              <span className="text-white font-black">Teasing</span>
+            {/* Headline */}
+            <h1 className="tt-fade-up text-white" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600, fontSize: 'clamp(46px, 7.2vw, 112px)', lineHeight: 0.98, letterSpacing: '-0.02em', margin: 0, animationDelay: '180ms', textShadow: '0 2px 40px rgba(0,0,0,.35)' }}>
+              Strangers today.<br />
+              <em style={{ fontStyle: 'italic', fontWeight: 400, color: '#bfe9f1' }}>Legends tomorrow.</em>
             </h1>
 
-            {/* Thin teal line — centered, under heading */}
-            <div className="w-16 h-[2px] rounded-full bg-[#5bc1d5]" />
-
-            {/* Tagline */}
-            <p className="text-white/60 text-[15px] sm:text-lg font-light tracking-wide max-w-sm">
-              Strangers today. &nbsp;<em className="not-italic text-white/80 font-normal">Legends tomorrow.</em>
-            </p>
-          </div>
-
-          {/* Search */}
-          <form onSubmit={e => { e.preventDefault(); if (heroSearch.trim()) router.push(`/packages?search=${encodeURIComponent(heroSearch.trim())}`); }}
-            className="w-full max-w-md">
-            <div className="flex items-center bg-white/95 backdrop-blur-sm rounded-full shadow-[0_12px_60px_rgba(0,0,0,0.45)] pl-5 pr-1.5 py-1.5 gap-2">
-              <MapPin size={15} className="text-[#5bc1d5] flex-shrink-0" />
-              <input type="text" value={heroSearch} onChange={e => setHeroSearch(e.target.value)}
-                placeholder="Where to?"
-                className="flex-1 text-[14px] font-medium text-gray-700 placeholder:text-gray-400 outline-none bg-transparent py-2.5" />
-              <button type="submit"
-                className="bg-[#1a1a1a] hover:bg-[#5bc1d5] text-white text-[13px] font-bold px-5 py-3 rounded-full transition-all duration-200 flex-shrink-0">
-                Search
-              </button>
-            </div>
-            <div className="flex justify-center gap-4 mt-3.5">
-              {['Ladakh', 'Bali', 'Kashmir', 'Spiti', 'Manali'].map(d => (
-                <button key={d} type="button"
-                  onClick={() => router.push(`/packages?search=${encodeURIComponent(d)}`)}
-                  className="text-[11px] text-white/40 hover:text-white/80 transition-colors tracking-wide">
-                  {d}
-                </button>
-              ))}
-            </div>
-          </form>
-
-          {/* Stats — minimal inline */}
-          <div className="flex items-center gap-6 text-[12px]">
-            {[['10K+', 'Travelers'], ['4.9★', 'Rated'], ['150+', 'Destinations']].map(([val, label], i) => (
-              <div key={label} className="flex items-center gap-4">
-                {i > 0 && <span className="text-white/15 text-sm">|</span>}
-                <div className="flex flex-col items-center gap-0">
-                  <span className="text-white font-bold text-[22px]">{val}</span>
-                  <span className="text-white/35 text-[12px] tracking-wider uppercase">{label}</span>
-                </div>
+            {/* Statement + CTAs */}
+            <div className="mt-7 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7">
+              <p className="tt-fade-up text-[15px] sm:text-[17px] max-w-[520px]" style={{ color: 'rgba(255,255,255,.72)', lineHeight: 1.65, fontFamily: "'Poppins', sans-serif", animationDelay: '280ms' }}>
+                Fixed departures with a trip captain, personalised FIT journeys, and community trips you can host yourself. Pick a package, find your people, go.
+              </p>
+              <div className="tt-fade-up flex flex-wrap gap-3" style={{ animationDelay: '360ms' }}>
+                <Link href="/packages" className="inline-flex items-center gap-2 rounded-full text-[12px] font-semibold uppercase px-6 py-3.5 transition-transform hover:-translate-y-0.5" style={{ background: '#ffffff', color: '#0d0d0d', letterSpacing: '0.14em', fontFamily: "'Poppins', sans-serif" }}>
+                  Explore trips <ArrowRight size={14} />
+                </Link>
+                <Link href={`${CT.base}/new`} className="inline-flex items-center gap-2 rounded-full text-white text-[12px] font-semibold uppercase px-6 py-3.5 transition-colors hover:bg-white/10" style={{ letterSpacing: '0.14em', border: '1px solid rgba(255,255,255,.35)', fontFamily: "'Poppins', sans-serif" }}>
+                  Host a community trip
+                </Link>
               </div>
-            ))}
+            </div>
+
+            {/* Search + stats row */}
+            <div className="tt-fade-up mt-10 pt-7 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10" style={{ borderTop: '1px solid rgba(255,255,255,.14)', animationDelay: '460ms' }}>
+              <form onSubmit={e => { e.preventDefault(); if (heroSearch.trim()) router.push(`/packages?search=${encodeURIComponent(heroSearch.trim())}`); }}
+                className="flex items-center w-full lg:max-w-[560px] rounded-full pl-5 pr-1.5 py-1.5 gap-3"
+                style={{ background: 'rgba(0,0,0,.35)', border: '1px solid rgba(255,255,255,.18)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}>
+                <Search size={15} style={{ color: 'rgba(255,255,255,.6)', flexShrink: 0 }} />
+                <input type="text" value={heroSearch} onChange={e => setHeroSearch(e.target.value)} placeholder="Where to? Ladakh, Bali, Spiti…"
+                  className="flex-1 bg-transparent outline-none text-[14px] py-2.5 text-white placeholder:text-white/45" style={{ border: 'none', boxShadow: 'none', fontFamily: "'Poppins', sans-serif", background: 'transparent', color: '#fff' }} />
+                <button type="submit" className="rounded-full text-[11px] font-bold uppercase px-5 py-3 flex-shrink-0 transition-colors" style={{ background: '#ffffff', color: '#0d0d0d', letterSpacing: '0.14em', fontFamily: "'Poppins', sans-serif" }} onMouseEnter={e => { e.currentTarget.style.background = '#5bc1d5'; }} onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; }}>Search</button>
+              </form>
+              <div className="flex items-center gap-7 sm:gap-10 lg:ml-auto">
+                {[['10K+', 'Travellers'], ['4.9', 'Rated'], ['150+', 'Destinations']].map(([val, label], i) => (
+                  <div key={label} className="flex items-center gap-7 sm:gap-10">
+                    {i > 0 && <span className="hidden sm:block w-px h-8" style={{ background: 'rgba(255,255,255,.14)' }} />}
+                    <div>
+                      <p className="text-white font-semibold leading-none" style={{ fontSize: '22px', fontFamily: "'Poppins', sans-serif", fontVariantNumeric: 'tabular-nums' }}>{val}{label === 'Rated' && <Star size={12} className="inline ml-1 -mt-1 fill-[#5bc1d5] text-[#5bc1d5]" />}</p>
+                      <p className="text-[10px] uppercase mt-1.5" style={{ letterSpacing: '0.18em', color: 'rgba(255,255,255,.45)', fontFamily: "'Poppins', sans-serif" }}>{label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div className="absolute right-6 sm:right-10 bottom-10 hidden lg:flex flex-col items-center gap-3" style={{ color: 'rgba(255,255,255,.45)' }}>
+          <span className="text-[9px] uppercase" style={{ letterSpacing: '0.3em', writingMode: 'vertical-rl', fontFamily: "'Poppins', sans-serif" }}>Scroll</span>
+          <span className="w-px h-14" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0))' }} />
         </div>
       </div>
 

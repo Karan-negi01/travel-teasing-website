@@ -33,7 +33,7 @@ export default function ConditionalLayout({ children }) {
         Hero pages (/, /packages, etc.) have a full-screen first section
         so they don't need the spacer — the navbar floats transparently over the hero.
       */}
-      {!isHero && <div className="h-[88px]" />}
+      {!isHero && <div className="h-[84px]" />}
 
       {/* pb-16 on mobile to avoid content hiding behind bottom nav */}
       <main className="flex-1 pb-16 md:pb-0">{children}</main>
