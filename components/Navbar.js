@@ -16,6 +16,15 @@ const menuItems = [
   { label: 'Blog',          sub: 'Travel stories & tips',     href: '/blog',                        img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=800&q=80' },
 ];
 
+const menuTiles = [
+  { label: 'Best Sellers',     sub: 'Our most-loved trips',        href: '/packages?sort=popular',         img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=80' },
+  { label: 'Upcoming Trips',   sub: 'Fixed departures, trip captain', href: '/packages?category=groups',   img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80' },
+  { label: 'Community Trips',  sub: 'Hosted by travellers like you', href: '/community-trips',             img: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1200&q=80' },
+  { label: 'Domestic',         sub: 'Incredible India',            href: '/packages?type=domestic',        img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80' },
+  { label: 'International',    sub: 'Beyond borders',              href: '/packages?type=international',   img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80' },
+  { label: 'About Us',         sub: 'Our story since 2019',        href: '/about',                         img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=1200&q=80' },
+];
+
 const mobileLinks = [
   { href: '/',            label: 'Home',    Icon: Home },
   { href: '/packages',    label: 'Explore', Icon: Layers },
@@ -124,97 +133,59 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* ── FULL SCREEN OVERLAY MENU ── */}
+      {/* ── FULL SCREEN OVERLAY MENU — photo tiles ── */}
       <div style={{
         position: 'fixed', inset: 0, zIndex: 999, background: '#0a0a0a',
-        display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)',
-        pointerEvents: menuOpen ? 'auto' : 'none',
-        opacity: menuOpen ? 1 : 0,
-        transition: 'opacity 0.45s cubic-bezier(0.4,0,0.2,1)',
+        pointerEvents: menuOpen ? 'auto' : 'none', opacity: menuOpen ? 1 : 0,
+        transition: 'opacity 0.4s cubic-bezier(0.4,0,0.2,1)', overflowY: 'auto',
         fontFamily: "'Poppins', sans-serif",
-      }} className="lg:!grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+      }}>
+        <div className="px-5 sm:px-8 lg:px-10" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: '104px', paddingBottom: '24px' }}>
 
-        {/* Left: index */}
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflowY: 'auto', padding: '96px 0 0' }}>
-          <div className="px-6 sm:px-10 lg:px-14" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '18px', animation: menuOpen ? 'fadeInUp 0.5s 0.05s both' : 'none' }}>Menu</p>
-
-            <div>
-              {menuItems.map((item, i) => {
-                const on = hoveredIdx === i;
-                return (
-                  <Link key={item.href} href={item.href}
-                    onMouseEnter={() => setHoveredIdx(i)}
-                    style={{
-                      display: 'grid', gridTemplateColumns: '36px 1fr auto', alignItems: 'baseline', gap: '18px',
-                      padding: '11px 0', textDecoration: 'none',
-                      borderTop: '1px solid rgba(255,255,255,0.08)',
-                      animation: menuOpen ? `fadeInUp 0.55s ${0.1 + i * 0.06}s both` : 'none',
-                    }}>
-                    <span style={{ fontSize: '11px', letterSpacing: '0.2em', color: on ? theme.primary : 'rgba(255,255,255,0.3)', transition: 'color 0.25s' }}>0{i + 1}</span>
-                    <span style={{
-                      fontFamily: "'Playfair Display', serif", fontWeight: 400, letterSpacing: '-0.01em', lineHeight: 1.05,
-                      fontSize: 'clamp(28px, 3.4vw, 50px)', whiteSpace: 'nowrap',
-                      color: on ? '#fff' : 'rgba(255,255,255,0.5)',
-                      transform: on ? 'translateX(10px)' : 'translateX(0)',
-                      transition: 'color 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)',
-                      display: 'inline-block',
-                    }}>{item.label}</span>
-                    <span className="hidden sm:inline-flex" style={{ alignItems: 'center', gap: '10px', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: on ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.25)', transition: 'color 0.25s', whiteSpace: 'nowrap' }}>
-                      {item.sub} <ArrowUpRight size={14} style={{ color: on ? theme.primary : 'transparent', transition: 'color 0.25s' }} />
-                    </span>
-                  </Link>
-                );
-              })}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }} />
-            </div>
-
-            {/* Categories */}
-            <div style={{ marginTop: '26px', animation: menuOpen ? 'fadeInUp 0.5s 0.5s both' : 'none' }}>
-              <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '14px' }}>Explore by category</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 22px' }}>
-                {Object.entries(CATEGORY_THEMES).filter(([k]) => k !== 'default').map(([key, catTheme]) => {
-                  const isActive = category === key;
-                  return (
-                    <Link key={key} href={`/packages?category=${key}`} onClick={() => { applyTheme(key); setMenuOpen(false); }}
-                      style={{ fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none', padding: '6px 0', color: isActive ? catTheme.primary : 'rgba(255,255,255,0.55)', transition: 'color 0.2s' }}
-                      onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = isActive ? catTheme.primary : 'rgba(255,255,255,0.55)'; }}
-                    >{catTheme.label}</Link>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="px-6 sm:px-10 lg:px-14" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '18px', paddingBottom: '18px', marginTop: '28px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '14px 28px', animation: menuOpen ? 'fadeInUp 0.5s 0.6s both' : 'none' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '22px', alignItems: 'center' }}>
-              {user
-                ? <Link href="/dashboard" className="tt-nav-link">Dashboard</Link>
-                : <Link href="/login" className="tt-nav-link">Log in</Link>}
+          {/* Header row */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '18px', animation: menuOpen ? 'fadeInUp 0.5s 0.05s both' : 'none' }}>
+            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 2.2vw, 30px)', color: '#fff', margin: 0, fontWeight: 400 }}>Where to <em style={{ color: 'rgba(255,255,255,.6)' }}>next?</em></p>
+            <div style={{ display: 'flex', gap: '22px', alignItems: 'center', flexWrap: 'wrap' }}>
+              {user ? <Link href="/dashboard" className="tt-nav-link">Dashboard</Link> : <Link href="/login" className="tt-nav-link">Log in</Link>}
+              <Link href="/blog" className="tt-nav-link">Blog</Link>
               <Link href="/contact" className="tt-nav-link">Contact</Link>
-              <Link href="/packages?category=groups" className="tt-nav-link" style={{ color: theme.primary }}>Upcoming trips</Link>
               <button onClick={toggleDarkMode} className="tt-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                {darkMode ? <Sun size={13} /> : <Moon size={13} />} {darkMode ? 'Light mode' : 'Dark mode'}
+                {darkMode ? <Sun size={13} /> : <Moon size={13} />} {darkMode ? 'Light' : 'Dark'}
               </button>
             </div>
-            <a href="https://wa.me/918510988703" target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}>+91 85109 88703</a>
           </div>
-        </div>
 
-        {/* Right: image panel */}
-        <div className="hidden lg:block" style={{ position: 'relative', overflow: 'hidden' }}>
-          {menuItems.map((item, i) => (
-            <div key={i} style={{ position: 'absolute', inset: 0, opacity: hoveredIdx === i ? 1 : 0, transition: 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.72)', animation: menuOpen && hoveredIdx === i ? 'authKenBurns 14s ease-out both' : 'none' }} />
+          {/* Tiles */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '10px', flex: 1, gridAutoRows: 'minmax(200px, 1fr)' }}>
+            {menuTiles.map((t, i) => (
+              <Link key={t.href} href={t.href} onClick={() => setMenuOpen(false)} className="group"
+                style={{ position: 'relative', display: 'block', overflow: 'hidden', borderRadius: '18px', minHeight: '200px', textDecoration: 'none', background: '#141414', animation: menuOpen ? `fadeInUp 0.55s ${0.08 + i * 0.06}s both` : 'none' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={t.img} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.9s cubic-bezier(0.22,1,0.36,1), filter 0.4s', filter: 'brightness(0.78)' }}
+                  className="group-hover:scale-[1.06] group-hover:brightness-90" />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.78) 100%)' }} />
+                <span style={{ position: 'absolute', top: '16px', left: '18px', fontSize: '10px', letterSpacing: '0.26em', color: 'rgba(255,255,255,.7)' }}>0{i + 1}</span>
+                <span className="group-hover:opacity-100 group-hover:translate-x-0" style={{ position: 'absolute', top: '14px', right: '16px', width: '34px', height: '34px', borderRadius: '50%', background: '#fff', color: '#0d0d0d', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transform: 'translateX(6px)', transition: 'opacity .3s, transform .3s' }}><ArrowUpRight size={15} /></span>
+                <div style={{ position: 'absolute', left: '18px', right: '18px', bottom: '18px' }}>
+                  <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(24px, 2.1vw, 34px)', fontWeight: 400, color: '#fff', margin: 0, lineHeight: 1.05 }}>{t.label}</p>
+                  <p style={{ fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)', margin: '8px 0 0' }}>{t.sub}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Categories + footer */}
+          <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 24px', animation: menuOpen ? 'fadeInUp 0.5s 0.5s both' : 'none' }}>
+            <div className="scrollbar-hide" style={{ display: 'flex', gap: '18px', overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '2px' }}>
+              {Object.entries(CATEGORY_THEMES).filter(([k]) => k !== 'default').map(([key, catTheme]) => (
+                <Link key={key} href={`/packages?category=${key}`} onClick={() => { applyTheme(key); setMenuOpen(false); }}
+                  style={{ fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase', textDecoration: 'none', color: category === key ? catTheme.primary : 'rgba(255,255,255,0.5)', transition: 'color .2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }} onMouseLeave={e => { e.currentTarget.style.color = category === key ? catTheme.primary : 'rgba(255,255,255,0.5)'; }}>
+                  {catTheme.label}
+                </Link>
+              ))}
             </div>
-          ))}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0) 28%), linear-gradient(0deg, rgba(10,10,10,.85) 0%, rgba(10,10,10,0) 45%)' }} />
-          <div style={{ position: 'absolute', left: '56px', bottom: '56px', right: '56px' }}>
-            <p style={{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', marginBottom: '10px' }}>0{hoveredIdx + 1} — {menuItems[hoveredIdx]?.sub}</p>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 2.6vw, 40px)', fontWeight: 400, color: '#fff', lineHeight: 1.1, margin: 0 }}>{menuItems[hoveredIdx]?.label}</p>
+            <a href="https://wa.me/918510988703" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', letterSpacing: '0.16em', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', flexShrink: 0 }}>WhatsApp · +91 85109 88703</a>
           </div>
         </div>
       </div>
