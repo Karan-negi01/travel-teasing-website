@@ -337,8 +337,8 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '66px', left: '50%',
-          transform: 'translateX(-50%)',
+          position: 'fixed', top: '66px', right: 'clamp(16px, 2.8vw, 40px)',
+          
           width: '800px', height: '24px',
           pointerEvents: open ? 'auto' : 'none',
           zIndex: 201,
@@ -349,7 +349,7 @@ function ExploreDropdown({ theme, pathname }) {
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         style={{
-          position: 'fixed', top: '92px', left: '50%',
+          position: 'fixed', top: '92px', right: 'clamp(16px, 2.8vw, 40px)',
           width: '800px',
           background: '#0c0c0c',
           border: '1px solid rgba(255,255,255,0.07)',
@@ -359,7 +359,7 @@ function ExploreDropdown({ theme, pathname }) {
           boxShadow: '0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04)',
           pointerEvents: open ? 'auto' : 'none',
           opacity: open ? 1 : 0,
-          transform: open ? 'translateX(-50%) translateY(0px)' : 'translateX(-50%) translateY(-12px)',
+          transform: open ? 'translateY(0px)' : 'translateY(-12px)',
           transition: 'opacity 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s cubic-bezier(0.4,0,0.2,1)',
         }}>
 
