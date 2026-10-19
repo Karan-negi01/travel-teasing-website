@@ -60,7 +60,7 @@ export default function Navbar() {
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
         <nav className="px-5 sm:px-8 lg:px-10" style={{
           pointerEvents: 'auto', position: 'relative',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
           width: '100%', height: scrolled && !menuOpen ? '68px' : '84px',
           background: menuOpen
             ? 'rgba(10,10,10,0.95)'
@@ -72,19 +72,8 @@ export default function Navbar() {
           fontFamily: "'Poppins', sans-serif",
         }}>
 
-          {/* ── LOGO ── */}
-          <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="Travel Teasing"
-              style={{ height: scrolled && !menuOpen ? '46px' : '54px', width: 'auto', objectFit: 'contain', filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`, transition: 'filter 0.5s ease, height 0.4s cubic-bezier(0.4,0,0.2,1)' }}
-              onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
-            <span style={{ display: 'none', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px', color: '#fff', whiteSpace: 'nowrap' }}>
-              <span style={{ fontSize: '18px' }}>{theme.emoji}</span> Travel Teasing
-            </span>
-          </Link>
-
-          {/* ── CENTER LINKS (desktop) ── */}
-          <div className="hidden lg:flex" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 'clamp(18px, 2.6vw, 40px)', padding: '0 20px', minWidth: 0 }}>
+          {/* ── LEFT LINKS (desktop) ── */}
+          <div className="hidden lg:flex" style={{ alignItems: 'center', justifyContent: 'flex-start', gap: 'clamp(18px, 2.4vw, 36px)', minWidth: 0 }}>
             <ExploreDropdown theme={theme} pathname={pathname} />
             {[
               { label: 'FIT',       href: '/packages?category=fit' },
@@ -95,8 +84,20 @@ export default function Navbar() {
             ))}
           </div>
 
+          <div className="lg:hidden" />
+          {/* ── LOGO ── */}
+          <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', flexShrink: 0, justifySelf: 'center' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Travel Teasing"
+              style={{ height: scrolled && !menuOpen ? '46px' : '54px', width: 'auto', objectFit: 'contain', filter: `brightness(0) invert(1) ${category === 'default' ? '' : getLogoTintFilter(category)}`, transition: 'filter 0.5s ease, height 0.4s cubic-bezier(0.4,0,0.2,1)' }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
+            <span style={{ display: 'none', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 700, letterSpacing: '-0.2px', color: '#fff', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '18px' }}>{theme.emoji}</span> Travel Teasing
+            </span>
+          </Link>
+
           {/* ── RIGHT ACTIONS ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', flexShrink: 0 }}>
             <button onClick={toggleDarkMode} title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'} className="tt-nav-icon" aria-label="Toggle theme" style={{ width: '40px', height: '40px' }}>
               {darkMode ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
             </button>
