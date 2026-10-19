@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { X, Home, Layers, Users, BookOpen, MapPin, ArrowUpRight, Sun, Moon, Search } from 'lucide-react';
+import { X, Home, Layers, Users, BookOpen, MapPin, ArrowUpRight, Sun, Moon, Search, ChevronDown } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useTheme, CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
@@ -272,7 +272,7 @@ function ExploreDropdown({ theme, pathname }) {
       {/* Trigger button */}
       <button className={`tt-nav-link${open ? ' is-active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
         Explore
-        <span style={{ display: 'inline-block', fontSize: '8px', opacity: 0.6, transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', marginTop: '1px' }}>▾</span>
+        <ChevronDown size={14} strokeWidth={2.2} style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', marginTop: '-1px' }} />
       </button>
 
       {/* Invisible bridge — keeps hover alive between button and panel */}
