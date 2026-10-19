@@ -18,7 +18,7 @@ const menuItems = [
 const mobileLinks = [
   { href: '/',            label: 'Home',    Icon: Home },
   { href: '/packages',    label: 'Explore', Icon: Layers },
-  { href: '/group-trips', label: 'Trips',   Icon: Users },
+  { href: '/packages?category=groups', label: 'Trips',   Icon: Users },
   { href: '/blog',        label: 'Blog',    Icon: BookOpen },
   { href: '/contact',     label: 'Contact', Icon: MapPin },
 ];
@@ -118,7 +118,7 @@ export default function Navbar() {
               >Log in</Link>
             )}
 
-            <Link href="/group-trips" className="hidden md:inline-flex" style={{
+            <Link href="/packages?category=groups" className="hidden md:inline-flex" style={{
               alignItems: 'center', gap: '10px', marginLeft: '8px',
               background: theme.primary, color: '#0d0d0d', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
               padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', whiteSpace: 'nowrap',
@@ -233,7 +233,7 @@ export default function Navbar() {
               <Link href="/login" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Login</Link>
             )}
             <Link href="/contact" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Contact</Link>
-            <Link href="/group-trips" style={{ fontSize: '13px', color: theme.primary, fontWeight: 600, textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Upcoming Trips →</Link>
+            <Link href="/packages?category=groups" style={{ fontSize: '13px', color: theme.primary, fontWeight: 600, textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Upcoming Trips →</Link>
           </div>
         </div>
 

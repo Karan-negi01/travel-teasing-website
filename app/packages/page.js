@@ -254,11 +254,11 @@ const CATEGORY_META = {
     ],
   },
   groups: {
-    title: 'Fixed Group Departures', subtitle: 'Set dates. Amazing people. Unforgettable journeys.',
-    description: 'Join a group of like-minded travelers on fixed departure dates. Everything is planned — just pack your bags and show up. Meet new friends, share experiences, create memories that last a lifetime.',
+    title: 'Upcoming Trips', subtitle: "Travel Teasing's own fixed departures, led by a trip captain.",
+    description: 'Fixed dates, a trip captain on the ground and a group of like-minded travellers. Everything is planned. Pack your bags, show up, and come back with friends.',
     img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=80',
-    highlights: ['Fixed Departure Dates', 'Expert Group Leaders', 'All-Inclusive Packages', 'Meet New Friends'],
-    badge: 'GROUP TOURS',
+    highlights: ['Fixed Departure Dates', 'Trip Captain On Every Trip', 'All-Inclusive Packages', 'Meet New Friends'],
+    badge: 'GROUP DEPARTURES',
     destinations: [
       { name: 'South Korea', img: 'https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&q=80' },
       { name: 'Japan',       img: 'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80' },
@@ -477,6 +477,7 @@ function PackagesContent() {
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [sort, setSort] = useState('featured');
   const [subFilter, setSubFilter] = useState('all'); // 'all' | 'international' | 'domestic'
+  const [subtype, setSubtype] = useState(''); // groups only: package_subtype filter
   const urlCategory = searchParams.get('category') || '';
   const { theme, applyTheme, darkMode } = useTheme();
 
@@ -512,13 +513,19 @@ function PackagesContent() {
       fitGroupParams.set('fit_group', 'true');
       fetches.push(fetch(`/api/packages?${fitGroupParams}`).then(r => r.json()));
     }
+    if (urlCategory === 'groups') {
+      const legacy = new URLSearchParams();
+      if (search) legacy.set('search', search);
+      legacy.set('category', 'group');
+      fetches.push(fetch(`/api/packages?${legacy}`).then(r => r.json()));
+    }
 
     Promise.all(fetches)
-      .then(([primary, secondary]) => {
+      .then(([primary, ...rest]) => {
         let pkgs = primary.packages || [];
-        if (secondary) {
+        for (const extra of rest) {
           const ids = new Set(pkgs.map(p => p.id));
-          pkgs = [...pkgs, ...(secondary.packages || []).filter(p => !ids.has(p.id))];
+          pkgs = [...pkgs, ...((extra && extra.packages) || []).filter(p => !ids.has(p.id))];
         }
         if (sort === 'price-asc') pkgs = [...pkgs].sort((a, b) => a.price_per_person - b.price_per_person);
         if (sort === 'price-desc') pkgs = [...pkgs].sort((a, b) => b.price_per_person - a.price_per_person);
@@ -626,7 +633,7 @@ function PackagesContent() {
               { key: 'international', label: 'International', count: intl.length },
               { key: 'domestic',      label: 'Domestic',      count: dom.length },
             ];
-            const visible = subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages;
+            const visible = (subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages).filter(p => !subtype || (p.package_subtype || '') === subtype);
             return (
               <>
                 {/* Row 1: tabs left, sort+filters right */}
@@ -675,6 +682,17 @@ function PackagesContent() {
                   </button>
                 </form>
 
+                {urlCategory === 'groups' && (
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                    {[['', 'All'], ["Women's Only Group", "Women's Only"], ['Travel with Pets Group', 'Travel with Pets'], ['Normal Group', 'Normal Group'], ['Sacred Places Group', 'Sacred Places'], ['Exclusive Trips', 'Exclusive Trips']].map(([val, label]) => {
+                      const on = subtype === val;
+                      return (
+                        <button key={label} onClick={() => setSubtype(val)} style={{ padding: '8px 16px', borderRadius: '999px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Poppins', sans-serif", border: `1px solid ${on ? c.textPrimary : c.inputBorder}`, background: on ? c.textPrimary : 'transparent', color: on ? (darkMode ? '#000' : '#fff') : c.textPrimary, transition: 'all 0.15s' }}>{label}</button>
+                      );
+                    })}
+                  </div>
+                )}
+
                 {/* Row 3: count */}
                 {!loading && (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
@@ -694,7 +712,7 @@ function PackagesContent() {
           ) : (() => {
             const intl = packages.filter(p => (p.state || '').toLowerCase() === 'international');
             const dom  = packages.filter(p => (p.state || '').toLowerCase() !== 'international');
-            const visible = subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages;
+            const visible = (subFilter === 'international' ? intl : subFilter === 'domestic' ? dom : packages).filter(p => !subtype || (p.package_subtype || '') === subtype);
             return visible.length > 0 ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
                 {visible.map(pkg => (

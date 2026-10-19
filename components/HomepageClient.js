@@ -203,7 +203,7 @@ const staticTestimonials = [
 ];
 
 const footerLinks = {
-  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/group-trips'], ['Blog', '/blog'], ['About Us', '/about']],
+  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/packages?category=groups'], ['Blog', '/blog'], ['About Us', '/about']],
   'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
   Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/918510988703'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
@@ -964,7 +964,7 @@ export default function HomepageClient() {
               )}
 
               <div className="mt-8 flex justify-center">
-                <Link href="/group-trips"
+                <Link href="/packages?category=groups"
                   className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
                   View All Upcoming Trips <ArrowRight size={14} />
                 </Link>

@@ -5,7 +5,7 @@ import InstagramIcon from './InstagramIcon';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const footerLinks = {
-  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/group-trips'], ['Community Trips', '/community-trips'], ['Blog', '/blog'], ['About Us', '/about']],
+  Explore:        [['All Packages', '/packages'], ['Upcoming Trips', '/packages?category=groups'], ['Community Trips', '/community-trips'], ['Blog', '/blog'], ['About Us', '/about']],
   'About Us':     [['Our Story', '/about'], ['Who Travels With Us', '/about'], ['Testimonials', '/about'], ['Careers', '/contact']],
   Support:        [['Contact Us', '/contact'], ['WhatsApp Us', 'https://wa.me/918510988703'], ['FAQ', '/#faq']],
   'Terms & Info': [['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms'], ['Cancellation Policy', '/terms']],
