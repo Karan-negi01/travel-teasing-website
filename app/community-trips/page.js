@@ -2,19 +2,13 @@
 import { useEffect, useMemo, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Search, Plus, ArrowRight, X } from 'lucide-react';
+import { Search, Plus, X } from 'lucide-react';
 import CommunityTripCard from '@/components/CommunityTripCard';
-import { PageHero, Pill, Button, SectionTitle, Eyebrow, Card, inputStyle, usePalette, Spinner } from '@/components/ui';
+import { PageHero, Pill, Button, Eyebrow, Card, inputStyle, usePalette, Spinner } from '@/components/ui';
 import { CT, VIBES, GENDER_RULES, approvedCount } from '@/lib/communityTrips';
 import { useSession, loginHref } from '@/lib/useSession';
 
 const HERO = 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1800&q=85';
-const STEPS = [
-  ['01', 'Pick an FIT package', 'Any personalised package can become a trip. The dates are yours to choose.'],
-  ['02', 'Set your rules', 'Group size, vibe, women-only or mixed, age range. Your trip, your call.'],
-  ['03', 'Approve your crew', 'Travellers request to join. You see their profile and past trips before saying yes.'],
-  ['04', 'Pay when it is full', 'Travel Teasing confirms the price for your group size and collects payment on WhatsApp.'],
-];
 
 function ListingContent() {
   const sp = useSearchParams();
@@ -122,24 +116,6 @@ function ListingContent() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="bg-[#fafafa]">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-16 md:py-24">
-          <SectionTitle italic="How it" rest="works" sub="Only FIT packages can be turned into trips. Fixed group departures stay with our trip captains." />
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
-            {STEPS.map(([n, t, d]) => (
-              <div key={n} className="border-t border-gray-200 pt-6">
-                <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5bc1d5]">{n}</p>
-                <h3 className="text-lg font-semibold text-gray-900 mt-3" style={{ fontSize: 18 }}>{t}</h3>
-                <p className="text-sm text-gray-500 mt-2 leading-relaxed">{d}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-12 flex justify-center">
-            <Link href={createHref} className="inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-800 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition">Start your trip <ArrowRight size={14} /></Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
