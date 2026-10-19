@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { X, Home, Layers, Users, BookOpen, MapPin, ArrowUpRight, Sun, Moon } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { X, Home, Layers, Users, BookOpen, MapPin, ArrowUpRight, Sun, Moon, Search } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useTheme, CATEGORY_THEMES } from '@/contexts/ThemeContext';
 
@@ -29,6 +29,8 @@ export default function Navbar() {
   const [scrolled, setScrolled]         = useState(false);
   const [user, setUser]                 = useState(null);
   const pathname                        = usePathname();
+  const router                          = useRouter();
+  const [navSearch, setNavSearch]       = useState('');
   const { theme, category, applyTheme, darkMode, toggleDarkMode } = useTheme();
   const isHeroPage = ['/', '/packages', '/about', '/community-trips'].includes(pathname) || (pathname?.startsWith('/community-trips/') && pathname !== '/community-trips/new') || pathname?.startsWith('/profile/');
 
@@ -72,18 +74,13 @@ export default function Navbar() {
           fontFamily: "'Poppins', sans-serif",
         }}>
 
-          {/* ── LEFT LINKS (desktop) ── */}
-          <div className="hidden lg:flex" style={{ alignItems: 'center', justifyContent: 'flex-start', gap: 'clamp(18px, 2.4vw, 36px)', minWidth: 0 }}>
-            <ExploreDropdown theme={theme} pathname={pathname} />
-            {[
-              { label: 'FIT',       href: '/packages?category=fit' },
-              { label: 'Groups',    href: '/packages?category=groups' },
-              { label: 'Community', href: '/community-trips' },
-            ].map(({ label, href }) => (
-              <Link key={label} href={href} className={`tt-nav-link${pathname === href.split('?')[0] && (href.includes('?') ? false : true) ? ' is-active' : ''}`}>{label}</Link>
-            ))}
-          </div>
-
+          {/* ── LEFT: SEARCH (desktop) ── */}
+          <form onSubmit={e => { e.preventDefault(); const q = navSearch.trim(); if (q) { router.push(`/packages?search=${encodeURIComponent(q)}`); setNavSearch(''); } }}
+            className="hidden lg:flex" style={{ alignItems: 'center', gap: '10px', width: 'min(300px, 100%)', height: '42px', padding: '0 16px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', background: 'rgba(255,255,255,0.06)' }}>
+            <Search size={15} style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }} />
+            <input value={navSearch} onChange={e => setNavSearch(e.target.value)} placeholder="Where to?" aria-label="Search destinations"
+              style={{ flex: 1, minWidth: 0, background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: '13px', fontFamily: "'Poppins', sans-serif", letterSpacing: '0.02em', boxShadow: 'none', backgroundColor: 'transparent' }} />
+          </form>
           <div className="lg:hidden" />
           {/* ── LOGO ── */}
           <Link href="/" onClick={() => { setMenuOpen(false); applyTheme('default'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', flexShrink: 0, justifySelf: 'center' }}>
@@ -98,6 +95,7 @@ export default function Navbar() {
 
           {/* ── RIGHT ACTIONS ── */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', flexShrink: 0 }}>
+            <div className="hidden lg:block" style={{ marginRight: '10px' }}><ExploreDropdown theme={theme} pathname={pathname} /></div>
 
             {user ? (
               <Link href="/dashboard" title="Your dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '4px 6px 4px 4px', marginLeft: '4px' }}>

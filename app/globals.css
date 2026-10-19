@@ -319,3 +319,6 @@
 .tt-nav-link:hover::after, .tt-nav-link.is-active::after { transform: scaleX(1); }
 .tt-nav-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; border: none; background: transparent; color: rgba(255,255,255,0.78); cursor: pointer; transition: background 0.2s, color 0.2s; }
 .tt-nav-icon:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+nav form input { background: transparent !important; background-color: transparent !important; border: none !important; color: #fff !important; box-shadow: none !important; }
+nav form input::placeholder { color: rgba(255,255,255,0.5); }
