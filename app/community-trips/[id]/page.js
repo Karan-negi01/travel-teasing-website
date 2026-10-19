@@ -159,6 +159,18 @@ function TripContent({ params }) {
       <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-10 pt-10">
         {/* LEFT */}
         <div className="space-y-10">
+          {/* Mobile: join card inline (the sticky sidebar is desktop-only) */}
+          {!isCreator && (
+            <Card pad={20} className="lg:hidden" style={{ borderColor: p.borderMid }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10, marginBottom: 12 }}>
+                <div><p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: p.text, margin: 0 }}>Join this trip</p><p style={{ fontSize: 22, fontWeight: 700, color: p.text, margin: '4px 0 0' }}>{trip.price_per_person ? `₹${Number(trip.price_per_person).toLocaleString('en-IN')}` : 'On request'} <span style={{ fontSize: 12, fontWeight: 400, color: p.muted }}>per person, from</span></p></div>
+                <Tag tone={toneFor(trip.status)}>{st.label}</Tag>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: p.muted, marginBottom: 8 }}><span>{approved} / {trip.total_spots} travellers</span><span style={{ color: p.text, fontWeight: 600 }}>{left === 0 ? 'Full' : `${left} left`}</span></div>
+              <Progress value={approved} max={trip.total_spots} />
+              <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>{cta}</div>
+            </Card>
+          )}
           {justCreated && isCreator && (
             <Card pad={22} style={{ borderColor: p.accent, background: `${p.accent}12` }}>
               <Eyebrow color={p.accent} style={{ marginBottom: 6 }}>Your trip is live</Eyebrow>
@@ -276,7 +288,8 @@ function TripContent({ params }) {
         </div>
       </div>
 
-      {/* MOBILE CTA */}
+      {/* MOBILE CTA — host only; non-hosts get the inline join card above */}
+      {isCreator && (
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-5 py-3" style={{ background: p.cardBg, borderTop: `1px solid ${p.border}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ flex: 1 }}><p style={{ fontSize: 10, color: p.label, margin: 0 }}>per person, from</p><p style={{ fontSize: 20, fontWeight: 700, color: p.text, margin: 0 }}>{trip.price_per_person ? `₹${Number(trip.price_per_person).toLocaleString('en-IN')}` : 'On request'}</p></div>
@@ -289,6 +302,7 @@ function TripContent({ params }) {
           </div>
         )}
       </div>
+      )}
 
       {/* Edit modal */}
       {editOpen && editForm && (

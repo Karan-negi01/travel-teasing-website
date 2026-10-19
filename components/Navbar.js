@@ -261,7 +261,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile bottom nav */}
+      {/* Mobile bottom nav — hidden on detail pages that have their own bottom action bar */}
+      {!((pathname?.startsWith('/packages/') ) || (pathname?.startsWith('/community-trips/') && pathname !== '/community-trips/new')) && (
       <nav className="flex lg:hidden" style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40,
         justifyContent: 'space-around',
@@ -283,6 +284,7 @@ export default function Navbar() {
           </Link>
         ))}
       </nav>
+      )}
 
       <style>{`
         @keyframes fadeInUp {
