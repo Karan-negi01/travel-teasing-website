@@ -97,10 +97,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── RIGHT ACTIONS ── */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', flexShrink: 0 }}>
-            <button onClick={toggleDarkMode} title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'} className="tt-nav-icon" aria-label="Toggle theme" style={{ width: '40px', height: '40px' }}>
-              {darkMode ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', flexShrink: 0 }}>
 
             {user ? (
               <Link href="/dashboard" title="Your dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '4px 6px 4px 4px', marginLeft: '4px' }}>
@@ -110,23 +107,13 @@ export default function Navbar() {
                     ? <img src={user.user_metadata.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     : (user.user_metadata?.full_name || user.email || 'T').trim().charAt(0).toUpperCase()}
                 </span>
-                <span className="hidden xl:inline" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff' }}>Dashboard</span>
               </Link>
             ) : (
-              <Link href="/login" className="hidden sm:inline-flex tt-nav-link" style={{ marginLeft: '6px', padding: '8px 14px' }}>Log in</Link>
+              <Link href="/login" className="hidden sm:inline-flex tt-nav-link" style={{ padding: '8px 4px' }}>Log in</Link>
             )}
 
-            <Link href="/packages?category=groups" className="hidden md:inline-flex" style={{
-              alignItems: 'center', gap: '10px', marginLeft: '8px',
-              background: '#fff', color: '#0d0d0d', fontSize: '12px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
-              padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', whiteSpace: 'nowrap',
-              transition: 'transform 0.2s, background 0.2s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.background = theme.primary; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.background = '#fff'; }}
-            >Upcoming Trips <ArrowUpRight size={14} strokeWidth={2.5} /></Link>
 
-            <button onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu" className="tt-nav-icon" style={{ marginLeft: '6px', border: '1px solid rgba(255,255,255,0.22)', width: '44px', height: '44px', background: menuOpen ? '#fff' : 'transparent', color: menuOpen ? '#0d0d0d' : '#fff' }}>
+            <button onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu" className="tt-nav-icon" style={{ marginLeft: '4px', border: '1px solid rgba(255,255,255,0.22)', width: '44px', height: '44px', background: menuOpen ? '#fff' : 'transparent', color: menuOpen ? '#0d0d0d' : '#fff' }}>
               {menuOpen ? <X size={16} strokeWidth={2} /> : (
                 <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-end' }}>
                   <span style={{ display: 'block', width: '18px', height: '1.5px', background: 'currentColor' }} />
@@ -231,6 +218,9 @@ export default function Navbar() {
               <Link href="/login" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Login</Link>
             )}
             <Link href="/contact" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Contact</Link>
+            <button onClick={toggleDarkMode} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: "'Poppins', sans-serif", display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              {darkMode ? <Sun size={13} /> : <Moon size={13} />} {darkMode ? 'Light mode' : 'Dark mode'}
+            </button>
             <Link href="/packages?category=groups" style={{ fontSize: '13px', color: theme.primary, fontWeight: 600, textDecoration: 'none', fontFamily: "'Poppins', sans-serif" }}>Upcoming Trips →</Link>
           </div>
         </div>
